@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080C0D;--bg2:#0D1416;--bg3:#111A1C;
+  --surface:#141F22;--surface2:#1A282C;
+  --border:#1E3035;--bm:#2A4048;--bh:#3A5560;
+  --text:#D4E8E8;--t2:#8BBCBC;--t3:#4E7A80;--t4:#2E5560;
+  --teal:#00D4C8;--td:#00897F;--tbg:rgba(0,212,200,.06);
+  --amber:#F5A623;--abg:rgba(245,166,35,.08);
+  --coral:#FF6B4A;--cbg:rgba(255,107,74,.08);
+  --green:#34D399;--gbg:rgba(52,211,153,.08);
+  --fd:'Syne',sans-serif;--fb:'Figtree',sans-serif;--fm:'Share Tech Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;line-height:1.6;overflow:hidden;display:flex;flex-direction:column}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,212,200,.018) 2px,rgba(0,212,200,.018) 4px);pointer-events:none;z-index:0}
+
+/* HEADER */
+.hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-bottom:1px solid var(--bm);background:var(--bg2);position:relative;z-index:2;flex-wrap:wrap;gap:.5rem}
+.brand{font-family:var(--fm);font-size:11px;color:var(--teal);letter-spacing:.22em;text-transform:uppercase}
+.brand::before{content:'▶ ';font-size:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.pills{display:flex;gap:.35rem;flex-wrap:wrap}
+.pill{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:2px;border:1px solid var(--bm);letter-spacing:.06em}
+.pill-m{background:var(--tbg);color:var(--teal);border-color:var(--td)}
+.pill-w{background:var(--surface2);color:var(--t2)}
+.pill-ws{background:var(--cbg);color:var(--coral);border-color:var(--coral);display:none}
+.pill-ws.on{display:inline}
+.pill-ccp{background:var(--abg);color:var(--amber);border-color:var(--amber)}
+.pill-flag{background:var(--cbg);color:var(--coral);border-color:var(--coral)}
+
+/* CCP DOMAIN SELECTOR */
+.ccp-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:2rem 1.5rem;gap:1.1rem;text-align:center}
+.ccp-sel.gone{display:none}
+.ccp-back{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;background:none;border:none;cursor:pointer;align-self:flex-start;padding:0;transition:color .12s}
+.ccp-back:hover{color:var(--teal)}
+.ccp-st{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--text)}
+.ccp-ss{font-size:12.5px;color:var(--t2);line-height:1.6;max-width:400px;margin-bottom:.25rem}
+.ccp-domains{display:flex;flex-direction:column;gap:.55rem;width:100%;max-width:420px}
+.dcrd{background:var(--surface);border:1px solid var(--bm);border-left:3px solid var(--bm);border-radius:3px;padding:.75rem 1rem;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:.75rem}
+.dcrd:hover{border-color:var(--td);border-left-color:var(--teal)}
+.dcrd.flagged{border-left-color:var(--coral)}
+.dcrd.flagged:hover{border-color:var(--coral)}
+.dcrd-num{font-family:var(--fm);font-size:11px;color:var(--t3);flex-shrink:0;width:22px}
+.dcrd.flagged .dcrd-num{color:var(--coral)}
+.dcrd-body{flex:1;min-width:0}
+.dcrd-name{font-family:var(--fb);font-size:13px;font-weight:500;color:var(--text)}
+.dcrd-meta{font-family:var(--fm);font-size:10px;color:var(--t3);margin-top:1px;display:flex;align-items:center;gap:.5rem}
+.dcrd-flag{font-family:var(--fm);font-size:9px;background:var(--cbg);color:var(--coral);border:1px solid rgba(255,107,74,.3);border-radius:2px;padding:1px 5px;letter-spacing:.06em}
+.dcrd-ok{font-family:var(--fm);font-size:9px;background:var(--gbg);color:var(--green);border:1px solid rgba(52,211,153,.3);border-radius:2px;padding:1px 5px;letter-spacing:.06em}
+.dcrd-arr{color:var(--t3);font-size:10px;margin-left:auto}
+
+/* LAYOUT */
+.main{flex:1;display:flex;overflow:hidden;position:relative;z-index:1}
+
+/* THREAD */
+.tw{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.thread{flex:1;overflow-y:auto;padding:1rem 1rem .5rem;display:flex;flex-direction:column;gap:.65rem;scroll-behavior:smooth}
+.thread::-webkit-scrollbar{width:3px}
+.thread::-webkit-scrollbar-thumb{background:var(--bm);border-radius:2px}
+
+/* MESSAGES */
+.msg{animation:fu .22s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.mu{align-self:flex-end;max-width:72%;background:var(--surface2);border:1px solid var(--bm);border-radius:4px 4px 0 4px;padding:.55rem .8rem;font-size:13px;color:var(--t2)}
+.ma{align-self:flex-start;width:100%;background:var(--surface);border:1px solid var(--bm);border-left:2px solid var(--teal);border-radius:0 4px 4px 4px;padding:.7rem .9rem;font-size:13.5px;color:var(--text);line-height:1.7}
+.ma p{margin-bottom:.45rem}.ma p:last-child{margin-bottom:0}
+.ma code{font-family:var(--fm);font-size:12px;background:var(--bg3);color:var(--teal);padding:1px 5px;border-radius:2px;border:1px solid var(--border)}
+.ma pre{background:var(--bg3);border:1px solid var(--border);border-left:2px solid var(--td);border-radius:3px;padding:.6rem .8rem;margin:.45rem 0;overflow-x:auto}
+.ma pre code{background:none;border:none;padding:0;color:var(--t2);font-size:12px;line-height:1.65}
+.ma strong{color:var(--text);font-weight:600}
+.ma em{color:var(--amber);font-style:normal;font-family:var(--fm);font-size:12px}
+.ma.streaming{border-left-color:var(--td)}
+
+/* CURSOR */
+.cursor{display:inline-block;width:7px;height:13px;background:var(--teal);vertical-align:middle;margin-left:2px;animation:blink .7s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* LOG BLOCK */
+.logb{margin-top:.5rem;background:var(--bg2);border:1px solid var(--bm);border-radius:3px;padding:.6rem .8rem;font-family:var(--fm);font-size:11px;color:var(--t2);line-height:1.7}
+.logb-hd{color:var(--teal);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem}
+.log-copy{margin-top:.4rem;font-family:var(--fm);font-size:10px;color:var(--t3);cursor:pointer;border:1px solid var(--border);border-radius:2px;padding:2px 7px;background:none;letter-spacing:.08em;transition:all .12s;display:inline-block}
+.log-copy:hover{color:var(--teal);border-color:var(--td)}
+
+/* THINKING */
+.thinking{align-self:flex-start;display:flex;gap:4px;align-items:center;padding:.6rem .9rem;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--bm);border-radius:0 4px 4px 4px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--t3);animation:bk 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes bk{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+/* SIDEBAR */
+.sb{width:200px;flex-shrink:0;border-left:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;overflow:hidden}
+@media(max-width:580px){.sb{display:none}}
+.sb-hd{padding:.55rem .9rem;border-bottom:1px solid var(--border);font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase}
+.sb-body{flex:1;overflow-y:auto;padding:.6rem .9rem}
+.sb-body::-webkit-scrollbar{width:3px}
+.sb-body::-webkit-scrollbar-thumb{background:var(--border)}
+.ws-list{display:flex;flex-direction:column;gap:.35rem}
+.ws-item{background:var(--cbg);border:1px solid rgba(255,107,74,.2);border-left:2px solid var(--coral);border-radius:2px;padding:.35rem .55rem;font-size:11px;color:var(--t2);line-height:1.4}
+.ws-mod{font-family:var(--fm);font-size:9px;color:var(--coral);letter-spacing:.08em;display:block;margin-bottom:1px}
+.ws-empty{font-family:var(--fm);font-size:10px;color:var(--t4);letter-spacing:.06em;text-align:center;padding:1.25rem .5rem}
+.sb-stats{margin-top:auto;border-top:1px solid var(--border);padding:.6rem .9rem;display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.sbox{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:.35rem .45rem;text-align:center}
+.sbox .n{font-family:var(--fm);font-size:18px;color:var(--text);display:block;line-height:1.1}
+.sbox .l{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
+
+/* INPUT BAR */
+.ibar{flex-shrink:0;padding:.65rem 1rem;border-top:1px solid var(--bm);background:var(--bg2);display:flex;gap:.5rem;align-items:flex-end;position:relative;z-index:2}
+.iwrap{flex:1;position:relative}
+textarea#inp{width:100%;background:var(--surface);border:1px solid var(--bm);border-radius:3px;color:var(--text);font-family:var(--fb);font-size:13px;line-height:1.5;padding:.55rem .8rem;resize:none;min-height:40px;max-height:130px;outline:none;transition:border-color .15s}
+textarea#inp:focus{border-color:var(--td)}
+textarea#inp::placeholder{color:var(--t4);font-family:var(--fm);font-size:11px;letter-spacing:.04em}
+.bsend{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--teal);color:var(--bg);border:none;border-radius:3px;padding:.5rem .85rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
+.bsend:hover{opacity:.85}.bsend:disabled{opacity:.3;cursor:not-allowed}
+.bend{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:none;color:var(--t3);border:1px solid var(--bm);border-radius:3px;padding:.5rem .7rem;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
+.bend:hover{color:var(--amber);border-color:var(--amber)}.bend:disabled{opacity:.3;cursor:not-allowed}
+
+/* API KEY OVERLAY */
+.key-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.82);
+  display:flex;align-items:center;justify-content:center;
+  z-index:500;padding:1rem;backdrop-filter:blur(6px);
+}
+.key-box{
+  background:var(--surface);border:1px solid var(--bm);
+  border-top:2px solid var(--teal);border-radius:4px;
+  padding:2rem;max-width:420px;width:100%;
+  box-shadow:0 0 40px rgba(0,212,200,.1);
+}
+.key-box h2{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--text);margin-bottom:.35rem}
+.key-box p{font-size:12.5px;color:var(--t2);line-height:1.65;margin-bottom:1.25rem}
+.key-lbl{font-family:var(--fm);font-size:10px;color:var(--t3);display:block;margin-bottom:.4rem;letter-spacing:.1em;text-transform:uppercase}
+.key-input{
+  width:100%;padding:.6rem .8rem;
+  border:1px solid var(--bm);border-radius:3px;
+  font-family:var(--fm);font-size:13px;
+  background:var(--bg2);color:var(--text);margin-bottom:.75rem;
+  letter-spacing:.04em;
+}
+.key-input:focus{outline:none;border-color:var(--td)}
+.key-hint{font-family:var(--fm);font-size:10px;color:var(--t3);margin-bottom:1rem;line-height:1.6}
+.key-hint a{color:var(--teal);text-decoration:none}
+.key-btn{
+  width:100%;padding:.65rem;background:var(--teal);color:var(--bg);
+  border:none;border-radius:3px;font-family:var(--fm);
+  font-size:12px;font-weight:600;cursor:pointer;
+  letter-spacing:.1em;text-transform:uppercase;transition:opacity .15s;
+}
+.key-btn:hover{opacity:.85}
+.key-footer{margin-top:.75rem;font-family:var(--fm);font-size:10px;color:var(--t4);text-align:center;line-height:1.6}
+
+.start{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:2rem 1.5rem;text-align:center;gap:1.1rem}
+.start.gone{display:none}
+.si{font-family:var(--fm);font-size:28px;color:var(--teal);letter-spacing:-2px}
+.st{font-family:var(--fd);font-size:19px;font-weight:800;letter-spacing:-.3px;color:var(--text)}
+.ss{font-size:13px;color:var(--t2);line-height:1.6;max-width:380px}
+.sopts{display:flex;flex-direction:column;gap:.45rem;width:100%;max-width:380px}
+.sbtn{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--surface);border:1px solid var(--bm);border-radius:3px;color:var(--t2);padding:.7rem .9rem;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:.65rem}
+.sbtn:hover{border-color:var(--td);color:var(--teal)}
+.sarr{color:var(--t3);font-size:10px;margin-left:auto}
+.sbtn:hover .sarr{color:var(--teal)}
+</style>
+</head>
+<body>
+
+<!-- API Key Setup -->
+<div class="key-overlay" id="keyOverlay" style="display:none">
+  <div class="key-box">
+    <h2>API Key Required</h2>
+    <p>The Drill Engine calls the Anthropic API directly from your browser. Your key is stored locally in this browser only — never sent anywhere except Anthropic.</p>
+    <label class="key-lbl" for="keyInp">Anthropic API Key</label>
+    <input class="key-input" id="keyInp" type="password" placeholder="sk-ant-..." autocomplete="off"
+      onkeydown="if(event.key==='Enter')saveKey()">
+    <div class="key-hint">
+      Get your key at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a> → API Keys.<br>
+      Make sure your account has credits loaded.
+    </div>
+    <button class="key-btn" onclick="saveKey()">Save &amp; Continue</button>
+    <div class="key-footer">Stored in localStorage · Never leaves your machine except to Anthropic</div>
+  </div>
+</div>
+
+<header class="hdr">
+  <span class="brand">Drill Engine</span>
+  <div class="pills">
+    <span class="pill pill-m" id="modPill">M1 · Variables &amp; Types</span>
+    <span class="pill pill-w" id="weekPill">Week —</span>
+    <span class="pill pill-ws" id="wsPill">0 weak spots</span>
+    <button onclick="switchMode()" id="modeToggle" style="font-family:var(--fm);font-size:9px;letter-spacing:.08em;background:none;border:1px solid var(--border);border-radius:2px;color:var(--t3);padding:2px 7px;cursor:pointer;transition:all .12s" title="Switch mode">PY</button>
+    <button onclick="resetKey()" style="font-family:var(--fm);font-size:9px;letter-spacing:.08em;background:none;border:1px solid var(--border);border-radius:2px;color:var(--t3);padding:2px 7px;cursor:pointer;transition:all .12s" title="Change API key">KEY</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="tw">
+    <div class="start" id="startScreen">
+      <div class="si">&gt;_</div>
+      <div class="st">Ready to drill.</div>
+      <div class="ss">Pick a mode — Python or CCP exam review.</div>
+      <div class="sopts">
+        <button class="sbtn" onclick="showPythonOpts()"><span>🐍</span><span>Python drill — Module sequence</span><span class="sarr">▶</span></button>
+        <button class="sbtn" onclick="showCCPSel()" style="border-color:rgba(245,166,35,.3)"><span style="color:var(--amber)">☁</span><span>CCP review — Domain drill</span><span class="sarr" style="color:var(--amber)">▶</span></button>
+      </div>
+    </div>
+
+    <!-- Python mode options -->
+    <div class="start gone" id="pyScreen">
+      <div class="si">&gt;_</div>
+      <div class="st">Python Drill</div>
+      <div class="ss">Pick up where you left off, or start fresh from Module 1.</div>
+      <div class="sopts">
+        <button class="sbtn" onclick="startFresh()"><span>→</span><span>Start fresh — Module 1 drills</span><span class="sarr">▶</span></button>
+        <button class="sbtn" onclick="startPaste()"><span>⇩</span><span>Paste dashboard state &amp; continue</span><span class="sarr">▶</span></button>
+        <button class="sbtn" onclick="startDebrief()"><span>◎</span><span>Just finished a session — debrief me</span><span class="sarr">▶</span></button>
+        <button class="sbtn" onclick="backToMain()" style="border-color:var(--border);color:var(--t3)"><span>←</span><span>Back</span></button>
+      </div>
+    </div>
+
+    <!-- CCP domain selector -->
+    <div class="ccp-sel gone" id="ccpScreen">
+      <div class="ccp-st">CCP Review — Select Domain</div>
+      <div class="ccp-ss">Current score: <strong style="color:var(--amber)">769</strong> · Target: <strong style="color:var(--green)">850+</strong> · Flagged domains need the most work.</div>
+      <div class="ccp-domains" id="ccpDomainList"></div>
+      <button class="sbtn" onclick="backToMain()" style="border-color:var(--border);color:var(--t3);margin-top:.25rem;width:100%;max-width:420px"><span>←</span><span>Back</span></button>
+    </div>
+    <div class="thread" id="thread" style="display:none"></div>
+    <div class="ibar" id="ibar" style="display:none">
+      <div class="iwrap">
+        <textarea id="inp" rows="1" placeholder="TYPE YOUR PREDICTION OR RESPONSE..."
+          oninput="resize(this)"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
+      </div>
+      <button class="bsend" id="bsend" onclick="send()">Send</button>
+      <button class="bend" id="bend" onclick="endSession()">End Session</button>
+    </div>
+  </div>
+
+  <aside class="sb">
+    <div class="sb-hd">Weak Spots · Session</div>
+    <div class="sb-body">
+      <div class="ws-list" id="wsList">
+        <div class="ws-empty" id="wsEmpty">None flagged yet</div>
+      </div>
+    </div>
+    <div class="sb-stats">
+      <div class="sbox"><span class="n" id="dc">0</span><span class="l">Drills</span></div>
+      <div class="sbox"><span class="n" id="wc">0</span><span class="l">Weak</span></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+// ── API KEY ────────────────────────────────────────────
+function getKey(){return localStorage.getItem('de_api_key')||'';}
+function saveKey(){
+  const v=document.getElementById('keyInp').value.trim();
+  if(!v.startsWith('sk-')){
+    document.getElementById('keyInp').style.borderColor='var(--coral)';
+    return;
+  }
+  localStorage.setItem('de_api_key',v);
+  document.getElementById('keyOverlay').style.display='none';
+}
+function checkKey(){
+  if(!getKey()) document.getElementById('keyOverlay').style.display='flex';
+}
+function resetKey(){
+  localStorage.removeItem('de_api_key');
+  document.getElementById('keyInp').value='';
+  document.getElementById('keyOverlay').style.display='flex';
+}
+
+// ── MODULE DEFINITIONS ─────────────────────────────────
+const MODULES = [
+  {num:1, name:'Variables & Types', file:'m1.py',
+   defaultCovered:['String repetition: "5" * 2 = "55" — operators are type-aware','Type conversion: int(), str(), float()','String concatenation TypeError across types','f-strings: preferred for mixed-type output','type() returns class info','/ always float; // floor division; % modulo','input() and user input handling'],
+   defaultStillTo:['Boolean type: True/False, case-sensitive','Comparison operators: ==, !=, <, >, <=, >=','None type','Variable naming rules (snake_case, no reserved words)','Multiple assignment: a, b = 1, 2','Constants convention: ALL_CAPS','Augmented assignment: +=, -=, *=, /=']},
+  {num:2, name:'Functions', file:'m2.py',
+   defaultCovered:[],
+   defaultStillTo:['def keyword and function anatomy','Arguments and parameters','return vs print — key difference','Scope: local vs global','Default argument values','Multiple return values','Docstrings']},
+  {num:3, name:'Lists, Dicts, Loops', file:'m3.py',
+   defaultCovered:[],
+   defaultStillTo:['List indexing and slicing','List methods: append, pop, remove, sort','Dict creation and access','Dict methods: .get(), .items(), .keys(), .values()','for loops over lists and dicts','while loops','List comprehensions','Nested data structures']},
+  {num:4, name:'Files & .env', file:'m4.py',
+   defaultCovered:[],
+   defaultStillTo:['open() and the with statement','read(), readlines(), write()','python-dotenv: load_dotenv()','os.getenv()','File paths: relative vs absolute','.gitignore for .env files']},
+  {num:5, name:'APIs + JSON', file:'m5.py',
+   defaultCovered:[],
+   defaultStillTo:['requests.get() and requests.post()','response.json() and response.status_code','json.dumps() and json.loads()','Anthropic SDK: client.messages.create()','Parsing data.content[0].text','try/except for API errors','HTTP status codes']},
+  {num:6, name:'Classes (light)', file:'m6.py',
+   defaultCovered:[],
+   defaultStillTo:['class definition','__init__ and self','Instance variables','Instance methods','Creating instances','__str__ method']},
+  {num:7, name:'Async basics', file:'m7.py',
+   defaultCovered:[],
+   defaultStillTo:['async def and await keyword','asyncio.run()','aiohttp for async HTTP','async with context manager','Why async matters for API throughput']},
+];
+
+// ── CCP DOMAIN DEFINITIONS ─────────────────────────────
+const CCP_DOMAINS = [
+  {num:1, name:'Cloud Concepts', weight:24, flagged:false,
+   subdomains:[
+    {id:'1.1', name:'Cloud value proposition', concepts:['Benefits: agility, elasticity, scalability, global reach','CapEx vs OpEx — cloud shifts to OpEx','Pay-as-you-go pricing model','High availability, fault tolerance, disaster recovery distinction','Economies of scale']},
+    {id:'1.2', name:'Cloud economics & TCO', concepts:['TCO: Total Cost of Ownership — what it includes','AWS Pricing Calculator','Right-sizing: match instance to workload','Reserved vs Spot savings impact on TCO']},
+    {id:'1.3', name:'Migration strategies (6 Rs)', concepts:['Rehost (lift-and-shift) — fastest, no optimization','Replatform — small optimizations, no core change','Repurchase — move to different product (SaaS)','Refactor/Re-architect — most expensive, most benefit','Retire — decommission unused apps','Retain — keep on-prem for now']},
+    {id:'1.4', name:'Cloud adoption framework', concepts:['6 CAF perspectives: Business, People, Governance, Platform, Security, Operations','CAF vs Well-Architected Framework — CAF is migration strategy, WAF is design principles','5 pillars of WAF: Operational Excellence, Security, Reliability, Performance, Cost']},
+  ]},
+  {num:2, name:'Security and Compliance', weight:30, flagged:true,
+   subdomains:[
+    {id:'2.1', name:'Shared responsibility model', concepts:['AWS responsible for: hardware, global infra, managed service OS patches','Customer responsible for: guest OS patches, app config, IAM, data','EC2: customer patches OS — classic exam trap','RDS: AWS patches OS — managed service','S3: AWS secures infra, customer manages bucket policies and data','Shared: patch management (differs by service), configuration management, awareness/training']},
+    {id:'2.2', name:'Security, governance, compliance', concepts:['AWS Artifact — on-demand compliance reports, not a security tool','AWS Config — resource config compliance, drift detection','AWS CloudTrail — API audit trail, who did what when','Amazon GuardDuty — ML-based threat detection, no agent needed','Amazon Inspector — automated vulnerability scanning for EC2/Lambda/ECR','AWS Security Hub — aggregated security findings across services','KMS — AWS-managed encryption keys, integrated with services','CloudHSM — dedicated hardware, customer manages keys, FIPS 140-2 Level 3','Encryption at rest vs in transit — know which services support each by default']},
+    {id:'2.3', name:'IAM access management', concepts:['Explicit deny always wins — overrides any allow, everywhere','Least privilege: grant only what is needed','IAM User vs Role: users are people, roles are for services/cross-account/federation','IAM Group: collection of users, cannot nest groups','Root account: only for initial setup and billing, never daily use, enable MFA immediately','MFA: virtual (Google Auth), hardware (key fob), or SMS — exam tests which to enforce','Policy types: identity-based, resource-based (S3 bucket policy), SCPs (deny at org level)','IAM Access Analyzer: identifies resources shared externally','IAM Credentials Report: audit of all users and credential status']},
+    {id:'2.4', name:'Security resources and components', concepts:['AWS Shield Standard: free, automatic DDoS protection for all AWS customers','AWS Shield Advanced: paid, 24/7 DDoS response team, financial protection','AWS WAF: L7 firewall, blocks SQL injection/XSS, attaches to CloudFront/ALB/API GW','Security Group: stateful, instance-level, allow rules only, default deny all inbound','NACL: stateless, subnet-level, allow and deny rules, evaluated in order','Trusted Advisor: cost, security, performance, fault tolerance, service limits — security checks need Business plan','Penetration testing: allowed for 8 specific services without AWS approval']},
+  ]},
+  {num:3, name:'Cloud Technology and Services', weight:34, flagged:false,
+   subdomains:[
+    {id:'3.1', name:'Deployment and operating methods', concepts:['Console vs CLI vs SDK — know when each is appropriate','CloudFormation: IaC, JSON/YAML templates, stacks','CDK: define infra in real code (Python, TypeScript)','Elastic Beanstalk: PaaS, upload code, AWS manages infra','Systems Manager: ops hub, patch manager, parameter store']},
+    {id:'3.2', name:'Global infrastructure', concepts:['Region: geographic area, multiple AZs','AZ: one or more discrete data centers, isolated','Edge Location: CloudFront CDN cache point — more than regions','Local Zone: AWS infra closer to major cities for low latency','CloudFront: CDN, uses edge locations, caches static content','Route 53: DNS, health checks, routing policies (latency, failover, geolocation)']},
+    {id:'3.3', name:'Compute services', concepts:['EC2: virtual servers, full control, you manage OS','Lambda: serverless, event-driven, max 15 min, pay per invocation','ECS: container orchestration on EC2 or Fargate','EKS: managed Kubernetes','Fargate: serverless containers — no EC2 to manage','Lightsail: simplified VPS for small workloads','Outposts: AWS hardware in your datacenter']},
+    {id:'3.4', name:'Database services', concepts:['RDS: managed relational (MySQL, PostgreSQL, Oracle, SQL Server, MariaDB)','Aurora: AWS-built MySQL/PostgreSQL compatible, 5x faster, serverless option','DynamoDB: serverless NoSQL, millisecond latency, global tables','ElastiCache: in-memory caching (Redis or Memcached) — speeds up reads','Redshift: petabyte-scale data warehouse, columnar storage','Neptune: graph database — social networks, fraud detection']},
+    {id:'3.5', name:'Network services', concepts:['VPC: isolated virtual network, spans AZs in a region','IGW: internet access for public subnets','NAT Gateway: outbound internet for private subnets, no inbound','VPN: encrypted tunnel over internet to on-prem','Direct Connect: dedicated private fiber to AWS, consistent bandwidth','CloudFront vs Global Accelerator: CF caches content, GA routes TCP/UDP traffic via AWS backbone','Transit Gateway: connect many VPCs and on-prem in a hub-spoke model']},
+    {id:'3.6', name:'Storage services', concepts:['S3: object storage, 11 9s durability, unlimited capacity','S3 Standard → IA → One Zone-IA → Glacier Instant → Glacier Flexible → Glacier Deep Archive — cost vs retrieval time','EBS: block storage, attached to one EC2 instance (usually), AZ-specific','EFS: elastic file system, shared across multiple EC2, NFS protocol','Storage Gateway: bridge on-prem to S3/EBS/Tape','Snowball Edge: 80TB, petabyte-scale data transfer by truck','Snowmobile: exabyte-scale, literal shipping container']},
+    {id:'3.7', name:'AI/ML services', concepts:['SageMaker: full ML platform — build, train, deploy models','Bedrock: foundation models as a service (Claude, Llama, Titan)','Rekognition: image and video analysis','Comprehend: NLP — sentiment, entities, key phrases','Lex: conversational chatbots (powers Alexa)','Polly: text to speech','Translate: real-time language translation','Textract: extract text and data from documents']},
+    {id:'3.8', name:'Other service categories', concepts:['SNS: pub/sub, push notifications, fan-out pattern','SQS: message queue, decouples components, pull-based','EventBridge: event bus, route events between services','Step Functions: visual workflow orchestration for microservices','AppSync: managed GraphQL']},
+  ]},
+  {num:4, name:'Billing, Pricing, and Support', weight:12, flagged:true,
+   subdomains:[
+    {id:'4.1', name:'Pricing models', concepts:['On-Demand: no commitment, highest rate, use for spiky unpredictable workloads','Reserved Instances: 1 or 3 year, Standard (can\'t change) vs Convertible (can change family)','Savings Plans: Compute (most flexible), EC2 Instance, SageMaker — commitment in $/hr not specific instances','Spot Instances: up to 90% off, AWS can reclaim with 2-min notice — use for fault-tolerant batch jobs','Dedicated Hosts: physical server reservation, per-host billing, for BYOL licensing compliance','Dedicated Instances: isolated hardware, per-instance billing, no host-level control','Free Tier: 12-month (750hr EC2 t2.micro), Always Free (Lambda 1M req/mo, DynamoDB 25GB), Trials']},
+    {id:'4.2', name:'Billing and cost management', concepts:['Cost Explorer: visualize spend, forecast, RI/SP purchase recommendations — the analysis tool','AWS Budgets: set alerts when spend/usage/RI coverage exceeds threshold — the alert tool','Cost Anomaly Detection: ML detects unusual spend patterns — automated anomaly alerts','Cost and Usage Report (CUR): most granular billing data, delivered to S3','Consolidated Billing: one bill for org, volume discount pooling — master account pays','Cost Allocation Tags: tag resources to track costs by project/team/env — must be activated','Compute Optimizer: ML recommends right-sizing for EC2, Lambda, EBS']},
+    {id:'4.3', name:'Support options', concepts:['Basic: free, documentation, forums, AWS Health Dashboard, no technical support','Developer: business hours email, 1 primary contact, general guidance <24hr, $29/mo or 3% of charges','Business: 24/7 phone/chat/email, unlimited contacts, <1hr critical response, full Trusted Advisor, $100/mo or %','Enterprise On-Ramp: pool of TAMs, <30min critical, concierge support, $5500/mo or %','Enterprise: dedicated TAM, <15min critical, business reviews, $15000/mo or %','Trusted Advisor: 5 categories — cost optimization, security, fault tolerance, performance, service limits','Basic/Developer get only 7 core TA checks; Business+ get full suite']},
+  ]},
+];
+
+// ── CCP STATE MANAGEMENT ────────────────────────────────
+function loadCCPState(){
+  try{return JSON.parse(localStorage.getItem('drill_engine_ccp_state')||'null');}
+  catch(e){return null;}
+}
+function saveCCPState(state){
+  localStorage.setItem('drill_engine_ccp_state',JSON.stringify(state));
+}
+function getCurrDomain(){
+  const state=loadCCPState();
+  const num=state?.currentDomain||2;
+  return CCP_DOMAINS.find(d=>d.num===num)||CCP_DOMAINS[1];
+}
+function getCurrSubIdx(){
+  const state=loadCCPState();
+  return state?.currentSubIdx||0;
+}
+function getCurrSub(){
+  const d=getCurrDomain();
+  const idx=getCurrSubIdx();
+  return d.subdomains[Math.min(idx,d.subdomains.length-1)];
+}
+function loadState(){
+  try{return JSON.parse(localStorage.getItem('drill_engine_state')||'null');}
+  catch(e){return null;}
+}
+function saveState(state){
+  localStorage.setItem('drill_engine_state',JSON.stringify(state));
+}
+function getCurrMod(){
+  const state=loadState();
+  const num=state?.currentModule||1;
+  return MODULES[Math.min(num,MODULES.length)-1];
+}
+function todayStrDE(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+// ── DYNAMIC SYSTEM PROMPT ──────────────────────────────
+let currentMode = 'python';
+
+function buildSystem(){
+  return currentMode === 'ccp' ? buildCCPSystem() : buildPythonSystem();
+}
+
+function buildPythonSystem(){
+  const state=loadState();
+  const mod=getCurrMod();
+  const covered=state?.covered?.length?state.covered:mod.defaultCovered;
+  const stillTo=state?.stillTo?.length?state.stillTo:mod.defaultStillTo;
+  const seqStr=MODULES.map(m=>`M${m.num} ${m.name}${m.num===mod.num?' (CURRENT)':''}`).join(' → ');
+
+  // Condense concept labels — strip explanatory text after colon/dash to save tokens
+  const condense=c=>c.split(/\s[—:–]\s/)[0].trim();
+  const covShort=covered.map(condense);
+  const stillShort=stillTo.map(condense);
+  const seqShort=MODULES.map(m=>`M${m.num}${m.num===mod.num?'*':''}`).join('→');
+
+  return `Drill coach for Damon. Direct, no fluff.
+CONTEXT: Applied AI accelerator. Python beginner. M${mod.num}: ${mod.name}. IDE: Cursor/Mac, python3, ~/dev/drills/${mod.file}. Seq: ${seqShort}
+COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
+REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → suggest M'+(mod.num+1)}
+
+COMPOUND DRILLING: Where 2-3 remaining concepts interact naturally, combine them into one snippet that exercises both. This maximizes concepts tested per exchange. Single-concept drills only when a concept must stand alone (e.g. first exposure to a type).
+
+FORMAT:
+[DRILL] on its own line before every drill.
+Give snippet (2-5 lines) or direct question. Ask prediction before he runs it. Wait. He runs, reports. Explain if wrong (2-3 lines). Next drill immediately.
+
+RULES: Predict first always. Correct→"Exactly."/"Correct." + next drill. Wrong→brief why + next. Responses ≤6 lines unless explaining error. No intros or mid-session summaries. Concept question→2 lines answer + drill.
+
+WEAK: [WEAK: <concept ≤5 words>] — one per response, genuine struggles only.
+
+END SESSION log format exactly:
+---LOG---
+MODULE: M${mod.num} · ${mod.name}
+DRILLS: <n>
+COVERED: <concepts>
+WEAK SPOTS: <list or None>
+NEXT DRILL: <snippet or question>
+NEXT FOCUS: <one line>
+---END---`;
+}
+
+function buildCCPSystem(){
+  const domain=getCurrDomain();
+  const sub=getCurrSub();
+  const ccpState=loadCCPState();
+  const covered=ccpState?.covered?.[sub.id]||[];
+  const stillTo=sub.concepts.filter(c=>!covered.includes(c));
+  const flaggedDomains=CCP_DOMAINS.filter(d=>d.flagged).map(d=>`D${d.num} ${d.name} (${d.weight}%)`).join(', ');
+
+  // Condense concepts to identifiers — strip explanatory text to save tokens
+  const condense=c=>c.split(/\s[—:–]\s/)[0].split(':')[0].trim();
+  const covShort=covered.map(condense);
+  const stillShort=stillTo.map(condense);
+
+  return `CCP drill coach for Damon. Direct, exam-focused, no fluff.
+CONTEXT: CLF-C02. Score 769→850+. Flagged: ${flaggedDomains}.
+FOCUS: D${domain.num} ${domain.name} (${domain.weight}%)${domain.flagged?' ⚠ NEEDS IMPROVEMENT':''} / ${sub.id} ${sub.name}
+COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
+REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → next subdomain'}
+
+COMPOUND DRILLING: The exam tests concepts in combination. Where 2-3 remaining concepts interact naturally (e.g. shared responsibility + encryption, pricing model + use case, IAM deny + policy type), build one MCQ that requires understanding of both. Single-concept questions only for first exposure to a concept or when isolation is pedagogically necessary. Compound questions = more exam-realistic + more coverage per token.
+
+FORMAT:
+[DRILL] on its own line before every question.
+MCQ preferred (A/B/C/D, plausible distractors). Ask for answer + reasoning. Wait. Confirm or correct with 2-3 line explanation of why right is right and wrong is wrong. Next question immediately.
+
+RULES: One question at a time. Distractors must be plausible. Correct→"Correct." + one reinforcement line + next. Wrong→explain right answer + why distractor fails + next. Responses ≤8 lines unless complex distinction requires more. No intros or summaries. Concept question→2 lines + drill.
+PRIORITY DISTINCTIONS: shared responsibility gray areas (RDS/EC2 OS patching), explicit deny always wins, Shield Std vs Adv, SG stateful vs NACL stateless, Cost Explorer vs Budgets vs Anomaly Detection, support tier response times, RI Standard vs Convertible, Savings Plans types.
+
+WEAK: [WEAK: <concept ≤5 words>] — one per response, genuine struggles only.
+
+END SESSION log format exactly:
+---LOG---
+DOMAIN: D${domain.num} · ${domain.name}
+SUBDOMAIN: ${sub.id} · ${sub.name}
+DRILLS: <n>
+COVERED: <concepts>
+WEAK SPOTS: <list or None>
+NEXT QUESTION: <exact question to open next session>
+NEXT FOCUS: <one line>
+---END---`;
+}
+
+// ── HISTORY ───────────────────────────────────────────
+const HIST_CAP=10;
+let hist=[],weakSpots=[],drills=0;
+function trimHist(){if(hist.length>HIST_CAP)hist=hist.slice(hist.length-HIST_CAP);}
+
+// ── HEADER ────────────────────────────────────────────
+function updateHeader(){
+  const modPill=document.getElementById('modPill');
+  const toggle=document.getElementById('modeToggle');
+  if(currentMode==='ccp'){
+    const domain=getCurrDomain();
+    const sub=getCurrSub();
+    modPill.textContent=`D${domain.num} · ${sub.id} ${sub.name}`;
+    modPill.className=`pill ${domain.flagged?'pill-flag':'pill-ccp'}`;
+    toggle.textContent='CCP';
+    toggle.style.color='var(--amber)';
+    toggle.style.borderColor='rgba(245,166,35,.4)';
+  } else {
+    const mod=getCurrMod();
+    modPill.textContent=`M${mod.num} · ${mod.name}`;
+    modPill.className='pill pill-m';
+    toggle.textContent='PY';
+    toggle.style.color='';
+    toggle.style.borderColor='';
+  }
+  const startStr=localStorage.getItem('v9d_start')||'';
+  if(startStr){
+    const diff=Math.floor((new Date()-new Date(startStr))/(7*24*3600*1000));
+    const wk=Math.min(24,Math.max(1,diff+1));
+    document.getElementById('weekPill').textContent=`Week ${wk}`;
+  }
+}
+
+// ── START MODES ───────────────────────────────────────
+function backToMain(){
+  document.getElementById('startScreen').classList.remove('gone');
+  document.getElementById('pyScreen').classList.add('gone');
+  document.getElementById('ccpScreen').classList.add('gone');
+}
+
+function showPythonOpts(){
+  currentMode='python';
+  document.getElementById('startScreen').classList.add('gone');
+  document.getElementById('pyScreen').classList.remove('gone');
+  updateHeader();
+}
+
+function showCCPSel(){
+  currentMode='ccp';
+  document.getElementById('startScreen').classList.add('gone');
+  document.getElementById('ccpScreen').classList.remove('gone');
+  renderCCPDomains();
+  updateHeader();
+}
+
+function renderCCPDomains(){
+  const list=document.getElementById('ccpDomainList');
+  const ccpState=loadCCPState();
+  list.innerHTML=CCP_DOMAINS.map(d=>{
+    const subCount=d.subdomains.length;
+    const badge=d.flagged
+      ?'<span class="dcrd-flag">NEEDS IMPROVEMENT</span>'
+      :'<span class="dcrd-ok">MEETS REQUIREMENTS</span>';
+    return `<div class="dcrd${d.flagged?' flagged':''}" onclick="startCCPDomain(${d.num})">
+      <div class="dcrd-num">D${d.num}</div>
+      <div class="dcrd-body">
+        <div class="dcrd-name">${d.name}</div>
+        <div class="dcrd-meta">${d.weight}% of exam · ${subCount} subdomains ${badge}</div>
+      </div>
+      <div class="dcrd-arr">▶</div>
+    </div>`;
+  }).join('');
+}
+
+function startCCPDomain(domainNum){
+  currentMode='ccp';
+  const state=loadCCPState()||{};
+  state.currentDomain=domainNum;
+  state.currentSubIdx=0;
+  saveCCPState(state);
+  updateHeader();
+  go();
+  const domain=getCurrDomain();
+  const sub=getCurrSub();
+  addU(`Start CCP drill — D${domain.num} ${domain.name} / ${sub.id} ${sub.name}`);
+  call(`Start a CCP drill session for Domain ${domain.num}: ${domain.name}, Subdomain ${sub.id}: ${sub.name}. This domain is ${domain.flagged?'flagged as Needs Improvement — be rigorous':'currently passing'}. In one line, note the focus. Then go straight into the first drill question.`);
+}
+
+function startFresh(){
+  currentMode='python';
+  const mod=getCurrMod();
+  go();
+  addU(`Start fresh — M${mod.num} drills`);
+  call(`Start a fresh M${mod.num} drill session. In one line, note what's been covered. Then go straight into the next untouched concept. First drill now.`);
+}
+
+function startPaste(){
+  go();
+  const inp=document.getElementById('inp');
+  inp.placeholder='PASTE DASHBOARD JSON STATE OR DESCRIBE WHERE YOU ARE...';
+  focus();
+}
+
+function startDebrief(){
+  go();
+  document.getElementById('inp').placeholder='DESCRIBE WHAT YOU JUST WORKED ON...';
+  focus();
+}
+
+function go(){
+  document.getElementById('startScreen').classList.add('gone');
+  document.getElementById('thread').style.display='flex';
+  document.getElementById('ibar').style.display='flex';
+}
+function focus(){setTimeout(()=>document.getElementById('inp').focus(),80)}
+
+function addU(t){
+  const thread=document.getElementById('thread');
+  const el=document.createElement('div');
+  el.className='msg mu';el.textContent=t;
+  thread.appendChild(el);
+  requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+}
+
+function think(){
+  const thread=document.getElementById('thread');
+  const el=document.createElement('div');
+  el.className='thinking';el.id='thk';
+  el.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  thread.appendChild(el);
+  requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+}
+function unthink(){const e=document.getElementById('thk');if(e)e.remove();}
+function scrollThread(){const t=document.getElementById('thread');requestAnimationFrame(()=>t.scrollTop=t.scrollHeight);}
+
+function finalizeA(el, fullText){
+  // Remove cursor
+  const cur=el.querySelector('.cursor');
+  if(cur)cur.remove();
+
+  // Weak spot extraction — can appear multiple times
+  const wms=[...fullText.matchAll(/\[WEAK:\s*([^\]]+)\]/gi)];
+  wms.forEach(m=>addWS(m[1].trim()));
+
+  // Drill counter — count [DRILL] markers Claude outputs
+  const drillMarkers=(fullText.match(/\[DRILL\]/gi)||[]).length;
+  if(drillMarkers>0){drills+=drillMarkers;document.getElementById('dc').textContent=drills;}
+
+  // Log block extraction + localStorage write
+  const lm=fullText.match(/---LOG---([\s\S]+?)---END---/);
+  if(lm){
+    const rawLog=lm[1].trim();
+    const lb=document.createElement('div');
+    lb.className='logb';
+    lb.innerHTML=`<div class="logb-hd">◎ Session Log — saved to dashboard</div>`+
+      rawLog.replace(/\n/g,'<br>')+
+      `<button class="log-copy" onclick="copyLog(this)" data-log="${encodeURIComponent(rawLog)}">Copy to clipboard</button>`;
+    el.appendChild(lb);
+    saveSessionLog(rawLog);
+  }
+
+  el.classList.remove('streaming');
+  scrollThread();
+}
+
+function saveSessionLog(rawLog){
+  const getField=(label)=>{const m=rawLog.match(new RegExp(label+':\\s*([^\\n]+)'));return m?m[1].trim():''};
+  const covBlock=rawLog.match(/COVERED:([\s\S]+?)(?=WEAK SPOTS:|---END---|$)/);
+  const covered=covBlock?covBlock[1].split('\n').map(l=>l.replace(/^[-•*]\s*/,'')).filter(l=>l.trim()):[];
+  const wsBlock=rawLog.match(/WEAK SPOTS:([\s\S]+?)(?=NEXT |---END---|$)/);
+  const wsFromLog=wsBlock?wsBlock[1].split('\n').map(l=>l.replace(/^[-•*]\s*/,'')).filter(l=>l.trim()&&l.trim().toLowerCase()!=='none'):[];
+
+  if(currentMode==='ccp'){
+    const domain=getCurrDomain();
+    const sub=getCurrSub();
+    const log={
+      date:todayStrDE(),
+      mode:'ccp',
+      domain:`D${domain.num}`,
+      domainName:domain.name,
+      subdomain:sub.id,
+      subdomainName:sub.name,
+      drills:drills,
+      weakSpots:[...new Set([...weakSpots,...wsFromLog])],
+      nextQuestion:getField('NEXT QUESTION'),
+      nextFocus:getField('NEXT FOCUS'),
+      raw:rawLog
+    };
+    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
+    // Update CCP cumulative state
+    const state=loadCCPState()||{};
+    state.currentDomain=domain.num;
+    state.totalSessions=(state.totalSessions||0)+1;
+    state.totalDrills=(state.totalDrills||0)+drills;
+    state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
+    state.lastActivity=todayStrDE();
+    if(covered.length){
+      if(!state.covered) state.covered={};
+      const existing=state.covered[sub.id]||[];
+      state.covered[sub.id]=[...new Set([...existing,...covered])];
+    }
+    saveCCPState(state);
+  } else {
+    const mod=getCurrMod();
+    const log={
+      date:todayStrDE(),
+      mode:'python',
+      module:`M${mod.num}`,
+      moduleName:mod.name,
+      drills:drills,
+      weakSpots:[...new Set([...weakSpots,...wsFromLog])],
+      nextDrill:getField('NEXT DRILL'),
+      nextFocus:getField('NEXT FOCUS'),
+      raw:rawLog
+    };
+    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
+    const state=loadState()||{};
+    state.currentModule=mod.num;
+    state.moduleName=mod.name;
+    state.totalSessions=(state.totalSessions||0)+1;
+    state.totalDrills=(state.totalDrills||0)+drills;
+    state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
+    state.lastActivity=todayStrDE();
+    if(covered.length){
+      const existing=state.covered||[];
+      state.covered=[...new Set([...existing,...covered])];
+    }
+    saveState(state);
+  }
+}
+
+function addWS(concept){
+  if(weakSpots.includes(concept))return;
+  weakSpots.push(concept);
+  const e=document.getElementById('wsEmpty');if(e)e.remove();
+  const item=document.createElement('div');
+  item.className='ws-item';
+  const mod=getCurrMod();
+  item.innerHTML=`<span class="ws-mod">M${mod.num}</span>${concept}`;
+  document.getElementById('wsList').appendChild(item);
+  const p=document.getElementById('wsPill');
+  p.textContent=`${weakSpots.length} weak spot${weakSpots.length!==1?'s':''}`;
+  p.classList.add('on');
+  document.getElementById('wc').textContent=weakSpots.length;
+}
+
+function fmt(t){
+  t=t.replace(/\[WEAK:[^\]]+\]/gi,'').trim();
+  t=t.replace(/\[DRILL\]/gi,'').trim();
+  t=t.replace(/---LOG---[\s\S]+?---END---/g,'').trim();
+  t=t.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<pre><code>${esc(c.trim())}</code></pre>`);
+  t=t.replace(/`([^`]+)`/g,'<code>$1</code>');
+  t=t.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  t=t.replace(/\*([^*]+)\*/g,'<em>$1</em>');
+  return t.split(/\n\n+/).map(p=>{
+    p=p.trim();if(!p)return'';
+    if(p.startsWith('<pre>'))return p;
+    return`<p>${p.replace(/\n/g,'<br>')}</p>`;
+  }).filter(Boolean).join('');
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function addErrMsg(msg){
+  const thread=document.getElementById('thread');
+  const el=document.createElement('div');
+  el.className='msg ma';
+  el.innerHTML=`<p style="color:var(--coral);font-family:var(--fm);font-size:12px;">⚠ ${esc(msg)}</p>`;
+  thread.appendChild(el);
+  requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+}
+
+async function call(userMsg){
+  lock(true);think();
+  hist.push({role:'user',content:userMsg});
+  trimHist();
+
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':getKey(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        stream:true,
+        system:buildSystem(),
+        messages:hist
+      })
+    });
+
+    if(!r.ok){
+      const errData=await r.json();
+      unthink();
+      addErrMsg(`Error ${r.status} — ${errData.error?.message||'API call failed.'}`);
+      hist.pop();lock(false);return;
+    }
+
+    unthink();
+    const thread=document.getElementById('thread');
+    const el=document.createElement('div');
+    el.className='msg ma streaming';
+    el.innerHTML='<span class="cursor"></span>';
+    thread.appendChild(el);
+    requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+
+    const reader=r.body.getReader();
+    const decoder=new TextDecoder();
+    let fullText='',buffer='';
+
+    while(true){
+      const{done,value}=await reader.read();if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');buffer=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data:'))continue;
+        const data=line.slice(5).trim();if(data==='[DONE]')continue;
+        try{
+          const parsed=JSON.parse(data);
+          if(parsed.type==='content_block_delta'&&parsed.delta?.type==='text_delta'){
+            fullText+=parsed.delta.text;
+            el.innerHTML=fmt(fullText)+'<span class="cursor"></span>';
+            requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+          }
+        }catch(e){}
+      }
+    }
+    hist.push({role:'assistant',content:fullText});
+    finalizeA(el,fullText);
+  }catch(err){
+    unthink();
+    addErrMsg(`Network error — ${err.message}`);
+    hist.pop();
+  }
+  lock(false);
+}
+
+function send(){
+  const inp=document.getElementById('inp');
+  const t=inp.value.trim();if(!t)return;
+
+  if(inp.placeholder.includes('PASTE DASHBOARD')){
+    if(t.length<10){
+      addErrMsg('Paste more context — describe where you are, or paste a JSON snippet.');
+      inp.value='';return;
+    }
+    const isJSON=t.trim().startsWith('{');
+    const prompt=isJSON
+      ?`Here is my current dashboard state: ${t}\n\nPick up from where I left off in the drill sequence. Brief one-line recap, then first drill.`
+      :`My current state: ${t}\n\nPick up from where I left off. Brief one-line recap, then first drill.`;
+    inp.value='';resize(inp);
+    inp.placeholder='TYPE YOUR PREDICTION OR RESPONSE...';
+    addU(t.length>120?t.slice(0,120)+'…':t);
+    call(prompt);return;
+  }
+
+  inp.value='';resize(inp);
+  inp.placeholder='TYPE YOUR PREDICTION OR RESPONSE...';
+  addU(t);call(t);
+}
+
+function endSession(){
+  if(currentMode==='ccp'){
+    addU('End session — generate log entry');
+    call('End this session. Generate the session log in the exact format specified. List all weak spots identified this session. Then one line: what to hit first next session.');
+  } else {
+    addU('End session — generate log entry');
+    call('End this session. Generate the session log in the exact format specified. List all weak spots identified this session. Then one line of encouragement.');
+  }
+}
+
+function switchMode(){
+  // Only works from main screen — prevents mid-session mode switch
+  backToMain();
+  hist=[];weakSpots=[];drills=0;
+  document.getElementById('dc').textContent='0';
+  document.getElementById('wc').textContent='0';
+  document.getElementById('wsList').innerHTML='<div class="ws-empty" id="wsEmpty">None flagged yet</div>';
+  document.getElementById('thread').style.display='none';
+  document.getElementById('ibar').style.display='none';
+  document.getElementById('thread').innerHTML='';
+  document.getElementById('wsPill').classList.remove('on');
+}
+
+function lock(on){
+  document.getElementById('bsend').disabled=on;
+  document.getElementById('bend').disabled=on;
+}
+function resize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,130)+'px';
+}
+function copyLog(btn){
+  navigator.clipboard.writeText(decodeURIComponent(btn.dataset.log)).then(()=>{
+    btn.textContent='✓ Copied';
+    setTimeout(()=>btn.textContent='Copy to clipboard',2000);
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────
+updateHeader();
+checkKey();
+</script>
+</body>
+</html>
