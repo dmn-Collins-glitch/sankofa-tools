@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPS · Damon · Applied AI Accelerator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── THEME TOKENS ─────────────────────────────────── */
+:root {
+  --fd:'Syne',sans-serif;
+  --fb:'Figtree',sans-serif;
+  --fm:'Share Tech Mono',monospace;
+}
+
+[data-theme="dark"] {
+  --bg:        #080C0D;
+  --bg2:       #0D1416;
+  --bg3:       #111A1C;
+  --surface:   #141F22;
+  --surface2:  #1A282C;
+  --surface3:  #1F3035;
+  --border:    #1E3035;
+  --border-mid:#2A4048;
+  --border-hi: #3A5560;
+  --text:      #D4E8E8;
+  --text-2:    #8BBCBC;
+  --text-3:    #4E7A80;
+  --text-4:    #2E5560;
+  --teal:      #00D4C8;
+  --teal-dim:  #00897F;
+  --teal-glow: rgba(0,212,200,.12);
+  --teal-bg:   rgba(0,212,200,.06);
+  --amber:     #F5A623;
+  --amber-dim: #C47B0A;
+  --amber-bg:  rgba(245,166,35,.08);
+  --amber-glow:rgba(245,166,35,.15);
+  --coral:     #FF6B4A;
+  --coral-bg:  rgba(255,107,74,.08);
+  --purple:    #A78BFA;
+  --purple-bg: rgba(167,139,250,.08);
+  --green:     #34D399;
+  --green-dim: #10B981;
+  --green-bg:  rgba(52,211,153,.08);
+  --red:       #F87171;
+  --red-bg:    rgba(248,113,113,.08);
+  --scanline:  rgba(0,212,200,.025);
+  --shadow:    0 0 0 1px var(--border), 0 4px 24px rgba(0,0,0,.4);
+  --shadow-glow: 0 0 0 1px var(--border-mid), 0 0 20px var(--teal-glow);
+}
+
+[data-theme="light"] {
+  --bg:        #F2F0EB;
+  --bg2:       #ECEAE4;
+  --bg3:       #E5E2DB;
+  --surface:   #FFFFFF;
+  --surface2:  #F5F3EE;
+  --surface3:  #EDEBE5;
+  --border:    #D9D6CE;
+  --border-mid:#C4C0B8;
+  --border-hi: #A8A49E;
+  --text:      #1A1918;
+  --text-2:    #4A4845;
+  --text-3:    #7A7773;
+  --text-4:    #A8A49E;
+  --teal:      #0A7A70;
+  --teal-dim:  #0D5C63;
+  --teal-glow: rgba(10,122,112,.08);
+  --teal-bg:   rgba(10,122,112,.06);
+  --amber:     #C47B0A;
+  --amber-dim: #A86608;
+  --amber-bg:  rgba(196,123,10,.07);
+  --amber-glow:rgba(196,123,10,.12);
+  --coral:     #C04B2A;
+  --coral-bg:  rgba(192,75,42,.07);
+  --purple:    #5B3FA0;
+  --purple-bg: rgba(91,63,160,.07);
+  --green:     #2A6B3A;
+  --green-dim: #1E5229;
+  --green-bg:  rgba(42,107,58,.07);
+  --red:       #B83232;
+  --red-bg:    rgba(184,50,50,.07);
+  --scanline:  transparent;
+  --shadow:    0 1px 3px rgba(0,0,0,.06), 0 0 0 1px var(--border);
+  --shadow-glow: 0 0 0 1px var(--border-mid), 0 2px 12px rgba(0,0,0,.08);
+}
+
+/* ── RESET & BASE ─────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--fb);
+  font-size:14px;
+  line-height:1.6;
+  min-height:100vh;
+  transition:background .3s, color .3s;
+}
+[data-theme="dark"] body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scanline) 2px,var(--scanline) 4px);
+  pointer-events:none;z-index:0;
+}
+.page{position:relative;z-index:1;max-width:1020px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+
+/* ── ANIMATIONS ───────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-ring{0%,100%{opacity:.4}50%{opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.fade-up{animation:fadeUp .35s ease both}
+.fade-up-1{animation-delay:.05s}
+.fade-up-2{animation-delay:.1s}
+.fade-up-3{animation-delay:.15s}
+.fade-up-4{animation-delay:.2s}
+.fade-up-5{animation-delay:.25s}
+.fade-up-6{animation-delay:.3s}
+
+/* ── SETUP OVERLAY ────────────────────────────────── */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.75);
+  display:flex;align-items:center;justify-content:center;
+  z-index:400;padding:1rem;
+  backdrop-filter:blur(6px);
+}
+.setup-box{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  padding:2.25rem;
+  max-width:400px;width:100%;
+  box-shadow:var(--shadow-glow);
+}
+[data-theme="dark"] .setup-box{border-top:2px solid var(--teal)}
+.setup-box h2{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:.4rem;color:var(--text)}
+.setup-box p{font-size:12.5px;color:var(--text-2);line-height:1.65;margin-bottom:1.5rem}
+.setup-lbl{font-family:var(--fm);font-size:10px;color:var(--text-3);display:block;margin-bottom:.4rem;letter-spacing:.1em;text-transform:uppercase}
+.setup-box input[type=date]{
+  width:100%;padding:.65rem .85rem;
+  border:1px solid var(--border-mid);border-radius:3px;
+  font-family:var(--fm);font-size:13px;
+  background:var(--bg2);color:var(--text);margin-bottom:1rem;
+}
+.btn-primary{
+  width:100%;padding:.7rem;
+  background:var(--teal);color:var(--bg);
+  border:none;border-radius:3px;
+  font-family:var(--fm);font-size:12px;font-weight:600;
+  cursor:pointer;letter-spacing:.1em;text-transform:uppercase;
+  transition:opacity .15s;
+}
+.btn-primary:hover{opacity:.85}
+
+/* ── HEADER ───────────────────────────────────────── */
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:.75rem;
+  margin-bottom:1.5rem;
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--border-mid);
+}
+[data-theme="dark"] .hdr{border-bottom-color:var(--border-mid)}
+.hdr-left{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.hdr-brand{
+  font-family:var(--fm);font-size:11px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--teal);
+}
+[data-theme="dark"] .hdr-brand::before{
+  content:'▶ ';font-size:8px;animation:pulse-ring 2s infinite;
+}
+.hdr-pills{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.pill{
+  font-family:var(--fm);font-size:10px;
+  padding:2px 9px;border-radius:2px;
+  border:1px solid var(--border-mid);
+  letter-spacing:.06em;
+}
+.pill-phase{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-dim)}
+.pill-week{background:var(--surface2);color:var(--text-2)}
+.hdr-right{display:flex;align-items:center;gap:.75rem}
+.hdr-date{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.04em}
+.theme-btn{
+  width:28px;height:28px;
+  border:1px solid var(--border-mid);border-radius:2px;
+  background:var(--surface2);color:var(--text-2);
+  font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;flex-shrink:0;
+}
+.theme-btn:hover{border-color:var(--teal);color:var(--teal)}
+.drill-btn{
+  font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--teal);color:var(--bg);
+  border:none;border-radius:3px;
+  padding:.3rem .75rem;cursor:pointer;
+  transition:opacity .15s;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:.4rem;
+}
+.drill-btn::before{content:'▶';font-size:8px}
+.drill-btn:hover{opacity:.85}
+
+/* ── MONDAY BANNER ────────────────────────────────── */
+.mon-banner{
+  background:var(--purple-bg);
+  border:1px solid var(--purple);
+  border-left:3px solid var(--purple);
+  border-radius:3px;
+  padding:.6rem 1rem;
+  margin-bottom:1rem;
+  display:none;align-items:center;justify-content:space-between;gap:.75rem;
+}
+.mon-banner p{font-family:var(--fm);font-size:11px;color:var(--purple);letter-spacing:.04em}
+.mon-banner a{
+  font-family:var(--fm);font-size:10px;color:var(--purple);
+  border:1px solid var(--purple);border-radius:2px;
+  padding:.25rem .65rem;text-decoration:none;
+  white-space:nowrap;letter-spacing:.06em;
+}
+.mon-banner a:hover{background:var(--purple-bg)}
+
+/* ── NORTH STAR ───────────────────────────────────── */
+.north-star{
+  background:var(--teal-bg);
+  border:1px solid var(--border-mid);
+  border-left:3px solid var(--teal);
+  border-radius:3px;
+  padding:.75rem 1.1rem;
+  margin-bottom:1rem;
+  display:flex;align-items:flex-start;gap:.75rem;
+}
+.ns-label{
+  font-family:var(--fm);font-size:9px;
+  color:var(--teal);letter-spacing:.15em;text-transform:uppercase;
+  white-space:nowrap;margin-top:2px;flex-shrink:0;
+}
+.ns-text{font-size:12.5px;color:var(--text-2);line-height:1.6}
+.ns-text strong{color:var(--text);font-weight:600}
+
+/* ── STREAK HERO ──────────────────────────────────── */
+.streak-hero{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  padding:1.25rem 1.5rem;
+  margin-bottom:1rem;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:2rem;align-items:center;
+  box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+[data-theme="dark"] .streak-hero::after{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),transparent);
+}
+@media(max-width:600px){.streak-hero{grid-template-columns:1fr}}
+.s-left{}
+.s-num{
+  font-family:var(--fm);font-size:56px;font-weight:400;
+  line-height:1;color:var(--teal);
+  text-shadow:0 0 30px var(--teal-glow);
+  letter-spacing:-2px;
+}
+.s-label{
+  font-family:var(--fm);font-size:9px;
+  color:var(--text-3);letter-spacing:.2em;text-transform:uppercase;
+  margin-top:4px;
+}
+.s-badges{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem}
+.s-badge{
+  font-family:var(--fm);font-size:10px;
+  padding:2px 8px;border-radius:2px;
+  border:1px solid var(--border-mid);
+  color:var(--text-3);
+  display:inline-flex;align-items:center;gap:.35rem;
+}
+.s-badge.active{border-color:var(--green-dim);color:var(--green);background:var(--green-bg)}
+.s-badge.warn{border-color:var(--amber-dim);color:var(--amber);background:var(--amber-bg)}
+.s-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.s-dot-green{background:var(--green)}
+.s-dot-amber{background:var(--amber);animation:pulse-ring 2s infinite}
+.s-right{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;
+}
+@media(max-width:520px){.s-right{grid-template-columns:repeat(2,1fr)}}
+.s-stat{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:3px;padding:.65rem .75rem;
+}
+.s-stat .n{
+  font-family:var(--fm);font-size:20px;
+  color:var(--text);display:block;line-height:1.1;
+}
+.s-stat .l{
+  font-family:var(--fm);font-size:9px;
+  color:var(--text-3);margin-top:3px;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* ── TODAY MISSION BLOCK ──────────────────────────── */
+.mission-block{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  margin-bottom:1rem;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+[data-theme="dark"] .mission-block{border-top:2px solid var(--amber)}
+.mission-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.75rem 1.25rem;
+  border-bottom:1px solid var(--border);
+  background:var(--amber-bg);
+}
+.mission-head-left{display:flex;align-items:center;gap:.75rem}
+.mission-title{
+  font-family:var(--fm);font-size:11px;
+  color:var(--amber);letter-spacing:.15em;text-transform:uppercase;
+}
+.mission-sub{font-family:var(--fm);font-size:10px;color:var(--text-3)}
+.mission-reset{
+  font-family:var(--fm);font-size:9px;color:var(--text-4);
+  cursor:pointer;letter-spacing:.08em;
+  border:1px solid var(--border);border-radius:2px;
+  padding:2px 7px;background:none;
+  transition:all .12s;
+}
+.mission-reset:hover{color:var(--text-2);border-color:var(--border-mid)}
+.mission-list{padding:.75rem 1.25rem;display:flex;flex-direction:column;gap:.4rem}
+.mission-item{
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.5rem .65rem;
+  border:1px solid var(--border);border-radius:3px;
+  cursor:pointer;transition:all .12s;
+  background:var(--bg2);
+}
+.mission-item:hover{border-color:var(--border-mid)}
+.mission-item.done{opacity:.45}
+.mission-item.done .mi-text{text-decoration:line-through;color:var(--text-3)}
+.mi-check{
+  width:16px;height:16px;border-radius:2px;
+  border:1px solid var(--border-hi);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+  font-family:var(--fm);font-size:10px;
+  transition:all .12s;color:transparent;
+}
+.mission-item.done .mi-check{
+  background:var(--green-dim);border-color:var(--green-dim);
+  color:var(--bg);
+}
+.mi-text{font-size:12.5px;color:var(--text-2);line-height:1.5;flex:1}
+.mi-text small{display:block;font-family:var(--fm);font-size:10px;color:var(--text-3);margin-top:2px}
+.mi-tag{
+  font-family:var(--fm);font-size:9px;
+  padding:1px 6px;border-radius:2px;
+  flex-shrink:0;margin-top:2px;
+  border:1px solid var(--border);color:var(--text-3);
+}
+.mi-tag.cert{border-color:var(--amber-dim);color:var(--amber);background:var(--amber-bg)}
+.mi-tag.code{border-color:var(--teal-dim);color:var(--teal);background:var(--teal-bg)}
+.mi-tag.review{border-color:var(--green-dim);color:var(--green);background:var(--green-bg)}
+
+/* ── 2-COL GRID ───────────────────────────────────── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:660px){.grid-2{grid-template-columns:1fr}}
+
+/* ── PYTHON CURRICULUM ────────────────────────────── */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem 1rem;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.panel-title{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
+.panel-meta{font-family:var(--fm);font-size:10px;color:var(--text-4)}
+.py-body{padding:.65rem .75rem}
+.py-ring-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.65rem;padding:.5rem .65rem;background:var(--bg2);border-radius:3px;border:1px solid var(--border)}
+.py-ring{position:relative;width:36px;height:36px;flex-shrink:0}
+.py-ring svg{transform:rotate(-90deg)}
+.py-ring-bg{fill:none;stroke:var(--border-mid);stroke-width:3}
+.py-ring-fill{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-dasharray:100;transition:stroke-dashoffset .5s;filter:drop-shadow(0 0 4px var(--teal))}
+.py-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:9px;color:var(--teal)}
+.py-ring-info{flex:1}
+.py-ring-info .pct{font-family:var(--fm);font-size:16px;color:var(--teal);line-height:1}
+.py-ring-info .sub{font-family:var(--fm);font-size:9.5px;color:var(--text-3);margin-top:2px}
+.py-modules{display:flex;flex-direction:column;gap:2px}
+.py-mod{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.32rem .5rem;border-radius:2px;
+  cursor:pointer;transition:all .1s;
+  border:1px solid transparent;
+}
+.py-mod:hover{background:var(--bg2);border-color:var(--border)}
+.py-mod.done{opacity:.5}
+.py-mod.active{background:var(--teal-bg);border-color:var(--teal-dim)}
+.py-mod-dot{
+  width:16px;height:16px;border-radius:50%;
+  border:1px solid var(--border-hi);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-family:var(--fm);font-size:8px;color:var(--text-3);
+  transition:all .15s;
+}
+.py-mod.done .py-mod-dot{background:var(--teal);border-color:var(--teal);color:var(--bg)}
+.py-mod.active .py-mod-dot{border-color:var(--teal);color:var(--teal)}
+.py-mod-name{flex:1;font-size:12px;color:var(--text-2)}
+.py-mod.active .py-mod-name{color:var(--teal);font-weight:500}
+.py-mod.done .py-mod-name{color:var(--text-3)}
+.py-mod-sub{font-family:var(--fm);font-size:9.5px;color:var(--text-4)}
+
+/* Active drill prompt */
+.drill-prompt{
+  margin-top:.65rem;
+  padding:.65rem .8rem;
+  background:var(--teal-bg);
+  border:1px solid var(--teal-dim);
+  border-left:2px solid var(--teal);
+  border-radius:3px;
+}
+.drill-prompt-lbl{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem}
+.drill-prompt-text{font-size:12px;color:var(--text-2);line-height:1.6}
+.drill-prompt-hint{font-family:var(--fm);font-size:10px;color:var(--text-3);margin-top:.3rem}
+
+/* ── SESSION LOGGER ───────────────────────────────── */
+.log-body{padding:.75rem}
+.coded-status{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.65rem;
+  padding:.4rem .65rem;
+  background:var(--bg2);border-radius:3px;border:1px solid var(--border);
+}
+.coded-status-label{font-family:var(--fm);font-size:9px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase}
+.coded-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:2px}
+.coded-yes{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim)}
+.coded-no{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-dim)}
+
+/* CCP mini */
+.ccp-mini{
+  background:var(--amber-bg);
+  border:1px solid var(--amber-dim);
+  border-radius:3px;padding:.6rem .75rem;
+  margin-bottom:.65rem;
+}
+.ccp-mini-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem}
+.ccp-lbl{font-family:var(--fm);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase}
+.ccp-score{font-family:var(--fm);font-size:18px;color:var(--amber);line-height:1}
+.ccp-track{height:3px;background:var(--border-mid);border-radius:2px;overflow:hidden;margin-bottom:.45rem}
+.ccp-fill{height:100%;background:var(--amber);border-radius:2px;transition:width .4s;box-shadow:0 0 6px var(--amber-glow)}
+.ccp-input-row{display:flex;gap:.35rem}
+.ccp-input-row input{
+  flex:1;padding:.35rem .6rem;
+  border:1px solid var(--amber-dim);border-radius:2px;
+  font-family:var(--fm);font-size:12px;
+  background:var(--bg2);color:var(--text);
+}
+.ccp-input-row button{
+  padding:.35rem .75rem;background:var(--amber);color:var(--bg);
+  border:none;border-radius:2px;
+  font-family:var(--fm);font-size:10px;cursor:pointer;
+  letter-spacing:.06em;font-weight:600;
+}
+.ccp-hist{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem}
+.chip{font-family:var(--fm);font-size:10px;padding:1px 7px;border-radius:2px;background:var(--bg2);border:1px solid var(--border-mid);color:var(--text-3)}
+.chip.best{background:var(--amber);color:var(--bg);border-color:var(--amber)}
+
+/* Cat pills */
+.log-section-lbl{font-family:var(--fm);font-size:9px;color:var(--text-4);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem}
+.cat-pills{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.5rem}
+.cat-pill{
+  padding:.25rem .65rem;
+  border:1px solid var(--border-mid);border-radius:2px;
+  background:none;color:var(--text-3);
+  font-family:var(--fm);font-size:10px;cursor:pointer;
+  letter-spacing:.05em;transition:all .1s;
+}
+.cat-pill:hover{border-color:var(--border-hi);color:var(--text-2)}
+.sel-drill  {background:var(--teal-bg)!important;border-color:var(--teal-dim)!important;color:var(--teal)!important}
+.sel-cert   {background:var(--amber-bg)!important;border-color:var(--amber-dim)!important;color:var(--amber)!important}
+.sel-code   {background:var(--teal-bg)!important;border-color:var(--teal-dim)!important;color:var(--teal)!important}
+.sel-project{background:var(--coral-bg)!important;border-color:var(--coral)!important;color:var(--coral)!important}
+.sel-scan   {background:var(--purple-bg)!important;border-color:var(--purple)!important;color:var(--purple)!important}
+.sel-review {background:var(--green-bg)!important;border-color:var(--green-dim)!important;color:var(--green)!important}
+
+.ctx{display:none;flex-direction:column;gap:.4rem;padding:.5rem .6rem;background:var(--bg2);border-radius:2px;border:1px solid var(--border);margin-bottom:.4rem}
+.ctx.show{display:flex}
+.ctx select,.ctx input[type=number],.ctx input[type=text]{
+  padding:.35rem .55rem;
+  border:1px solid var(--border-mid);border-radius:2px;
+  font-family:var(--fm);font-size:11.5px;
+  background:var(--bg3);color:var(--text);width:100%;
+}
+.ctx-row{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.ctx-lbl{font-family:var(--fm);font-size:9px;color:var(--text-4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+
+.log-row{display:flex;flex-direction:column;gap:.35rem}
+.log-row-top{display:flex;gap:.35rem}
+.log-mins{
+  width:64px;flex:none;
+  padding:.4rem .55rem;
+  border:1px solid var(--border-mid);border-radius:2px;
+  font-family:var(--fm);font-size:13px;
+  background:var(--bg2);color:var(--text);
+}
+.log-note{
+  width:100%;padding:.4rem .6rem;
+  border:1px solid var(--border-mid);border-radius:2px;
+  font-family:var(--fb);font-size:12px;
+  background:var(--bg2);color:var(--text);
+  resize:vertical;min-height:38px;max-height:200px;
+  line-height:1.55;
+}
+.log-note::placeholder{color:var(--text-4)}
+.log-note:focus{outline:none;border-color:var(--border-hi)}
+.log-btn{
+  padding:.4rem .9rem;
+  background:var(--teal);color:var(--bg);
+  border:none;border-radius:2px;
+  font-family:var(--fm);font-size:10px;font-weight:600;
+  cursor:pointer;letter-spacing:.08em;
+  transition:opacity .12s;white-space:nowrap;
+}
+.log-btn:hover{opacity:.8}
+.log-ok{font-family:var(--fm);font-size:10px;color:var(--green);text-align:center;padding:.25rem;display:none;letter-spacing:.06em}
+
+/* ── THIS WEEK ────────────────────────────────────── */
+.week-panel{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  padding:1rem 1.25rem;
+  margin-bottom:1rem;
+  box-shadow:var(--shadow);
+}
+.week-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem}
+.week-title{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
+.week-meta{font-family:var(--fm);font-size:10px;color:var(--text-4)}
+.targets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+@media(max-width:560px){.targets-grid{grid-template-columns:1fr 1fr}}
+.target-item{
+  background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;
+  padding:.6rem .75rem;
+}
+.target-item.hit{background:var(--green-bg);border-color:var(--green-dim)}
+.target-item.hit .ti-lbl{color:var(--green)}
+.target-item.warn{background:var(--amber-bg);border-color:var(--amber-dim)}
+.target-item.warn .ti-lbl{color:var(--amber)}
+.ti-lbl{font-family:var(--fm);font-size:9px;color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.25rem}
+.ti-val{font-family:var(--fm);font-size:22px;color:var(--text);line-height:1}
+.ti-target{font-family:var(--fm);font-size:9.5px;color:var(--text-4);margin-top:2px}
+
+/* ── HEATMAP ──────────────────────────────────────── */
+.hm-panel{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  padding:1rem 1.25rem;
+  margin-bottom:1rem;
+  overflow-x:auto;
+  box-shadow:var(--shadow);
+}
+.hm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.hm-title{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
+.hm-sub{font-family:var(--fm);font-size:10px;color:var(--text-4)}
+.hm-grid{display:grid;grid-template-rows:13px repeat(7,13px);grid-template-columns:20px repeat(24,13px);gap:2px;min-width:380px}
+.hm-wl{font-family:var(--fm);font-size:8px;color:var(--text-4);display:flex;align-items:center;justify-content:center}
+.hm-dl{font-family:var(--fm);font-size:8px;color:var(--text-4);display:flex;align-items:center}
+.hm-cell{
+  width:13px;height:13px;border-radius:2px;
+  background:var(--bg3);
+  position:relative;transition:transform .1s;cursor:default;
+}
+.hm-cell:hover{transform:scale(1.5);z-index:2}
+.hm-cell[data-tip]:hover::after{
+  content:attr(data-tip);
+  position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
+  background:var(--surface3);color:var(--text);
+  font-family:var(--fm);font-size:9px;padding:3px 7px;border-radius:2px;
+  white-space:nowrap;pointer-events:none;z-index:10;
+  border:1px solid var(--border-mid);
+}
+.l1{background:#1A4A4F}.l2{background:#1A7070}.l3{background:#009090}
+.l4{background:var(--teal);box-shadow:0 0 4px var(--teal-glow)}
+.coded{outline:1px solid var(--green-dim);outline-offset:1px}
+.future{background:transparent!important;border:1px dashed var(--border)}
+.istoday{outline:2px solid var(--amber)!important;outline-offset:1px;box-shadow:0 0 6px var(--amber-glow)}
+.hm-leg{display:flex;align-items:center;gap:.4rem;margin-top:.6rem;flex-wrap:wrap}
+.hm-leg span{font-family:var(--fm);font-size:9px;color:var(--text-4)}
+.hm-sw{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+.hm-sep{width:1px;height:9px;background:var(--border-mid);margin:0 2px}
+
+/* ── SESSION LIST ─────────────────────────────────── */
+.sl-panel{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  padding:1rem 1.25rem;
+  margin-bottom:1rem;
+  box-shadow:var(--shadow);
+}
+.sl-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.sl-head-l{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
+.sl-head-r{display:flex;align-items:center;gap:.6rem}
+.sl-count{font-family:var(--fm);font-size:10px;color:var(--text-4)}
+.sl-toggle{font-family:var(--fm);font-size:10px;color:var(--teal);cursor:pointer;letter-spacing:.04em}
+.sl-list{display:flex;flex-direction:column;gap:.3rem}
+.sl-row{
+  display:flex;align-items:flex-start;gap:.55rem;
+  padding:.45rem .6rem;
+  background:var(--bg2);border:1px solid var(--border);border-radius:2px;
+  transition:border-color .1s;
+}
+.sl-row:hover{border-color:var(--border-mid)}
+.sl-cat{
+  font-family:var(--fm);font-size:9px;font-weight:600;
+  padding:2px 7px;border-radius:2px;flex-shrink:0;margin-top:1px;
+  text-transform:uppercase;letter-spacing:.05em;border:1px solid;
+}
+.cc-cert    {background:var(--amber-bg);color:var(--amber);border-color:var(--amber-dim)}
+.cc-code    {background:var(--teal-bg);color:var(--teal);border-color:var(--teal-dim)}
+.cc-dailycode,.cc-drill{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-dim)}
+.cc-project {background:var(--coral-bg);color:var(--coral);border-color:var(--coral)}
+.cc-scan    {background:var(--purple-bg);color:var(--purple);border-color:var(--purple)}
+.cc-review  {background:var(--green-bg);color:var(--green);border-color:var(--green-dim)}
+.sl-main{flex:1;min-width:0}
+.sl-note{font-size:12px;color:var(--text-2);line-height:1.5;word-break:break-word;white-space:pre-wrap}
+.sl-meta{font-family:var(--fm);font-size:9.5px;color:var(--text-4);margin-top:1px}
+.sl-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:3px}
+.sl-tag{font-family:var(--fm);font-size:9px;padding:1px 5px;border-radius:2px;background:var(--bg3);color:var(--text-3);border:1px solid var(--border)}
+.sl-del{font-size:11px;color:var(--text-4);cursor:pointer;opacity:0;transition:opacity .12s;padding:0 3px;flex-shrink:0;align-self:flex-start;margin-top:1px}
+.sl-row:hover .sl-del{opacity:1}
+.sl-del:hover{color:var(--red)}
+.empty{font-family:var(--fm);font-size:11px;color:var(--text-4);text-align:center;padding:1.5rem;letter-spacing:.06em}
+
+/* ── PHASE BARS ───────────────────────────────────── */
+.pb-panel{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;padding:.85rem 1.25rem;
+  margin-bottom:1rem;box-shadow:var(--shadow);
+}
+.pb-head{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem}
+.pb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+@media(max-width:540px){.pb-grid{grid-template-columns:1fr 1fr}}
+.pb-lbl{font-family:var(--fm);font-size:9px;color:var(--text-3);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pb-track{height:3px;border-radius:2px;background:var(--bg3);overflow:hidden}
+.pb-fill{height:100%;border-radius:2px;transition:width .4s}
+[data-theme="dark"] .pb-fill{box-shadow:0 0 4px currentColor}
+.pb-wks{font-family:var(--fm);font-size:8px;color:var(--text-4);margin-top:2px}
+
+/* ── PHASE BRIEF ──────────────────────────────────── */
+.phase-brief{
+  background:var(--surface);
+  border:1px solid var(--border-mid);
+  border-radius:4px;
+  margin-bottom:1rem;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.pb2-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1.1rem;cursor:pointer;user-select:none;
+  border-bottom:1px solid transparent;
+  transition:background .12s;
+}
+.pb2-header:hover{background:var(--bg2)}
+.phase-brief.open .pb2-header{border-bottom-color:var(--border)}
+.pb2-left{display:flex;align-items:center;gap:.75rem}
+.pb2-num{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fm);font-size:11px;font-weight:600;
+  flex-shrink:0;border:1px solid;
+}
+.pb2-title{font-family:var(--fm);font-size:11px;color:var(--text-2);letter-spacing:.06em}
+.pb2-title strong{color:var(--text)}
+.pb2-right{display:flex;align-items:center;gap:.75rem}
+.pb2-wks{font-family:var(--fm);font-size:10px;color:var(--text-4)}
+.pb2-chevron{font-family:var(--fm);font-size:10px;color:var(--text-3);transition:transform .2s}
+.phase-brief.open .pb2-chevron{transform:rotate(90deg)}
+.pb2-body{display:none;padding:.85rem 1.1rem}
+.phase-brief.open .pb2-body{display:block}
+.pb2-cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.85rem}
+@media(max-width:560px){.pb2-cols{grid-template-columns:1fr}}
+.pb2-col-label{
+  font-family:var(--fm);font-size:9px;color:var(--text-4);
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;
+}
+.pb2-list{list-style:none;display:flex;flex-direction:column;gap:.3rem}
+.pb2-list li{
+  font-size:12px;color:var(--text-2);
+  padding:.25rem 0 .25rem .85rem;
+  position:relative;line-height:1.5;
+  border-bottom:1px solid var(--border);
+}
+.pb2-list li:last-child{border-bottom:none}
+.pb2-list li::before{content:'→';position:absolute;left:0;color:var(--text-4);font-family:var(--fm);font-size:10px;top:5px}
+.pb2-milestones{display:flex;gap:.35rem;flex-wrap:wrap;padding-top:.75rem;border-top:1px solid var(--border)}
+.pb2-badge{
+  font-family:var(--fm);font-size:10px;
+  padding:2px 8px;border-radius:2px;border:1px solid;
+  letter-spacing:.04em;
+}
+.pb2-badge-cert{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-dim)}
+.pb2-badge-proj{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-dim)}
+.pb2-badge-skill{background:var(--purple-bg);color:var(--purple);border-color:var(--purple)}
+.pb2-week-nav{
+  display:flex;align-items:center;gap:.5rem;
+  margin-bottom:.85rem;flex-wrap:wrap;
+}
+.pb2-wk-btn{
+  font-family:var(--fm);font-size:9.5px;
+  padding:2px 8px;border-radius:2px;
+  border:1px solid var(--border);
+  background:none;color:var(--text-3);cursor:pointer;
+  transition:all .1s;letter-spacing:.04em;
+}
+.pb2-wk-btn:hover{border-color:var(--border-hi);color:var(--text-2)}
+.pb2-wk-btn.current{border-color:var(--teal-dim);color:var(--teal);background:var(--teal-bg)}
+.pb2-week-detail{
+  background:var(--bg2);border:1px solid var(--border);
+  border-left:2px solid var(--teal);
+  border-radius:3px;padding:.6rem .85rem;
+  margin-bottom:.85rem;
+}
+.pb2-wd-title{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
+.pb2-wd-items{display:flex;flex-direction:column;gap:.2rem}
+.pb2-wd-item{font-size:12px;color:var(--text-2);padding-left:.7rem;position:relative;line-height:1.5}
+.pb2-wd-item::before{content:'·';position:absolute;left:0;color:var(--teal);font-family:var(--fm)}
+
+/* ── STOP & THINK ─────────────────────────────────── */
+.st-block{
+  margin-bottom:.65rem;
+  border:1px solid var(--border);
+  border-radius:3px;
+  overflow:hidden;
+}
+.st-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.45rem .65rem;
+  background:var(--bg2);cursor:pointer;
+  border-bottom:1px solid transparent;
+  transition:background .1s;user-select:none;
+}
+.st-toggle:hover{background:var(--bg3)}
+.st-block.open .st-toggle{border-bottom-color:var(--border)}
+.st-toggle-left{display:flex;align-items:center;gap:.5rem}
+.st-icon{font-family:var(--fm);font-size:11px;color:var(--coral)}
+.st-label{font-family:var(--fm);font-size:9px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
+.st-chevron{font-family:var(--fm);font-size:9px;color:var(--text-4);transition:transform .2s}
+.st-block.open .st-chevron{transform:rotate(90deg)}
+.st-cards{display:none;grid-template-columns:1fr 1fr;gap:.4rem;padding:.5rem}
+.st-block.open .st-cards{display:grid}
+@media(max-width:480px){.st-cards{grid-template-columns:1fr}}
+.st-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:2px;padding:.55rem .65rem;
+}
+.st-card-title{
+  font-family:var(--fm);font-size:9.5px;font-weight:600;
+  color:var(--teal);letter-spacing:.06em;margin-bottom:.3rem;
+}
+.st-card-body{font-size:11.5px;color:var(--text-2);line-height:1.6}
+.st-card-body em{color:var(--amber);font-style:normal;font-family:var(--fm)}
+
+/* ── FOOTER ───────────────────────────────────────── */
+.footer-bar{
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:.3rem;
+  margin-top:.75rem;padding-top:.75rem;
+  border-top:1px solid var(--border);
+}
+.fl-link{
+  display:inline-flex;align-items:center;gap:.3rem;
+  padding:.25rem .6rem;border-radius:2px;
+  text-decoration:none;
+  font-family:var(--fm);font-size:9.5px;color:var(--text-3);
+  border:1px solid transparent;letter-spacing:.04em;
+  transition:all .1s;
+}
+.fl-link:hover{background:var(--surface2);border-color:var(--border);color:var(--text-2)}
+.fl-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.fl-sep{width:1px;height:10px;background:var(--border-mid)}
+.footer-meta{
+  text-align:center;margin-top:.4rem;
+  font-family:var(--fm);font-size:9px;color:var(--text-4);
+  letter-spacing:.06em;
+}
+.footer-meta .rl{cursor:pointer;color:var(--text-3);text-decoration:underline;text-underline-offset:2px}
+.footer-meta .rl:hover{color:var(--red)}
+
+/* ── BACKUP BAR ───────────────────────────────────── */
+.backup-bar{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.5rem;
+  margin-top:.5rem;padding:.5rem .75rem;
+  background:var(--surface);border:1px solid var(--border);border-radius:3px;
+}
+.backup-bar span{font-family:var(--fm);font-size:9.5px;color:var(--text-4);letter-spacing:.06em}
+.bk-btn{
+  padding:.25rem .7rem;
+  border:1px solid var(--border-mid);border-radius:2px;
+  background:none;font-family:var(--fm);font-size:10px;color:var(--text-2);
+  cursor:pointer;letter-spacing:.04em;transition:all .1s;
+}
+.bk-btn:hover{background:var(--surface2);border-color:var(--border-hi)}
+.bk-msg{font-family:var(--fm);font-size:10px;color:var(--green);display:none;letter-spacing:.06em}
+.bk-file{display:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Setup Overlay -->
+  <div class="overlay" id="setupOverlay" style="display:none">
+    <div class="setup-box">
+      <h2>Initialize Plan</h2>
+      <p>One date drives everything — current week, phase, active mission. Set it to when you started Plan v9.</p>
+      <span class="setup-lbl">Plan start date</span>
+      <input type="date" id="setupDate">
+      <button class="btn-primary" onclick="saveStart()">INITIALIZE →</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="hdr fade-up">
+    <div class="hdr-left">
+      <div class="hdr-brand">OPS · DAMON · APPLIED AI ACCELERATOR</div>
+      <div class="hdr-pills">
+        <span class="pill pill-phase" id="hdrPhase">PHASE —</span>
+        <span class="pill pill-week" id="hdrWeek">WK — / 24</span>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-date" id="hdrDate">—</div>
+      <button class="drill-btn" onclick="openDrillEngine()">Drill Engine</button>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">◑</button>
+    </div>
+  </div>
+
+  <!-- Monday Banner -->
+  <div class="mon-banner" id="monBanner">
+    <p>▶ MONDAY SCAN — 20 MIN. ECOSYSTEM CHECK. PLAN STAYS CURRENT.</p>
+    <a href="damon_plan_v9.html#protocol">OPEN PROTOCOL →</a>
+  </div>
+
+  <!-- North Star -->
+  <div class="north-star fade-up fade-up-1" id="northStar">
+    <span class="ns-label">North Star</span>
+    <span class="ns-text" id="northStarText">Set your start date to see the current phase directive.</span>
+  </div>
+
+  <!-- Streak Hero -->
+  <div class="streak-hero fade-up fade-up-2">
+    <div class="s-left">
+      <div class="s-num" id="streakNum">0</div>
+      <div class="s-label">DAY STREAK</div>
+      <div class="s-badges">
+        <div class="s-badge" id="codeStreakBadge"><div class="s-dot s-dot-green"></div><span>0-day coding streak</span></div>
+        <div class="s-badge warn" id="codedTodayBadge"><div class="s-dot s-dot-amber"></div><span>not coded today</span></div>
+      </div>
+    </div>
+    <div class="s-right">
+      <div class="s-stat"><span class="n" id="statSesh">0</span><span class="l">SESSIONS</span></div>
+      <div class="s-stat"><span class="n" id="statHrs">0h</span><span class="l">LOGGED</span></div>
+      <div class="s-stat"><span class="n" id="statWk">0</span><span class="l">THIS WK</span></div>
+      <div class="s-stat"><span class="n" id="statMods">0/7</span><span class="l">PY MODS</span></div>
+    </div>
+  </div>
+
+  <!-- Today's Mission -->
+  <div class="mission-block fade-up fade-up-3">
+    <div class="mission-head">
+      <div class="mission-head-left">
+        <span class="mission-title">▸ TODAY'S MISSION</span>
+        <span class="mission-sub" id="missionSub">—</span>
+      </div>
+      <button class="mission-reset" onclick="resetMission()">RESET</button>
+    </div>
+    <div class="mission-list" id="missionList">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- 2-col: Python + Logger -->
+  <div class="grid-2 fade-up fade-up-4">
+
+    <!-- Python Curriculum -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Python Curriculum</span>
+        <span class="panel-meta" id="pyMeta">0 / 7 modules</span>
+      </div>
+      <div class="py-body">
+        <div class="py-ring-row">
+          <div class="py-ring">
+            <svg viewBox="0 0 36 36" width="36" height="36">
+              <circle class="py-ring-bg" cx="18" cy="18" r="15.9"/>
+              <circle class="py-ring-fill" id="pyRingFill" cx="18" cy="18" r="15.9" style="stroke-dashoffset:100"/>
+            </svg>
+            <div class="py-ring-label" id="pyRingLabel">0%</div>
+          </div>
+          <div class="py-ring-info">
+            <div class="pct" id="pyPct">0%</div>
+            <div class="sub" id="pySubtext">M1 active — Variables & Types</div>
+          </div>
+        </div>
+        <div class="py-modules" id="pyModules"></div>
+        <div class="drill-prompt" id="drillPrompt" style="display:none">
+          <div class="drill-prompt-lbl">▸ Active Drill</div>
+          <div class="drill-prompt-text" id="drillPromptText"></div>
+          <div class="drill-prompt-hint" id="drillPromptHint"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logger -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Log Session</span>
+        <span class="coded-badge" id="codedBadge">—</span>
+      </div>
+
+      <!-- Stop & Think -->
+      <div class="st-block" id="stBlock">
+        <div class="st-toggle" onclick="toggleStopThink()">
+          <div class="st-toggle-left">
+            <span class="st-icon">⬡</span>
+            <span class="st-label">Stop &amp; Think</span>
+          </div>
+          <span class="st-chevron">▶</span>
+        </div>
+        <div class="st-cards">
+          <div class="st-card">
+            <div class="st-card-title">Before logging</div>
+            <div class="st-card-body">Can you complete the sentence — <em>"I can now..."</em>? If not, the session isn't done yet.</div>
+          </div>
+          <div class="st-card">
+            <div class="st-card-title">Motion ≠ progress</div>
+            <div class="st-card-body">A streak measures showing up. It doesn't measure understanding. Don't confuse the two.</div>
+          </div>
+          <div class="st-card">
+            <div class="st-card-title">Before asking for help</div>
+            <div class="st-card-body">Sit with the error for 10 minutes first. The struggle is the learning. Skipping it skips the rep.</div>
+          </div>
+          <div class="st-card">
+            <div class="st-card-title">Weekly gut check</div>
+            <div class="st-card-body">Could you explain what you built this week to someone else without notes? If no — review before moving forward.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="log-body">
+        <!-- CCP -->
+        <div class="ccp-mini" id="ccpMini" style="display:none">
+          <div class="ccp-mini-row1">
+            <span class="ccp-lbl">CCP Mock Score</span>
+            <span class="ccp-score" id="ccpScore">658</span>
+          </div>
+          <div class="ccp-track"><div class="ccp-fill" id="ccpFill" style="width:52%"></div></div>
+          <div class="ccp-input-row">
+            <input type="number" id="ccpInput" placeholder="New score" min="100" max="1000">
+            <button onclick="logCCP()">LOG</button>
+          </div>
+          <div class="ccp-hist" id="ccpChips"></div>
+        </div>
+
+        <!-- Category -->
+        <div class="log-section-lbl">Category</div>
+        <div class="cat-pills">
+          <button class="cat-pill" data-cat="drill"   onclick="pickCat(this)">Drill</button>
+          <button class="cat-pill" data-cat="cert"    onclick="pickCat(this)">Cert</button>
+          <button class="cat-pill" data-cat="code"    onclick="pickCat(this)">Code</button>
+          <button class="cat-pill" data-cat="project" onclick="pickCat(this)">Project</button>
+          <button class="cat-pill" data-cat="scan"    onclick="pickCat(this)">Scan</button>
+          <button class="cat-pill" data-cat="review"  onclick="pickCat(this)">Review</button>
+        </div>
+
+        <div class="ctx" id="ctx-drill">
+          <div class="ctx-row">
+            <div><div class="ctx-lbl">Module</div>
+              <select id="drillModule">
+                <option value="1">M1 · Variables & Types</option>
+                <option value="2">M2 · Functions</option>
+                <option value="3">M3 · Lists, Dicts, Loops</option>
+                <option value="4">M4 · Files & .env</option>
+                <option value="5">M5 · APIs + JSON</option>
+                <option value="6">M6 · Classes (light)</option>
+                <option value="7">M7 · Async basics</option>
+              </select>
+            </div>
+            <div><div class="ctx-lbl">Type</div>
+              <select id="drillType">
+                <option>Concept study</option>
+                <option>Exercise / drill</option>
+                <option>Challenge</option>
+                <option>Review</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctx" id="ctx-cert">
+          <div class="ctx-row">
+            <div><div class="ctx-lbl">Cert</div>
+              <select id="certWhich"><option>AWS CCP</option><option>AWS SAA</option><option>DL.AI: Evals</option><option>DL.AI: Agents</option><option>AWS AI Practitioner</option></select>
+            </div>
+            <div><div class="ctx-lbl">Method</div>
+              <select id="certMethod"><option>Mock exam</option><option>Video lesson</option><option>Reading / docs</option><option>Flashcards</option><option>Practice Qs</option></select>
+            </div>
+          </div>
+          <div><div class="ctx-lbl">Score (mock only)</div>
+            <input type="number" id="certScore" placeholder="leave blank if not a mock" min="100" max="1000">
+          </div>
+        </div>
+
+        <div class="ctx" id="ctx-code">
+          <div class="ctx-row">
+            <div><div class="ctx-lbl">Language</div>
+              <select id="codeLang"><option>Python</option><option>JavaScript</option><option>Bash / CLI</option><option>SQL</option><option>HTML / CSS</option><option>Other</option></select>
+            </div>
+            <div><div class="ctx-lbl">Type</div>
+              <select id="codeType"><option>Exercise / drill</option><option>Tutorial</option><option>Project work</option><option>Debugging</option><option>Refactoring</option><option>Code reading</option></select>
+            </div>
+          </div>
+          <div><div class="ctx-lbl">Tool</div>
+            <select id="codeTool"><option>Cursor (AI-assisted)</option><option>VS Code (solo)</option><option>Terminal only</option><option>Browser / REPL</option></select>
+          </div>
+        </div>
+
+        <div class="ctx" id="ctx-project">
+          <div class="ctx-row">
+            <div><div class="ctx-lbl">Project</div>
+              <select id="projWhich"><option>Trading Framework (flagship)</option><option>Sekhem AI Tool</option><option>Claude Shell</option><option>EvalKit</option><option>ReviewLoop</option><option>AgentForge</option><option>CloudMind</option></select>
+            </div>
+            <div><div class="ctx-lbl">Work type</div>
+              <select id="projType"><option>Planning / design</option><option>Building a feature</option><option>Debugging</option><option>Testing / evals</option><option>Deploying</option><option>Polishing / README</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="ctx" id="ctx-scan">
+          <div><div class="ctx-lbl">Signal level</div>
+            <select id="scanSig"><option value="green">Green — noted, no change</option><option value="yellow">Yellow — discuss, maybe adjust</option><option value="red">Red — act now</option><option value="none">Nothing notable</option></select>
+          </div>
+          <div><div class="ctx-lbl">What did you find?</div>
+            <input type="text" id="scanNote" placeholder="e.g. New DL.AI course on RAG launched">
+          </div>
+        </div>
+
+        <div class="ctx" id="ctx-review">
+          <div><div class="ctx-lbl">Review type</div>
+            <select id="reviewType"><option>Weekly reflection</option><option>Monthly plan review</option><option>Phase transition</option><option>CCP score debrief</option><option>Ad hoc reflection</option></select>
+          </div>
+        </div>
+
+        <div class="log-row">
+          <div class="log-row-top">
+            <input type="number" class="log-mins" id="logMins" placeholder="min" min="1" max="480">
+            <button class="log-btn" onclick="logSession()" style="flex:1">LOG →</button>
+          </div>
+          <textarea class="log-note" id="logNote" rows="2"
+            placeholder="What did you work on? Paste drill engine log here..."
+            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'"></textarea>
+        </div>
+        <div class="log-ok" id="logOk">✓ LOGGED</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- This Week -->
+  <div class="week-panel fade-up fade-up-5">
+    <div class="week-head">
+      <span class="week-title">This Week</span>
+      <span class="week-meta" id="weekMeta">—</span>
+    </div>
+    <div class="targets-grid" id="targetsGrid"></div>
+  </div>
+
+  <!-- Phase Brief -->
+  <div class="phase-brief" id="phaseBrief">
+    <div class="pb2-header" onclick="togglePhaseBrief()">
+      <div class="pb2-left">
+        <div class="pb2-num" id="pb2Num">1</div>
+        <span class="pb2-title" id="pb2Title"><strong>Phase 1</strong> · Foundation</span>
+      </div>
+      <div class="pb2-right">
+        <span class="pb2-wks" id="pb2Wks">Wks 1–6</span>
+        <span class="pb2-chevron">▶</span>
+      </div>
+    </div>
+    <div class="pb2-body" id="pb2Body">
+      <!-- week nav -->
+      <div class="pb2-week-nav" id="pb2WeekNav"></div>
+      <!-- active week detail -->
+      <div class="pb2-week-detail" id="pb2WeekDetail" style="display:none">
+        <div class="pb2-wd-title" id="pb2WdTitle">WEEK — FOCUS</div>
+        <div class="pb2-wd-items" id="pb2WdItems"></div>
+      </div>
+      <!-- phase cols -->
+      <div class="pb2-cols" id="pb2Cols"></div>
+      <!-- milestones -->
+      <div class="pb2-milestones" id="pb2Milestones"></div>
+    </div>
+  </div>
+
+  <!-- Heatmap -->
+  <div class="hm-panel fade-up fade-up-6">
+    <div class="hm-head">
+      <span class="hm-title">24-Week Activity</span>
+      <span class="hm-sub" id="hmSub"></span>
+    </div>
+    <div class="hm-grid" id="hmGrid"></div>
+    <div class="hm-leg">
+      <span>Less</span>
+      <div class="hm-sw" style="background:var(--bg3);border:1px solid var(--border)"></div>
+      <div class="hm-sw l1"></div><div class="hm-sw l2"></div><div class="hm-sw l3"></div><div class="hm-sw l4"></div>
+      <span>More</span>
+      <div class="hm-sep"></div>
+      <div class="hm-sw coded" style="background:var(--bg3)"></div><span>coded</span>
+      <div class="hm-sep"></div>
+      <div class="hm-sw istoday" style="background:var(--bg3)"></div><span>today</span>
+    </div>
+  </div>
+
+  <!-- Phase Bars -->
+  <div class="pb-panel">
+    <div class="pb-head">24-Week Phase Progress</div>
+    <div class="pb-grid">
+      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#A78BFA;width:0%"></div></div><div class="pb-wks">Wks 1–6</div></div>
+      <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#00D4C8;width:0%"></div></div><div class="pb-wks">Wks 7–13</div></div>
+      <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#F5A623;width:0%"></div></div><div class="pb-wks">Wks 14–20</div></div>
+      <div><div class="pb-lbl">Phase 4 · Job Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#FF6B4A;width:0%"></div></div><div class="pb-wks">Wks 21–24</div></div>
+    </div>
+  </div>
+
+  <!-- Session List -->
+  <div class="sl-panel">
+    <div class="sl-head">
+      <span class="sl-head-l">Recent Sessions</span>
+      <div class="sl-head-r">
+        <span class="sl-count" id="slCount"></span>
+        <span class="sl-toggle" id="slToggle" onclick="toggleSessions()" style="display:none">show all</span>
+      </div>
+    </div>
+    <div class="sl-list" id="slList"></div>
+  </div>
+
+  <!-- Footer Links -->
+  <div class="footer-bar">
+    <a class="fl-link" href="damon_plan_v9.html"><div class="fl-dot" style="background:var(--teal)"></div>Plan v9</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="damon_plan_v9.html#protocol"><div class="fl-dot" style="background:var(--purple)"></div>Protocol</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="https://docs.anthropic.com" target="_blank"><div class="fl-dot" style="background:var(--teal)"></div>Anthropic Docs</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>AWS CCP</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="https://www.tutorialsdojo.com/" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>Tutorials Dojo</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="https://www.deeplearning.ai/courses/" target="_blank"><div class="fl-dot" style="background:var(--purple)"></div>DeepLearning.AI</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="https://github.com/trending/python?since=weekly" target="_blank"><div class="fl-dot" style="background:var(--text-3)"></div>GH Trending</a>
+    <div class="fl-sep"></div>
+    <a class="fl-link" href="https://simonwillison.net" target="_blank"><div class="fl-dot" style="background:var(--text-3)"></div>Simon Willison</a>
+  </div>
+
+  <div class="footer-meta">
+    v11 &nbsp;·&nbsp;
+    <span class="rl" onclick="resetStart()">reset start date</span>
+  </div>
+
+  <div class="backup-bar">
+    <span>BACKUP:</span>
+    <button class="bk-btn" onclick="exportData()">⬇ Export JSON</button>
+    <button class="bk-btn" onclick="document.getElementById('bkFile').click()">⬆ Import JSON</button>
+    <input type="file" id="bkFile" class="bk-file" accept=".json" onchange="importData(event)">
+    <span class="bk-msg" id="bkMsg"></span>
+  </div>
+
+</div>
+<script>
+// ── DRILL ENGINE ───────────────────────────────────────
+function openDrillEngine(){
+  window.open('AaE_Drill_Engine.html','_blank');
+}
+
+// ── CONSTANTS ─────────────────────────────────────────
+const PHASES = [
+  {num:1,wk:[1,6],   color:'#A78BFA',label:'Foundation',
+   northStar:'Leave Phase 1 with the CCP cert, a working Python environment, one real GitHub project, and zero shaky fundamentals. <strong>Speed matters less than depth here.</strong>'},
+  {num:2,wk:[7,13],  color:'#00D4C8',label:'Eval Layer',
+   northStar:'"How do you know if your AI is working?" — Phase 2 is your answer. Build the evals mindset AND the code to back it up. <strong>The HITL project here is what makes you non-generic.</strong>'},
+  {num:3,wk:[14,20], color:'#F5A623',label:'Agentic',
+   northStar:'The jump from "I call the API" to "I run a reliable agentic pipeline in the cloud" is <strong>the jump from student to employable.</strong> Both projects this phase must be deployed, not just local.'},
+  {num:4,wk:[21,24], color:'#FF6B4A',label:'Job Ready',
+   northStar:'Stop building, start telling the story. READMEs, GitHub profile, LinkedIn, interview prep. <strong>The projects only land if the narrative is tight.</strong> First real applications go out this phase.'}
+];
+
+const PY_MODULES = [
+  {num:1,name:'Variables & Types',   sub:'str · int · float · bool · None',
+   prompt:'Write a function that takes a name and age, returns a formatted string like "Damon (32) — Applied AI Engineer". Then print it.',
+   hint:'Hint: use an f-string. What happens if age is a string instead of int?'},
+  {num:2,name:'Functions',           sub:'def · args · return · scope',
+   prompt:'Write three functions: one that adds two numbers, one that reverses a string, one that returns True if a number is even. Call each one.',
+   hint:'Hint: what is the difference between print() and return? Try removing return and see what breaks.'},
+  {num:3,name:'Lists, Dicts, Loops', sub:'for · while · comprehensions',
+   prompt:'Given a list of scores [82, 91, 67, 74, 95, 88], write code that prints only scores above 80 and calculates their average.',
+   hint:'Hint: use a list comprehension for filtering, then sum() and len() for the average.'},
+  {num:4,name:'Files & .env',        sub:'open · read · write · dotenv',
+   prompt:'Write a script that reads a .env file containing API_KEY=abc123, loads it with python-dotenv, and prints "Key loaded: [first 4 chars]***".',
+   hint:'Hint: pip install python-dotenv. Use os.getenv() after load_dotenv(). Never print the full key.'},
+  {num:5,name:'APIs + JSON',         sub:'requests · json · error handling',
+   prompt:'Write a function that calls the Anthropic API with a user message and returns the text response. Add a try/except that prints "API call failed: [error]" on any exception.',
+   hint:'Hint: use the anthropic Python SDK. Check data.content[0].text for the response text.'},
+  {num:6,name:'Classes (light)',     sub:'class · __init__ · methods',
+   prompt:'Build a simple SessionLogger class with an __init__ that sets self.sessions = [], an add(category, minutes, note) method, and a summary() method that prints total sessions and total minutes.',
+   hint:'Hint: self is the instance. summary() should loop over self.sessions — a list of dicts.'},
+  {num:7,name:'Async basics',        sub:'async · await · aiohttp',
+   prompt:'Convert a synchronous requests.get() call to use aiohttp in an async function. Call it with asyncio.run(). Confirm the response arrives correctly.',
+   hint:'Hint: async def, await session.get(), and async with aiohttp.ClientSession() as session.'},
+];
+
+// Phase-derived daily missions
+const PHASE_MISSIONS = {
+  1:[
+    {text:'Run one CCP mock exam on Tutorials Dojo',    hint:'Log your score in the CCP tracker after.',            tag:'cert',   cat:'cert'},
+    {text:'Complete today\'s Python drill — work through the active module',hint:'Log it as a Drill session when done.',tag:'code',   cat:'drill'},
+    {text:'Commit at least one file to GitHub',         hint:'Even a README update counts. No days without commits.',tag:'code',   cat:'code'},
+  ],
+  2:[
+    {text:'Study AWS SAA for at least 45 minutes',      hint:'Focus: VPC, EC2, S3, Lambda, IAM.',                  tag:'cert',   cat:'cert'},
+    {text:'Work on EvalKit or ReviewLoop project',      hint:'Even 30 minutes of building beats 0.',               tag:'code',   cat:'project'},
+    {text:'Run one Python drill or code exercise',      hint:'Keep the coding streak alive.',                      tag:'code',   cat:'drill'},
+  ],
+  3:[
+    {text:'Build something on AgentForge or CloudMind', hint:'Must be deployed, not just local.',                  tag:'code',   cat:'project'},
+    {text:'Study DL.AI Agents or Bedrock labs',         hint:'Pair study with what you\'re building.',             tag:'cert',   cat:'cert'},
+    {text:'Review yesterday\'s code — improve one thing',hint:'Refactor, add error handling, or improve naming.',  tag:'review', cat:'review'},
+  ],
+  4:[
+    {text:'Polish one project README with screenshots', hint:'One well-documented project beats five undocumented.',tag:'review', cat:'review'},
+    {text:'Send at least 2 targeted job applications',  hint:'Applied AI engineer, HITL engineer, LLM engineer.',  tag:'review', cat:'review'},
+    {text:'Study for AWS AI Practitioner (AIF-C01)',    hint:'Final cert. Focus: foundation models, responsible AI.',tag:'cert',  cat:'cert'},
+  ],
+};
+
+const WEEK_TARGETS = {
+  1:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'CCP Mocks',target:1,unit:'exam this wk'},modules:{label:'Py Modules',target:2,unit:'done total'}},
+  2:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'Cert Sessions',target:3,unit:'this wk'},modules:{label:'Py Modules',target:4,unit:'done total'}},
+  3:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'Cert Sessions',target:3,unit:'this wk'},project:{label:'Project',target:3,unit:'sessions this wk'}},
+  4:{coding:{label:'Code / Drill',target:3,unit:'sessions this wk'},project:{label:'Project',target:4,unit:'sessions this wk'},apps:{label:'Applications',target:10,unit:'sent this wk'}},
+};
+
+// ── STATE ─────────────────────────────────────────────
+let sessions=[], ccp=[], startStr='', selCat='', showAll=false;
+let pyDone={}, missionDone={};
+
+function load(){
+  try{sessions=JSON.parse(localStorage.getItem('v9d_sessions')||'[]');}catch(e){sessions=[];}
+  try{ccp=JSON.parse(localStorage.getItem('v9d_ccp')||'[]');}catch(e){ccp=[];}
+  try{pyDone=JSON.parse(localStorage.getItem('v10_pyDone')||'{}');}catch(e){pyDone={};}
+  try{missionDone=JSON.parse(localStorage.getItem('v11_mission')||'{}');}catch(e){missionDone={};}
+  startStr=localStorage.getItem('v9d_start')||'';
+  // Load theme
+  const t=localStorage.getItem('v11_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent=t==='dark'?'☀':'◑';
+}
+function saveSesh()   {localStorage.setItem('v9d_sessions',JSON.stringify(sessions));}
+function saveCCP()    {localStorage.setItem('v9d_ccp',JSON.stringify(ccp));}
+function savePyDone() {localStorage.setItem('v10_pyDone',JSON.stringify(pyDone));}
+function saveMission(){localStorage.setItem('v11_mission',JSON.stringify(missionDone));}
+
+// ── DATES ─────────────────────────────────────────────
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parseLD(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function localStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function currWk(){
+  if(!startStr)return 1;
+  const diff=Math.floor((parseLD(todayStr())-parseLD(startStr))/86400000);
+  return Math.min(24,Math.max(1,Math.ceil((diff+1)/7)));
+}
+function wkOf(ds){
+  if(!startStr)return 1;
+  const diff=Math.floor((parseLD(ds)-parseLD(startStr))/86400000);
+  if(diff<0)return 0;
+  return Math.min(24,Math.ceil((diff+1)/7));
+}
+function dayI(ds){
+  if(!startStr)return -1;
+  return Math.floor((parseLD(ds)-parseLD(startStr))/86400000);
+}
+function getPhase(wk){return PHASES.find(p=>wk>=p.wk[0]&&wk<=p.wk[1])||PHASES[0];}
+
+// ── STREAK ────────────────────────────────────────────
+function calcStreak(filter){
+  const days=new Set(sessions.filter(s=>!filter||filter(s)).map(s=>s.date));
+  let streak=0,check=new Date(parseLD(todayStr()));
+  if(!days.has(todayStr()))check.setDate(check.getDate()-1);
+  while(true){const ds=localStr(check);if(days.has(ds)){streak++;check.setDate(check.getDate()-1);}else break;}
+  return streak;
+}
+function isCodeSesh(s){return['dailycode','code','drill'].includes(s.category);}
+function codedToday(){return sessions.some(s=>s.date===todayStr()&&isCodeSesh(s));}
+
+// ── THEME ─────────────────────────────────────────────
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  document.getElementById('themeBtn').textContent=next==='dark'?'☀':'◑';
+  localStorage.setItem('v11_theme',next);
+}
+
+// ── RENDERS ───────────────────────────────────────────
+function renderHeader(){
+  const wk=currWk(),ph=getPhase(wk);
+  const pill=document.getElementById('hdrPhase');
+  pill.textContent=`PHASE ${ph.num} · ${ph.label.toUpperCase()}`;
+  pill.style.borderColor=ph.color+'80';
+  pill.style.color=ph.color;
+  document.getElementById('hdrWeek').textContent=startStr?`WK ${wk} / 24`:'WK — / 24';
+  document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}).toUpperCase();
+  if(new Date().getDay()===1)document.getElementById('monBanner').style.display='flex';
+}
+
+function renderNorthStar(){
+  const ph=getPhase(currWk());
+  document.getElementById('northStarText').innerHTML=startStr
+    ?ph.northStar
+    :'Set your start date to see the current phase directive.';
+}
+
+function renderStreak(){
+  const streak=calcStreak();
+  const codeStreak=calcStreak(isCodeSesh);
+  const ct=codedToday();
+  const doneMods=PY_MODULES.filter(m=>pyDone[m.num]).length;
+  document.getElementById('streakNum').textContent=streak;
+
+  const csb=document.getElementById('codeStreakBadge');
+  csb.querySelector('span').textContent=codeStreak+'-day coding streak';
+  csb.className='s-badge'+(codeStreak>0?' active':'');
+
+  const ctb=document.getElementById('codedTodayBadge');
+  ctb.querySelector('span').textContent=ct?'✓ coded today':'not coded today';
+  ctb.className='s-badge'+(ct?' active':' warn');
+
+  document.getElementById('statSesh').textContent=sessions.length;
+  const mins=sessions.reduce((a,s)=>a+(s.minutes||0),0);
+  document.getElementById('statHrs').textContent=(mins/60).toFixed(1)+'h';
+  document.getElementById('statWk').textContent=sessions.filter(s=>wkOf(s.date)===currWk()).length;
+  document.getElementById('statMods').textContent=doneMods+'/7';
+}
+
+function renderMission(){
+  const ph=getPhase(currWk());
+  const items=PHASE_MISSIONS[ph.num]||PHASE_MISSIONS[1];
+  const today=todayStr();
+  const mKey=today; // mission resets daily if not manually done
+
+  document.getElementById('missionSub').textContent=`Phase ${ph.num} · Week ${currWk()}`;
+
+  const list=document.getElementById('missionList');
+  list.innerHTML=items.map((item,i)=>{
+    const key=`${mKey}_${i}`;
+    const done=!!missionDone[key];
+    return `<div class="mission-item${done?' done':''}" onclick="toggleMission('${key}',this)">
+      <div class="mi-check">${done?'✓':''}</div>
+      <div class="mi-text">${item.text}<small>${item.hint}</small></div>
+      <span class="mi-tag ${item.tag}">${item.tag.toUpperCase()}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleMission(key,el){
+  missionDone[key]=!missionDone[key];
+  saveMission();
+  el.classList.toggle('done',missionDone[key]);
+  el.querySelector('.mi-check').textContent=missionDone[key]?'✓':'';
+}
+
+function resetMission(){
+  const today=todayStr();
+  Object.keys(missionDone).forEach(k=>{if(k.startsWith(today))delete missionDone[k];});
+  saveMission();renderMission();
+}
+
+function renderPyModules(){
+  const doneMods=PY_MODULES.filter(m=>pyDone[m.num]).length;
+  const nextMod=PY_MODULES.find(m=>!pyDone[m.num]);
+  const pct=Math.round((doneMods/PY_MODULES.length)*100);
+  const offset=100-(pct/100)*100;
+  document.getElementById('pyRingFill').style.strokeDashoffset=offset;
+  document.getElementById('pyRingLabel').textContent=pct+'%';
+  document.getElementById('pyPct').textContent=pct+'%';
+  document.getElementById('pyMeta').textContent=doneMods+' / 7 modules';
+  document.getElementById('pySubtext').textContent=nextMod
+    ?`M${nextMod.num} active — ${nextMod.name}`
+    :'All modules complete';
+
+  document.getElementById('pyModules').innerHTML=PY_MODULES.map(m=>{
+    const done=!!pyDone[m.num];
+    const active=nextMod&&m.num===nextMod.num;
+    let cls='py-mod';
+    if(done)cls+=' done';
+    else if(active)cls+=' active';
+    return `<div class="${cls}" onclick="togglePyMod(${m.num})">
+      <div class="py-mod-dot">${done?'✓':m.num}</div>
+      <div class="py-mod-name">M${m.num} · ${m.name}</div>
+      <span class="py-mod-sub">${m.sub}</span>
+    </div>`;
+  }).join('');
+
+  // Drill prompt
+  const prompt=document.getElementById('drillPrompt');
+  if(nextMod){
+    prompt.style.display='block';
+    document.getElementById('drillPromptText').textContent=nextMod.prompt;
+    document.getElementById('drillPromptHint').textContent=nextMod.hint;
+  } else {
+    prompt.style.display='none';
+  }
+}
+
+function togglePyMod(num){
+  pyDone[num]=!pyDone[num];
+  savePyDone();renderPyModules();renderStreak();renderTargets();
+}
+
+function renderCCP(){
+  const wk=currWk();
+  const mini=document.getElementById('ccpMini');
+  mini.style.display=wk<=6?'block':'none';
+  if(wk>6)return;
+  const base=658;
+  const allScores=[base,...ccp.map(s=>s.score)];
+  const latest=allScores[allScores.length-1];
+  const best=Math.max(...allScores);
+  document.getElementById('ccpScore').textContent=latest;
+  document.getElementById('ccpFill').style.width=Math.round((latest/1000)*100)+'%';
+  document.getElementById('ccpChips').innerHTML=ccp.slice().reverse().map(s=>
+    `<span class="chip${s.score===best?' best':''}">${s.score}</span>`
+  ).join('');
+}
+
+function logCCP(){
+  const v=parseInt(document.getElementById('ccpInput').value);
+  if(!v||v<100||v>1000)return;
+  ccp.push({score:v,date:todayStr()});saveCCP();
+  sessions.unshift({id:Date.now(),date:todayStr(),week:currWk(),category:'cert',minutes:90,
+    note:`CCP mock exam — score: ${v}`,tags:['AWS CCP','Mock exam',v>=820?'Target range':'Reviewing']});
+  saveSesh();document.getElementById('ccpInput').value='';renderAll();
+}
+
+function renderCodedBadge(){
+  const el=document.getElementById('codedBadge');
+  const ct=codedToday();
+  el.textContent=ct?'✓ CODED TODAY':'NOT YET';
+  el.className='coded-badge '+(ct?'coded-yes':'coded-no');
+}
+
+function renderTargets(){
+  const wk=currWk(),ph=getPhase(wk);
+  const phNum=ph.num;
+  const tDef=WEEK_TARGETS[phNum]||WEEK_TARGETS[1];
+  const wkSessions=sessions.filter(s=>wkOf(s.date)===wk);
+  const doneMods=PY_MODULES.filter(m=>pyDone[m.num]).length;
+  document.getElementById('weekMeta').textContent=startStr?`WEEK ${wk} · PHASE ${ph.num} · ${ph.label.toUpperCase()}`:'—';
+  const counts={
+    coding:wkSessions.filter(s=>isCodeSesh(s)).length,
+    cert:wkSessions.filter(s=>s.category==='cert').length,
+    project:wkSessions.filter(s=>s.category==='project').length,
+    modules:doneMods,apps:0,
+  };
+  document.getElementById('targetsGrid').innerHTML=Object.entries(tDef).map(([key,def])=>{
+    const val=counts[key]||0;
+    const hit=val>=def.target;
+    const warn=!hit&&(val/def.target)>=0.5;
+    let cls='target-item';
+    if(hit)cls+=' hit';else if(warn)cls+=' warn';
+    return `<div class="${cls}">
+      <div class="ti-lbl">${def.label}</div>
+      <div class="ti-val">${val}<span style="font-size:12px;color:var(--text-4)">/${def.target}</span></div>
+      <div class="ti-target">${def.unit}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderPhaseBars(){
+  const wk=currWk();
+  [{id:'pb1',r:[1,6]},{id:'pb2',r:[7,13]},{id:'pb3',r:[14,20]},{id:'pb4',r:[21,24]}].forEach(c=>{
+    const[s,e]=c.r;
+    const pct=wk<s?0:wk>e?100:Math.round(((wk-s)/(e-s+1))*100);
+    document.getElementById(c.id).style.width=pct+'%';
+  });
+}
+
+function renderHeatmap(){
+  const grid=document.getElementById('hmGrid');grid.innerHTML='';
+  const today=todayStr(),todayIdx=dayI(today);
+  const dayMap={},codeMap={};
+  sessions.forEach(s=>{
+    const i=dayI(s.date);
+    if(i>=0){dayMap[i]=(dayMap[i]||0)+1;if(isCodeSesh(s))codeMap[i]=true;}
+  });
+  const corner=document.createElement('div');corner.style.cssText='grid-column:1;grid-row:1';grid.appendChild(corner);
+  for(let w=1;w<=24;w++){
+    const l=document.createElement('div');l.className='hm-wl';l.style.cssText=`grid-column:${w+1};grid-row:1`;l.textContent=w;grid.appendChild(l);
+  }
+  const dn=['M','T','W','T','F','S','S'];
+  for(let d=0;d<7;d++){
+    const dl=document.createElement('div');dl.className='hm-dl';dl.style.cssText=`grid-column:1;grid-row:${d+2}`;dl.textContent=dn[d];grid.appendChild(dl);
+    for(let w=1;w<=24;w++){
+      const idx=(w-1)*7+d;
+      const cell=document.createElement('div');cell.className='hm-cell';cell.style.cssText=`grid-column:${w+1};grid-row:${d+2}`;
+      if(startStr&&todayIdx>=0&&idx>todayIdx){cell.classList.add('future');}
+      else{
+        const cnt=dayMap[idx]||0;
+        if(cnt===1)cell.classList.add('l1');else if(cnt===2)cell.classList.add('l2');else if(cnt===3)cell.classList.add('l3');else if(cnt>=4)cell.classList.add('l4');
+        if(codeMap[idx])cell.classList.add('coded');
+        if(startStr&&idx===todayIdx)cell.classList.add('istoday');
+        if(startStr){
+          const sd=parseLD(startStr);
+          const cd=new Date(sd.getFullYear(),sd.getMonth(),sd.getDate()+idx);
+          const ds=cd.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+          cell.setAttribute('data-tip',ds+(cnt?` · ${cnt} session${cnt>1?'s':''}`:'')+(codeMap[idx]?' · coded ✓':''));
+        }
+      }
+      grid.appendChild(cell);
+    }
+  }
+  const active=Object.values(dayMap).filter(v=>v>0).length,coded=Object.keys(codeMap).length;
+  document.getElementById('hmSub').textContent=active?`${active} ACTIVE · ${coded} CODED`:'';
+}
+
+function renderSessions(){
+  const list=document.getElementById('slList');
+  const toggle=document.getElementById('slToggle');
+  const count=document.getElementById('slCount');
+  count.textContent=sessions.length?`${sessions.length} TOTAL`:'';
+  if(!sessions.length){list.innerHTML='<div class="empty">NO SESSIONS YET — LOG YOUR FIRST ONE ABOVE</div>';toggle.style.display='none';return;}
+  const vis=showAll?sessions:sessions.slice(0,7);
+  toggle.style.display=sessions.length>7?'inline':'none';
+  toggle.textContent=showAll?'SHOW LESS':'SHOW ALL';
+  list.innerHTML=vis.map(s=>{
+    const dl=s.date===todayStr()?'TODAY':parseLD(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();
+    const cat=s.category==='dailycode'?'dailycode':s.category;
+    let lbl=s.category.toUpperCase();
+    if(s.category==='dailycode')lbl='CODE ★';
+    const tags=(s.tags||[]).filter(Boolean).slice(0,4).map(t=>`<span class="sl-tag">${t}</span>`).join('');
+    return `<div class="sl-row">
+      <span class="sl-cat cc-${cat}">${lbl}</span>
+      <div class="sl-main">
+        <div class="sl-note">${s.note||'—'}</div>
+        <div class="sl-meta">${dl} · WK ${s.week} · ${s.minutes} MIN</div>
+        ${tags?`<div class="sl-tags">${tags}</div>`:''}
+      </div>
+      <span class="sl-del" onclick="delSesh(${s.id})" title="Remove">✕</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleSessions(){showAll=!showAll;renderSessions();}
+function delSesh(id){sessions=sessions.filter(s=>s.id!==id);saveSesh();renderAll();}
+
+// ── LOGGER ────────────────────────────────────────────
+function pickCat(btn){
+  document.querySelectorAll('.cat-pill').forEach(b=>b.className='cat-pill');
+  selCat=btn.dataset.cat;btn.classList.add('cat-pill','sel-'+selCat);
+  ['drill','cert','code','project','scan','review'].forEach(c=>
+    document.getElementById('ctx-'+c).classList.toggle('show',c===selCat)
+  );
+}
+
+function logSession(){
+  const mins=parseInt(document.getElementById('logMins').value)||0;
+  const note=document.getElementById('logNote').value.trim();
+  if(!selCat||mins<1)return;
+  const tags=[];let fullNote=note;
+  if(selCat==='drill'){
+    const modNum=parseInt(document.getElementById('drillModule').value);
+    const type=document.getElementById('drillType').value;
+    const mod=PY_MODULES.find(m=>m.num===modNum);
+    tags.push(`M${modNum}: ${mod.name}`,type);
+    if(!fullNote)fullNote=`Python drill · M${modNum}: ${mod.name} · ${type}`;
+  }else if(selCat==='cert'){
+    const w=document.getElementById('certWhich').value,m=document.getElementById('certMethod').value,sc=document.getElementById('certScore').value;
+    tags.push(w,m);
+    if(sc){tags.push('Score: '+sc);if(!fullNote)fullNote=`${w} · ${m} · score ${sc}`;}
+    else if(!fullNote)fullNote=`${w} · ${m}`;
+    if(sc&&w==='AWS CCP'){ccp.push({score:parseInt(sc),date:todayStr()});saveCCP();}
+  }else if(selCat==='code'){
+    const l=document.getElementById('codeLang').value,t=document.getElementById('codeType').value,to=document.getElementById('codeTool').value;
+    tags.push(l,t,to);if(!fullNote)fullNote=`${l} · ${t}`;
+  }else if(selCat==='project'){
+    const p=document.getElementById('projWhich').value,t=document.getElementById('projType').value;
+    tags.push(p,t);if(!fullNote)fullNote=`${p} · ${t}`;
+  }else if(selCat==='scan'){
+    const sig=document.getElementById('scanSig').value,sn=document.getElementById('scanNote').value.trim();
+    tags.push('Signal: '+sig);if(sn)tags.push(sn);if(!fullNote)fullNote=sn||'Ecosystem scan · '+sig;
+  }else if(selCat==='review'){
+    const rt=document.getElementById('reviewType').value;tags.push(rt);if(!fullNote)fullNote=rt;
+  }
+  sessions.unshift({id:Date.now(),date:todayStr(),week:currWk(),category:selCat,minutes:mins,note:fullNote,tags:tags.filter(Boolean)});
+  saveSesh();
+  document.getElementById('logMins').value='';
+  const noteEl=document.getElementById('logNote');
+  noteEl.value='';noteEl.style.height='auto';
+  document.querySelectorAll('.cat-pill').forEach(b=>b.className='cat-pill');
+  ['drill','cert','code','project','scan','review'].forEach(c=>document.getElementById('ctx-'+c).classList.remove('show'));
+  selCat='';
+  const ok=document.getElementById('logOk');ok.style.display='block';setTimeout(()=>ok.style.display='none',2000);
+  renderAll();
+}
+
+// ── SETUP ─────────────────────────────────────────────
+function checkSetup(){
+  if(!startStr){document.getElementById('setupOverlay').style.display='flex';document.getElementById('setupDate').value=todayStr();}
+}
+function saveStart(){
+  const v=document.getElementById('setupDate').value;if(!v)return;
+  startStr=v;localStorage.setItem('v9d_start',v);
+  document.getElementById('setupOverlay').style.display='none';renderAll();
+}
+function resetStart(){
+  if(!confirm('Reset plan start date? Sessions are preserved.'))return;
+  localStorage.removeItem('v9d_start');startStr='';
+  document.getElementById('setupOverlay').style.display='flex';
+}
+
+// ── BACKUP ────────────────────────────────────────────
+function exportData(){
+  const payload={
+    v:11,exported:new Date().toISOString(),
+    v9d_sessions:localStorage.getItem('v9d_sessions')||'[]',
+    v9d_ccp:localStorage.getItem('v9d_ccp')||'[]',
+    v9d_start:localStorage.getItem('v9d_start')||'',
+    v10_pyDone:localStorage.getItem('v10_pyDone')||'{}',
+    v11_mission:localStorage.getItem('v11_mission')||'{}',
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`ops-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();URL.revokeObjectURL(url);
+  showBkMsg('✓ EXPORTED');
+}
+function importData(evt){
+  const file=evt.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(!d.v9d_sessions)throw new Error('Not a valid backup file');
+      if(!confirm(`Import backup from ${d.exported?d.exported.slice(0,10):'unknown date'}?\n\nThis will replace all current data.`))return;
+      if(d.v9d_sessions)localStorage.setItem('v9d_sessions',d.v9d_sessions);
+      if(d.v9d_ccp)localStorage.setItem('v9d_ccp',d.v9d_ccp);
+      if(d.v9d_start)localStorage.setItem('v9d_start',d.v9d_start);
+      if(d.v10_pyDone)localStorage.setItem('v10_pyDone',d.v10_pyDone);
+      if(d.v11_mission)localStorage.setItem('v11_mission',d.v11_mission);
+      load();renderAll();
+      showBkMsg('✓ IMPORTED');
+    }catch(err){alert('Import failed: '+err.message);}
+    evt.target.value='';
+  };
+  reader.readAsText(file);
+}
+function showBkMsg(txt){
+  const el=document.getElementById('bkMsg');
+  el.textContent=txt;el.style.display='inline';
+  setTimeout(()=>el.style.display='none',3000);
+}
+
+// ── PHASE BRIEF ───────────────────────────────────────
+const PHASE_DETAIL = {
+  1:{
+    wkRange:[1,6],
+    cert:['CCP review — target 850+ (currently 658)','Focus: billing, IAM, shared responsibility, core services','One full mock exam per week until passing'],
+    code:['Python: variables, loops, functions, files, APIs','VS Code + Cursor as daily pair','Git workflow: commit, branch, PR — no GUI crutches','Build Project 1: Claude Shell (CLI wrapper)'],
+    milestones:[
+      {label:'CCP pass 850+',type:'cert'},{label:'Claude Shell',type:'proj'},
+      {label:'Git fluency',type:'skill'},{label:'Python CLI',type:'skill'},
+    ],
+    weeks:{
+      1:['Run first CCP mock exam — baseline your score','Start Python M1: Variables & Types','Set up daily commit habit — push something every day'],
+      2:['CCP: focus on billing models and pricing','Python M2: Functions — write 5 small functions from scratch','Start Claude Shell repo on GitHub'],
+      3:['CCP: IAM, shared responsibility model','Python M3: Lists, dicts, loops','Claude Shell: build the basic CLI loop'],
+      4:['CCP: core services — EC2, S3, RDS, Lambda overview','Python M4: Files & .env loading','Claude Shell: add session logging to file'],
+      5:['CCP: mock exam — target 820+','Python M5: APIs + JSON — call Anthropic API directly','Claude Shell: add multi-turn conversation'],
+      6:['CCP: final review pass, sit the exam if 820+ on mocks','Python M6: Classes (light)','Claude Shell: README, polish, push to GitHub'],
+    }
+  },
+  2:{
+    wkRange:[7,13],
+    cert:['AWS SAA-C03 study — weeks 7–12','Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing','DL.AI: Evaluating & Debugging GenAI — week 10','SAA exam target: week 12–13'],
+    code:['Python intermediate: requests, JSON, async basics, classes','Build EvalKit — automated LLM output scoring','Build ReviewLoop — HITL annotation interface','APIs: Anthropic, basic REST patterns'],
+    milestones:[
+      {label:'SAA-C03 pass',type:'cert'},{label:'DL.AI Evals',type:'cert'},
+      {label:'EvalKit',type:'proj'},{label:'ReviewLoop',type:'proj'},
+    ],
+    weeks:{
+      7:['Begin SAA study — VPC fundamentals','Python M6 review or M7: Async basics','EvalKit: scaffold the project structure'],
+      8:['SAA: EC2, S3, IAM deep dive','EvalKit: build prompt input + output scoring logic','Commit daily — every session leaves a trace'],
+      9:['SAA: RDS, Lambda, load balancing','EvalKit: add pass/fail assertions and results output','Code review: read one open-source LLM eval repo'],
+      10:['Complete DL.AI: Evaluating & Debugging GenAI','EvalKit: integrate with DL.AI concepts','Begin ReviewLoop planning — sketch the UI flow'],
+      11:['SAA mock exam — baseline score','ReviewLoop: build annotation interface skeleton','Study SAA weakest areas from mock'],
+      12:['SAA: final review, target 820+ on mocks','ReviewLoop: add accept/reject/edit logging','Sit SAA exam if consistently hitting 820+'],
+      13:['ReviewLoop: JSONL dataset export feature','Polish EvalKit README with usage examples','Weekly review: what\'s working, what isn\'t'],
+    }
+  },
+  3:{
+    wkRange:[14,20],
+    cert:['DL.AI: Agentic AI Systems — week 14–15','AWS Bedrock hands-on labs (concurrent)','Begin AWS AI Practitioner prep — week 18'],
+    code:['Tool use, function calling, multi-step agents','Build AgentForge — agentic research assistant','Build CloudMind — full-stack deployed on AWS','Docker basics, Lambda, S3, basic CI/CD'],
+    milestones:[
+      {label:'DL.AI Agents',type:'cert'},{label:'AgentForge',type:'proj'},
+      {label:'CloudMind (deployed)',type:'proj'},{label:'AWS Bedrock',type:'skill'},
+    ],
+    weeks:{
+      14:['Complete DL.AI: Agentic AI Systems','AgentForge: design the agent loop and tool interface','Bedrock: first hands-on lab'],
+      15:['AgentForge: implement web search tool calling','AgentForge: multi-step planning loop','Bedrock: second lab — foundation model inference'],
+      16:['AgentForge: structured output + citation logic','AgentForge: validation via EvalKit integration','CloudMind: scaffold project, pick AWS architecture'],
+      17:['CloudMind: build frontend + API layer locally','CloudMind: first Lambda deployment attempt','Review AgentForge — polish error handling'],
+      18:['CloudMind: S3 storage integration','Begin AWS AI Practitioner (AIF-C01) prep','CloudMind: basic CloudWatch monitoring'],
+      19:['CloudMind: CI/CD pipeline (basic)','AIF-C01: foundation models, responsible AI','Full end-to-end CloudMind test in production'],
+      20:['CloudMind: README + demo recording','AIF-C01: final prep — Bedrock, SageMaker, AI services','Review all Phase 3 projects — pick the weakest, improve it'],
+    }
+  },
+  4:{
+    wkRange:[21,24],
+    cert:['AWS AI Practitioner (AIF-C01) — exam week 21','Any Anthropic developer credential if available'],
+    code:['Polish all 5 project READMEs with demo GIFs/screenshots','GitHub profile — pinned projects, clean bio','LinkedIn optimized for "applied AI engineer"','50 targeted job applications','Mock interviews: technical + behavioral'],
+    milestones:[
+      {label:'AWS AI Practitioner',type:'cert'},{label:'Portfolio live',type:'skill'},
+      {label:'Applications active',type:'skill'},
+    ],
+    weeks:{
+      21:['Sit AWS AI Practitioner exam','Trading Framework README: screenshots, decision examples','Begin LinkedIn optimization'],
+      22:['Claude Shell + EvalKit READMEs: add usage GIFs','GitHub profile: pin 5 projects, write bio','Send first 10 job applications'],
+      23:['ReviewLoop + AgentForge READMEs: HITL and agent demos','CloudMind README: architecture diagram + live link','Send 20 more applications — track responses'],
+      24:['Mock interview: technical walkthrough of each project','Mock interview: behavioral — tell the career story','Final polish pass — fix anything that looks unfinished'],
+    }
+  }
+};
+
+let pb2SelectedWk = null;
+
+function renderPhaseBrief(){
+  const wk = currWk();
+  const ph = getPhase(wk);
+  const detail = PHASE_DETAIL[ph.num];
+
+  // Header
+  const numEl = document.getElementById('pb2Num');
+  numEl.textContent = ph.num;
+  numEl.style.borderColor = ph.color + '80';
+  numEl.style.color = ph.color;
+  numEl.style.background = ph.color + '15';
+  document.getElementById('pb2Title').innerHTML = `<strong>Phase ${ph.num}</strong> · ${ph.label}`;
+  document.getElementById('pb2Wks').textContent = `Wks ${detail.wkRange[0]}–${detail.wkRange[1]}`;
+
+  // Week nav buttons
+  const nav = document.getElementById('pb2WeekNav');
+  const weeks = Object.keys(detail.weeks).map(Number);
+  nav.innerHTML = weeks.map(w =>
+    `<button class="pb2-wk-btn${w===wk?' current':''}" onclick="selectPhaseBriefWk(${w},event)">Wk ${w}</button>`
+  ).join('');
+
+  // Default selected week = current
+  if(pb2SelectedWk === null || !weeks.includes(pb2SelectedWk)) pb2SelectedWk = wk;
+  renderPhaseBriefWeek(detail);
+
+  // Cols
+  document.getElementById('pb2Cols').innerHTML = `
+    <div>
+      <div class="pb2-col-label">Cert work</div>
+      <ul class="pb2-list">${detail.cert.map(c=>`<li>${c}</li>`).join('')}</ul>
+    </div>
+    <div>
+      <div class="pb2-col-label">Coding &amp; projects</div>
+      <ul class="pb2-list">${detail.code.map(c=>`<li>${c}</li>`).join('')}</ul>
+    </div>`;
+
+  // Milestones
+  document.getElementById('pb2Milestones').innerHTML = detail.milestones.map(m=>
+    `<span class="pb2-badge pb2-badge-${m.type}">${m.label}</span>`
+  ).join('');
+}
+
+function renderPhaseBriefWeek(detail){
+  if(!detail) return;
+  const items = detail.weeks[pb2SelectedWk];
+  const wd = document.getElementById('pb2WeekDetail');
+  if(!items){wd.style.display='none';return;}
+  wd.style.display = 'block';
+  document.getElementById('pb2WdTitle').textContent = `WEEK ${pb2SelectedWk} — FOCUS`;
+  document.getElementById('pb2WdItems').innerHTML = items.map(i=>
+    `<div class="pb2-wd-item">${i}</div>`
+  ).join('');
+  // Update button highlights
+  document.querySelectorAll('.pb2-wk-btn').forEach(btn=>{
+    btn.classList.toggle('current', parseInt(btn.textContent.replace('Wk ',''))===pb2SelectedWk);
+  });
+}
+
+function selectPhaseBriefWk(wk, e){
+  e.stopPropagation();
+  pb2SelectedWk = wk;
+  const ph = getPhase(currWk());
+  renderPhaseBriefWeek(PHASE_DETAIL[ph.num]);
+}
+
+function toggleStopThink(){
+  const el = document.getElementById('stBlock');
+  el.classList.toggle('open');
+  localStorage.setItem('v11_st', el.classList.contains('open')?'1':'0');
+}
+
+function togglePhaseBrief(){
+  const el = document.getElementById('phaseBrief');
+  el.classList.toggle('open');
+  localStorage.setItem('v11_phaseOpen', el.classList.contains('open')?'1':'0');
+}
+
+// ── MAIN ──────────────────────────────────────────────
+function renderAll(){
+  renderHeader();renderNorthStar();renderStreak();
+  renderMission();renderPyModules();renderCCP();
+  renderCodedBadge();renderTargets();renderPhaseBrief();
+  renderPhaseBars();renderHeatmap();renderSessions();
+}
+
+load();
+// Restore phase brief open state
+if(localStorage.getItem('v11_phaseOpen')==='1'){
+  document.getElementById('phaseBrief').classList.add('open');
+}
+// Restore stop & think open state
+if(localStorage.getItem('v11_st')==='1'){
+  document.getElementById('stBlock').classList.add('open');
+}
+renderAll();checkSetup();
+</script>
+</body>
+</html>
