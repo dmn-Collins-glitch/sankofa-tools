@@ -60,7 +60,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 /* THREAD */
 .tw{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.thread{flex:1;overflow-y:auto;padding:1rem 1rem .5rem;display:flex;flex-direction:column;gap:.65rem;scroll-behavior:smooth}
+.thread{flex:1;overflow-y:auto;padding:1rem 1rem .5rem;display:flex;flex-direction:column;gap:1.1rem;scroll-behavior:smooth}
 .thread::-webkit-scrollbar{width:3px}
 .thread::-webkit-scrollbar-thumb{background:var(--bm);border-radius:2px}
 
@@ -70,6 +70,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .mu{align-self:flex-end;max-width:72%;background:var(--surface2);border:1px solid var(--bm);border-radius:4px 4px 0 4px;padding:.55rem .8rem;font-size:13px;color:var(--t2)}
 .ma{align-self:flex-start;width:100%;background:var(--surface);border:1px solid var(--bm);border-left:2px solid var(--teal);border-radius:0 4px 4px 4px;padding:.7rem .9rem;font-size:13.5px;color:var(--text);line-height:1.7}
 .ma p{margin-bottom:.45rem}.ma p:last-child{margin-bottom:0}
+.ma hr{border:none;border-top:1px solid var(--bm);margin:.75rem 0;opacity:.6}
 .ma code{font-family:var(--fm);font-size:12px;background:var(--bg3);color:var(--teal);padding:1px 5px;border-radius:2px;border:1px solid var(--border)}
 .ma pre{background:var(--bg3);border:1px solid var(--border);border-left:2px solid var(--td);border-radius:3px;padding:.6rem .8rem;margin:.45rem 0;overflow-x:auto}
 .ma pre code{background:none;border:none;padding:0;color:var(--t2);font-size:12px;line-height:1.65}
@@ -573,6 +574,8 @@ function startDebrief(){
 
 function go(){
   document.getElementById('startScreen').classList.add('gone');
+  document.getElementById('pyScreen').classList.add('gone');
+  document.getElementById('ccpScreen').classList.add('gone');
   document.getElementById('thread').style.display='flex';
   document.getElementById('ibar').style.display='flex';
 }
@@ -710,7 +713,8 @@ function addWS(concept){
 
 function fmt(t){
   t=t.replace(/\[WEAK:[^\]]+\]/gi,'').trim();
-  t=t.replace(/\[DRILL\]/gi,'').trim();
+  // Normalize [DRILL] to its own paragraph so the hr renders cleanly
+  t=t.replace(/\s*\[DRILL\]\s*/gi,'\n\n<hr>\n\n');
   t=t.replace(/---LOG---[\s\S]+?---END---/g,'').trim();
   t=t.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<pre><code>${esc(c.trim())}</code></pre>`);
   t=t.replace(/`([^`]+)`/g,'<code>$1</code>');
@@ -719,6 +723,7 @@ function fmt(t){
   return t.split(/\n\n+/).map(p=>{
     p=p.trim();if(!p)return'';
     if(p.startsWith('<pre>'))return p;
+    if(p==='<hr>')return p;
     return`<p>${p.replace(/\n/g,'<br>')}</p>`;
   }).filter(Boolean).join('');
 }
