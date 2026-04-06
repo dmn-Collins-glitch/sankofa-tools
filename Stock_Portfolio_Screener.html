@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sankofa · Trade Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #09080A;
+  --surface:   #111018;
+  --surface2:  #181620;
+  --border:    #222030;
+  --border2:   #302C40;
+  --text:      #EAE2F8;
+  --text2:     #8880A8;
+  --text3:     #40384E;
+  --amber:     #C8861A;
+  --amber-dim: rgba(200,134,26,.12);
+  --amber-mid: rgba(200,134,26,.28);
+  --green:     #4CAA7C;
+  --green-dim: rgba(76,170,124,.12);
+  --red:       #B85858;
+  --red-dim:   rgba(184,88,88,.12);
+  --blue:      #6490D0;
+  --blue-dim:  rgba(100,144,208,.12);
+  --mono:      'JetBrains Mono', monospace;
+  --head:      'Syne', sans-serif;
+  --serif:     'Lora', serif;
+  --r:         8px;
+  --r2:        12px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 14px; min-height: 100vh; }
+.shell { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar { width: 230px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 0 0 1.5rem; position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.brand { padding: 1.75rem 1.5rem 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+.brand-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; color: var(--amber); text-transform: uppercase; margin-bottom: .4rem; }
+.brand-mark { font-family: var(--head); font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; }
+.brand-sub { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: .06em; margin-top: .4rem; }
+.nav { flex: 1; padding: .5rem 0; }
+.nav-item { display: flex; align-items: center; gap: .7rem; padding: .6rem 1.5rem; font-family: var(--head); font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all .15s; border-left: 2px solid transparent; letter-spacing: .01em; user-select: none; }
+.nav-item:hover { color: var(--text); background: var(--surface2); }
+.nav-item.active { color: var(--amber); border-left-color: var(--amber); background: var(--amber-dim); }
+.nav-glyph { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; opacity: .7; }
+.nav-item.active .nav-glyph { opacity: 1; }
+.nav-badge { margin-left: auto; font-family: var(--mono); font-size: 10px; background: var(--border2); color: var(--text2); padding: 1px 7px; border-radius: 10px; min-width: 22px; text-align: center; }
+.sidebar-foot { padding: 1rem 1.5rem 0; border-top: 1px solid var(--border); }
+.macro-label-sm { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: .4rem; }
+.macro-pill { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .1em; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; cursor: pointer; transition: all .15s; display: inline-block; border: 1px solid transparent; }
+.macro-pill:hover { filter: brightness(1.15); }
+.macro-risk    { background: var(--green-dim); color: var(--green); border-color: rgba(76,170,124,.4); }
+.macro-caution { background: var(--amber-dim); color: var(--amber); border-color: rgba(200,134,26,.4); }
+.macro-off     { background: var(--red-dim);   color: var(--red);   border-color: rgba(184,88,88,.4); }
+.macro-hint { font-family: var(--mono); font-size: 9px; color: var(--text3); margin-top: .3rem; }
+
+/* Main */
+.main { flex: 1; min-width: 0; }
+.panel { display: none; padding: 2.25rem 2.5rem 5rem; max-width: 940px; animation: fadeIn .2s ease; }
+.panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.panel-hdr { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); gap: 1rem; flex-wrap: wrap; }
+.panel-title { font-family: var(--head); font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -.03em; line-height: 1; }
+.panel-title em { color: var(--amber); font-style: normal; }
+.panel-meta { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: .05em; }
+
+/* Buttons */
+.btn { font-family: var(--head); font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: .5rem 1.1rem; border-radius: var(--r); border: none; cursor: pointer; transition: all .15s; white-space: nowrap; display: inline-flex; align-items: center; gap: .4rem; }
+.btn-primary { background: var(--amber); color: #000; }
+.btn-primary:hover { background: #DFA030; }
+.btn-ghost   { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+.btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+.btn-ai      { background: var(--blue-dim); border: 1px solid rgba(100,144,208,.4); color: var(--blue); }
+.btn-ai:hover { background: var(--blue); color: #fff; }
+.btn-danger  { background: var(--red-dim); border: 1px solid rgba(184,88,88,.4); color: var(--red); }
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-sm { font-size: 11px; padding: .35rem .8rem; border-radius: 6px; }
+.btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+
+/* Summary strip */
+.sum-strip { display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 1rem; }
+.sum-cell { flex: 1; background: var(--surface); padding: .9rem 1rem; text-align: center; }
+.sum-val { font-family: var(--mono); font-size: 20px; font-weight: 700; line-height: 1; margin-bottom: 5px; color: var(--text); }
+.sum-val.g { color: var(--green); } .sum-val.a { color: var(--amber); } .sum-val.r { color: var(--red); }
+.sum-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; color: var(--text3); text-transform: uppercase; }
+
+/* Rotation bar */
+.rotation-bar { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: .65rem 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.rot-label { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); flex-shrink: 0; }
+.rot-chip { font-family: var(--mono); font-size: 10px; padding: 2px 10px; border-radius: 4px; border: 1px solid transparent; }
+.rot-out { background: var(--red-dim);   color: var(--red);   border-color: rgba(184,88,88,.3); }
+.rot-in  { background: var(--green-dim); color: var(--green); border-color: rgba(76,170,124,.3); }
+
+/* Score badge */
+.score-badge { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px; border: 1px solid transparent; letter-spacing: .04em; white-space: nowrap; }
+.score-4 { background: var(--green-dim); color: var(--green); border-color: rgba(76,170,124,.4); }
+.score-3 { background: rgba(76,170,124,.06); color: #5CB88A; border-color: rgba(76,170,124,.2); }
+.score-2 { background: var(--amber-dim); color: var(--amber); border-color: rgba(200,134,26,.3); }
+.score-1, .score-0 { background: var(--red-dim); color: var(--red); border-color: rgba(184,88,88,.3); }
+
+/* Momentum warning */
+.momentum-warn { display: flex; align-items: flex-start; gap: .6rem; background: var(--amber-dim); border: 1px solid rgba(200,134,26,.3); border-radius: var(--r); padding: .7rem .9rem; margin-bottom: 1rem; font-family: var(--mono); font-size: 10px; color: var(--amber); line-height: 1.6; }
+
+/* Checklist in form */
+.checklist-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: .9rem 1rem; margin-bottom: 1rem; }
+.checklist-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+.checklist-title { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); }
+.checklist-score { font-family: var(--mono); font-size: 12px; font-weight: 700; }
+.checklist-item { display: flex; align-items: flex-start; gap: .65rem; padding: .4rem 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item:hover { background: rgba(255,255,255,.015); border-radius: 4px; }
+.cl-box { width: 16px; height: 16px; border: 1px solid var(--border2); border-radius: 3px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; background: var(--bg); }
+.cl-box.checked { background: var(--green); border-color: var(--green); }
+.cl-check { color: #000; font-size: 10px; font-weight: 700; display: none; }
+.cl-box.checked .cl-check { display: block; }
+.cl-text { font-family: var(--mono); font-size: 10px; color: var(--text2); line-height: 1.5; }
+.cl-text.checked { color: var(--text3); text-decoration: line-through; }
+.score-hint { font-family: var(--mono); font-size: 9px; color: var(--text3); margin-top: .6rem; }
+
+/* Position card */
+.pos-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); margin-bottom: 1rem; overflow: hidden; transition: border-color .15s; }
+.pos-card:hover { border-color: var(--border2); }
+.pos-card-head { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; flex-wrap: wrap; }
+.pos-ticker-wrap { min-width: 90px; }
+.pos-ticker { font-family: var(--head); font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -.02em; line-height: 1; }
+.pos-company { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: .04em; margin-top: 3px; text-transform: uppercase; }
+.pos-tags { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.pos-setup-tag { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(200,134,26,.3); white-space: nowrap; }
+.momentum-tag { background: var(--red-dim) !important; color: var(--red) !important; border-color: rgba(184,88,88,.3) !important; }
+.pos-levels { display: flex; gap: 1.75rem; margin-left: auto; align-items: center; flex-wrap: wrap; }
+.pos-level { text-align: right; }
+.pos-level-val { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--text); line-height: 1; }
+.pos-level-val.tgt { color: var(--green); } .pos-level-val.stp { color: var(--red); } .pos-level-val.amb { color: var(--amber); }
+.pos-level-lbl { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; margin-top: 2px; }
+.pos-card-body { display: none; padding: 1.25rem 1.4rem; border-top: 1px solid var(--border); }
+.pos-card-body.open { display: block; }
+
+/* Checklist review on card */
+.cl-review { margin-bottom: 1.25rem; }
+.cl-review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .3rem .75rem; margin-top: .5rem; }
+.cl-review-item { font-family: var(--mono); font-size: 10px; color: var(--text3); display: flex; align-items: flex-start; gap: .4rem; line-height: 1.4; }
+.cl-review-item.yes { color: var(--text2); }
+.pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.pip-y { background: var(--green); } .pip-n { background: var(--border2); }
+
+.thesis-block { margin-bottom: 1.25rem; }
+.field-micro-label { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); margin-bottom: .5rem; }
+.thesis-text { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--text2); line-height: 1.8; border-left: 2px solid var(--border2); padding-left: 1rem; }
+.card-meta-row { display: flex; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.meta-chip { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.meta-chip strong { color: var(--text2); }
+.card-actions { display: flex; gap: .4rem; margin-left: auto; flex-wrap: wrap; }
+
+/* Watchlist */
+.wl-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); padding: 1.1rem 1.4rem; margin-bottom: .75rem; display: flex; align-items: flex-start; gap: 1.25rem; transition: border-color .15s; }
+.wl-card:hover { border-color: var(--border2); }
+.wl-ticker-wrap { min-width: 80px; }
+.wl-ticker { font-family: var(--head); font-size: 20px; font-weight: 800; letter-spacing: -.01em; color: var(--text); }
+.wl-date { font-family: var(--mono); font-size: 9px; color: var(--text3); margin-top: 3px; }
+.wl-body { flex: 1; min-width: 0; }
+.wl-setup-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; flex-wrap: wrap; }
+.wl-notes { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--text2); line-height: 1.7; margin-bottom: .65rem; }
+.wl-levels { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.wl-level-item { font-family: var(--mono); font-size: 11px; color: var(--text); }
+.wl-level-item span { display: block; font-size: 9px; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 2px; }
+.wl-actions { display: flex; flex-direction: column; gap: .4rem; align-items: flex-end; flex-shrink: 0; }
+
+/* Closed */
+.closed-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); margin-bottom: 1rem; overflow: hidden; }
+.closed-head { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.outcome-tag { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; padding: 3px 10px; border-radius: 4px; border: 1px solid transparent; }
+.outcome-win     { background: var(--green-dim); color: var(--green); border-color: rgba(76,170,124,.4); }
+.outcome-loss    { background: var(--red-dim);   color: var(--red);   border-color: rgba(184,88,88,.4); }
+.outcome-scratch { background: var(--amber-dim); color: var(--amber); border-color: rgba(200,134,26,.4); }
+.closed-body { padding: 1.25rem 1.4rem; }
+.debrief-box { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: var(--r); padding: 1rem 1.25rem; margin-top: 1rem; }
+.debrief-label { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); margin-bottom: .6rem; }
+.debrief-text { font-family: var(--serif); font-size: 13px; color: var(--text2); line-height: 1.8; }
+
+/* AI box */
+.ai-box { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--r); padding: 1rem 1.25rem; margin-top: .75rem; display: none; }
+.ai-box.open { display: block; }
+.ai-box-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: .65rem; }
+.ai-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+.ai-thinking { font-family: var(--mono); font-size: 9px; color: var(--text3); }
+@keyframes blink { 0%,100%{opacity:.2} 50%{opacity:1} }
+.ai-thinking::after { content: '...'; animation: blink 1.2s infinite; }
+.ai-body { font-family: var(--serif); font-size: 13px; color: var(--text2); line-height: 1.8; white-space: pre-wrap; }
+
+/* Drawer */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 100; backdrop-filter: blur(2px); }
+.overlay.open { display: block; }
+.drawer { position: fixed; top: 0; right: -105%; width: min(560px, 96vw); height: 100vh; background: var(--surface); border-left: 1px solid var(--border2); z-index: 101; overflow-y: auto; transition: right .3s cubic-bezier(.22,.68,0,1.2); padding: 2rem 1.75rem; }
+.drawer.open { right: 0; }
+.drawer-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+.drawer-title { font-family: var(--head); font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+.drawer-close { background: none; border: 1px solid var(--border); color: var(--text3); font-size: 14px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.drawer-close:hover { border-color: var(--red); color: var(--red); }
+
+/* Form */
+.field { margin-bottom: 1.2rem; }
+.fl { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); margin-bottom: 5px; display: block; }
+.fl.req::after { content: ' *'; color: var(--amber); }
+input[type=text], input[type=number], input[type=date], input[type=password], select, textarea {
+  width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--r);
+  color: var(--text); font-family: var(--mono); font-size: 12px; padding: .6rem .8rem;
+  outline: none; transition: border-color .15s; appearance: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--amber); }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2340384E'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2rem; }
+select option { background: #111018; }
+textarea { resize: vertical; min-height: 90px; line-height: 1.65; font-family: var(--serif); font-size: 13px; }
+.field-row   { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; }
+.field-hint { font-family: var(--mono); font-size: 9px; color: var(--text3); margin-top: 5px; }
+.section-divider { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); margin: 1.5rem 0 .75rem; display: flex; align-items: center; gap: .75rem; }
+.section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.ai-assist { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem; margin-bottom: .75rem; }
+.ai-assist-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); margin-bottom: .5rem; }
+.drawer-foot { display: flex; gap: .6rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); justify-content: flex-end; flex-wrap: wrap; }
+
+/* Share modal */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-backdrop.open { display: flex; }
+.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--r2); width: min(620px, 92vw); max-height: 88vh; overflow-y: auto; padding: 1.75rem; animation: fadeIn .2s ease; }
+.modal-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.modal-title { font-family: var(--head); font-size: 16px; font-weight: 800; color: var(--text); }
+.share-body { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 1.25rem; font-family: var(--serif); font-size: 13px; color: var(--text2); line-height: 1.85; min-height: 100px; white-space: pre-wrap; }
+.modal-foot { display: flex; gap: .6rem; margin-top: 1rem; justify-content: flex-end; }
+
+/* Settings */
+.settings-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); padding: 1.5rem; margin-bottom: 1.25rem; }
+.settings-head { font-family: var(--head); font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text2); margin-bottom: 1rem; display: flex; align-items: center; gap: .75rem; }
+.api-badge { font-family: var(--mono); font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 400; }
+.api-ok { background: var(--green-dim); color: var(--green); } .api-no { background: var(--red-dim); color: var(--red); }
+
+/* Empty */
+.empty { text-align: center; padding: 5rem 2rem; font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: .04em; line-height: 2; }
+.empty-glyph { font-size: 36px; margin-bottom: 1rem; opacity: .25; display: block; }
+
+@media (max-width: 720px) {
+  .sidebar { display: none; }
+  .panel { padding: 1.25rem 1rem 4rem; }
+  .field-row-3 { grid-template-columns: 1fr 1fr; }
+  .cl-review-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="sidebar">
+    <div class="brand">
+      <div class="brand-eyebrow">⦿ Sankofa</div>
+      <div class="brand-mark">Trade<br>Journal</div>
+      <div class="brand-sub">Rules-Based · AI-Assisted · v3</div>
+    </div>
+    <div class="nav">
+      <div class="nav-item active" onclick="switchPanel('positions',this)"><span class="nav-glyph">◈</span>Positions<span class="nav-badge" id="badge-pos">0</span></div>
+      <div class="nav-item" onclick="switchPanel('watchlist',this)"><span class="nav-glyph">◎</span>Watchlist<span class="nav-badge" id="badge-wl">0</span></div>
+      <div class="nav-item" onclick="switchPanel('closed',this)"><span class="nav-glyph">◇</span>Closed<span class="nav-badge" id="badge-cl">0</span></div>
+      <div class="nav-item" onclick="switchPanel('settings',this)"><span class="nav-glyph">⚙</span>Settings</div>
+    </div>
+    <div class="sidebar-foot">
+      <div class="macro-label-sm">Macro Climate</div>
+      <div style="margin:.4rem 0 .25rem"><span class="macro-pill macro-risk" id="macroPill" onclick="cycleMacro()">RISK ON</span></div>
+      <div class="macro-hint">Click to cycle</div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="panel active" id="panel-positions">
+      <div class="panel-hdr">
+        <div class="panel-title">Active <em>Positions</em></div>
+        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+          <span class="panel-meta" id="posDate"></span>
+          <button class="btn btn-primary" onclick="openDrawer('position')">+ New Position</button>
+        </div>
+      </div>
+      <div class="sum-strip" id="posSummary"></div>
+      <div id="rotationBar"></div>
+      <div id="positionsList"></div>
+    </div>
+
+    <div class="panel" id="panel-watchlist">
+      <div class="panel-hdr">
+        <div class="panel-title">Watch<em>list</em></div>
+        <button class="btn btn-primary" onclick="openDrawer('watchlist')">+ Add Candidate</button>
+      </div>
+      <div id="watchlistList"></div>
+    </div>
+
+    <div class="panel" id="panel-closed">
+      <div class="panel-hdr"><div class="panel-title">Closed <em>Trades</em></div></div>
+      <div id="closedList"></div>
+    </div>
+
+    <div class="panel" id="panel-settings">
+      <div class="panel-hdr"><div class="panel-title">Set<em>tings</em></div></div>
+      <div class="settings-block">
+        <div class="settings-head">Anthropic API Key <span class="api-badge api-no" id="apiStatus">NOT SET</span></div>
+        <div class="field"><label class="fl">Key (shared with Drill Engine · de_api_key)</label><input type="password" id="apiKeyInput" placeholder="sk-ant-..."></div>
+        <button class="btn btn-primary btn-sm" onclick="saveApiKey()">Save Key</button>
+      </div>
+      <div class="settings-block">
+        <div class="settings-head">Data</div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="exportData()">Export JSON</button>
+          <button class="btn btn-danger btn-sm" onclick="clearAll()">Clear All Data</button>
+        </div>
+      </div>
+      <div class="settings-block">
+        <div class="settings-head">About</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:2.2">
+          localStorage: pf_v2_positions · pf_v2_watchlist · pf_v2_closed · pf_macro_v2<br>
+          API: claude-sonnet-4-6 · Version 3.0 · Sankofa Trading Framework<br>
+          Setup types: Breakout · Pullback to Support · Trend Continuation · Reversal · Range Play · Momentum
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-hdr">
+    <div class="drawer-title" id="drawerTitle">New Position</div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div id="drawerBody"></div>
+</div>
+
+<div class="modal-backdrop" id="shareModal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">Share Summary</div>
+      <button class="drawer-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="ai-tag" style="margin-bottom:.75rem">⬡ Claude · Plain-English Summary</div>
+    <div class="share-body" id="shareBody">Generating…</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button>
+      <button class="btn btn-primary btn-sm" onclick="copyShare()">Copy to Clipboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CHECKLISTS = {
+  'Breakout': [
+    'Price breaking above a clearly defined resistance level or consolidation range',
+    'Volume elevated on the breakout candle relative to recent average',
+    'Level has been tested at least twice before the breakout',
+    'Clean consolidation pattern (flag, triangle, base) preceding the move'
+  ],
+  'Pullback to Support': [
+    'Level has held at least twice before',
+    'Pullback occurring on declining volume, not rising volume',
+    'Momentum showing exhaustion signs at the level (wicks, slowing bearish pressure)',
+    'Broader trend still intact above this level'
+  ],
+  'Trend Continuation': [
+    'Clearly established trend in place — higher highs and higher lows confirmed',
+    'Entry is at a retest of a prior breakout level now acting as support',
+    'Pullback is shallow relative to the prior move — less than 50% retracement',
+    'Entry direction aligns with the dominant trend'
+  ],
+  'Reversal': [
+    'Significant prior trend exists to reverse against',
+    'Structural reason for reversal present (double top/bottom, H&S, key level)',
+    'Momentum divergence visible — price and momentum not in agreement',
+    'Volume confirming the reversal candle or pattern'
+  ],
+  'Range Play': [
+    'Range clearly defined with at least two touches on each boundary',
+    'Price is near the boundary being faded, not the middle of the range',
+    'Overall market context is range-bound, not trending',
+    'Measured target to the opposite boundary is identified'
+  ],
+  'Momentum': [
+    'Clear catalyst or news event is driving the move',
+    'Volume is significantly above average',
+    'Price is making new highs within its recent timeframe',
+    'Stop is defined below a recent structure level — not chasing blind'
+  ]
+};
+
+const SETUP_TYPES = Object.keys(CHECKLISTS);
+const SCORE_LABELS = ['Poor','Poor','Weak','Good','Strong'];
+const K = { pos:'pf_v2_positions', wl:'pf_v2_watchlist', cl:'pf_v2_closed', macro:'pf_macro_v2', api:'de_api_key' };
+const MACROS = ['risk-on','caution','risk-off'];
+const MACRO_LABELS = {'risk-on':'RISK ON','caution':'CAUTION','risk-off':'RISK OFF'};
+const MACRO_CLS    = {'risk-on':'macro-risk','caution':'macro-caution','risk-off':'macro-off'};
+
+let S = { pos:[], wl:[], cl:[], macro:'risk-on' };
+let dMode = null, dEditId = null;
+
+function load() {
+  S.pos   = JSON.parse(localStorage.getItem(K.pos)   || '[]');
+  S.wl    = JSON.parse(localStorage.getItem(K.wl)    || '[]');
+  S.cl    = JSON.parse(localStorage.getItem(K.cl)    || '[]');
+  S.macro = localStorage.getItem(K.macro) || 'risk-on';
+}
+
+function persist() {
+  localStorage.setItem(K.pos,   JSON.stringify(S.pos));
+  localStorage.setItem(K.wl,    JSON.stringify(S.wl));
+  localStorage.setItem(K.cl,    JSON.stringify(S.cl));
+  localStorage.setItem(K.macro, S.macro);
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+
+function getScore(cl) { return cl?.length ? cl.filter(Boolean).length : null; }
+
+function scoreClass(s) {
+  if (s === null || s === undefined) return '';
+  return 'score-' + Math.max(0, Math.min(4, s));
+}
+
+function scoreBadge(score, setup) {
+  if (score === null || score === undefined || !setup) return '';
+  return `<span class="score-badge ${scoreClass(score)}">${score}/4 · ${SCORE_LABELS[score]}</span>`;
+}
+
+function hintText(s) {
+  if (s === 4) return '◆ All conditions met — strong setup. Proceed to thesis.';
+  if (s === 3) return '◆ Good setup — one condition missing. Note why in thesis.';
+  if (s === 2) return '◇ Weak setup — consider watchlist over entry.';
+  return '◇ Setup not ready. Wait for more conditions.';
+}
+
+// Navigation
+function switchPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  render();
+}
+
+// Macro
+function cycleMacro() {
+  S.macro = MACROS[(MACROS.indexOf(S.macro) + 1) % 3];
+  persist(); renderMacro(); renderPositions();
+}
+
+function renderMacro() {
+  const el = document.getElementById('macroPill');
+  el.textContent = MACRO_LABELS[S.macro];
+  el.className = 'macro-pill ' + MACRO_CLS[S.macro];
+}
+
+// Drawer
+function openDrawer(mode, id) {
+  dMode = mode; dEditId = id || null;
+  const titles = { position: id ? 'Edit Position' : 'New Position', watchlist: id ? 'Edit Candidate' : 'Add Candidate', close: 'Close Position' };
+  document.getElementById('drawerTitle').textContent = titles[mode];
+  document.getElementById('drawerBody').innerHTML = buildForm(mode, dEditId);
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => {
+    // Init checklist for edit mode
+    const fSetup = document.getElementById('f_setup');
+    if (fSetup && fSetup.value) renderChecklist('f_cl_wrap', fSetup.value, dEditId ? S.pos.find(x=>x.id===dEditId)?.checklist : null);
+    const fwSetup = document.getElementById('fw_setup');
+    if (fwSetup && fwSetup.value) renderChecklist('fw_cl_wrap', fwSetup.value, dEditId ? S.wl.find(x=>x.id===dEditId)?.checklist : null);
+    // Momentum warning
+    if (fSetup) updateMomentumWarn(fSetup.value);
+  }, 60);
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  dMode = null; dEditId = null;
+}
+
+// Checklist rendering
+function renderChecklist(wrapperId, setup, existingAnswers) {
+  const wrap = document.getElementById(wrapperId);
+  if (!wrap || !setup || !CHECKLISTS[setup]) { if (wrap) wrap.innerHTML = ''; return; }
+  const qs = CHECKLISTS[setup];
+  const ans = existingAnswers || new Array(qs.length).fill(false);
+  const score = ans.filter(Boolean).length;
+  wrap.innerHTML = `
+    <div class="checklist-wrap">
+      <div class="checklist-hdr">
+        <span class="checklist-title">Checklist · ${setup}</span>
+        <span class="checklist-score ${scoreClass(score)}" id="${wrapperId}_score">${score}/4</span>
+      </div>
+      ${qs.map((q,i) => `
+        <div class="checklist-item" onclick="toggleCL('${wrapperId}',${i})">
+          <div class="cl-box ${ans[i]?'checked':''}" id="${wrapperId}_box_${i}"><span class="cl-check">✓</span></div>
+          <div class="cl-text ${ans[i]?'checked':''}" id="${wrapperId}_txt_${i}">${q}</div>
+        </div>`).join('')}
+      <div class="score-hint" id="${wrapperId}_hint">${hintText(score)}</div>
+    </div>`;
+}
+
+function toggleCL(wrapperId, index) {
+  const box = document.getElementById(wrapperId + '_box_' + index);
+  const txt = document.getElementById(wrapperId + '_txt_' + index);
+  if (!box) return;
+  const checked = box.classList.toggle('checked');
+  if (txt) txt.classList.toggle('checked', checked);
+  const wrap = document.getElementById(wrapperId);
+  const count = wrap ? wrap.querySelectorAll('.cl-box.checked').length : 0;
+  const scoreEl = document.getElementById(wrapperId + '_score');
+  const hintEl  = document.getElementById(wrapperId + '_hint');
+  if (scoreEl) { scoreEl.textContent = count + '/4'; scoreEl.className = 'checklist-score ' + scoreClass(count); }
+  if (hintEl)  { hintEl.textContent = hintText(count); }
+}
+
+function readChecklist(wrapperId, setup) {
+  const wrap = document.getElementById(wrapperId);
+  if (!wrap || !setup || !CHECKLISTS[setup]) return [];
+  return CHECKLISTS[setup].map((_, i) => {
+    const box = document.getElementById(wrapperId + '_box_' + i);
+    return box ? box.classList.contains('checked') : false;
+  });
+}
+
+function onSetupChange(selectId, wrapperId) {
+  const setup = document.getElementById(selectId)?.value;
+  renderChecklist(wrapperId, setup, null);
+  if (selectId === 'f_setup') updateMomentumWarn(setup);
+}
+
+function updateMomentumWarn(setup) {
+  const w = document.getElementById('momentumWarn');
+  if (w) w.style.display = setup === 'Momentum' ? 'flex' : 'none';
+}
+
+// Form builder
+function buildForm(mode, id) {
+  if (mode === 'position') {
+    const p = id ? S.pos.find(x=>x.id===id) : null;
+    const v = k => p?.[k] ?? '';
+    const setupOpts = ['', ...SETUP_TYPES].map(s =>
+      `<option value="${s}" ${v('setup')===s?'selected':''}>${s||'— Select setup type —'}</option>`).join('');
+    return `
+      <div class="field-row">
+        <div class="field"><label class="fl req">Ticker</label><input type="text" id="f_ticker" value="${v('ticker')}" placeholder="NVDA" maxlength="8" style="text-transform:uppercase;font-weight:700;font-size:14px"></div>
+        <div class="field"><label class="fl">Company Name</label><input type="text" id="f_name" value="${v('name')}" placeholder="NVIDIA Corp"></div>
+      </div>
+      <div class="field-row-3">
+        <div class="field"><label class="fl req">Entry Price</label><input type="number" id="f_entry" value="${v('entryPrice')}" placeholder="850.00" step="0.01"></div>
+        <div class="field"><label class="fl req">Target</label><input type="number" id="f_target" value="${v('target')}" placeholder="1000.00" step="0.01"></div>
+        <div class="field"><label class="fl req">Stop Loss</label><input type="number" id="f_stop" value="${v('stop')}" placeholder="780.00" step="0.01"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="fl req">Setup Type</label><select id="f_setup" onchange="onSetupChange('f_setup','f_cl_wrap')">${setupOpts}</select></div>
+        <div class="field"><label class="fl">Entry Date</label><input type="date" id="f_date" value="${v('entryDate')||new Date().toISOString().split('T')[0]}"></div>
+      </div>
+      <div id="momentumWarn" class="momentum-warn" style="display:none">⚡ Momentum trades carry elevated risk. Confirm your stop is defined below a clear structure level before proceeding.</div>
+      <div id="f_cl_wrap"></div>
+      <div class="section-divider">Trade Thesis</div>
+      <div class="ai-assist">
+        <div class="ai-assist-tag">⬡ AI Assist — describe what you're seeing</div>
+        <textarea id="f_rawNotes" placeholder="Describe the setup in your own words. Claude will use your checklist answers and these notes to write a structured thesis." style="min-height:65px;margin-bottom:.6rem"></textarea>
+        <button class="btn btn-ai btn-sm" onclick="articulateThesis()">Structure My Thesis →</button>
+        <div class="ai-box" id="thesisBox">
+          <div class="ai-box-hdr"><span class="ai-tag">⬡ Claude · Structured Thesis</span><span id="thesisSpinner" class="ai-thinking" style="display:none">Thinking</span></div>
+          <div class="ai-body" id="thesisText"></div>
+          <div style="margin-top:.75rem"><button class="btn btn-ghost btn-sm" onclick="acceptThesis()">Use This →</button></div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="fl req">Thesis (required to save)</label>
+        <textarea id="f_thesis" placeholder="State your thesis — the setup, the key level, and at what point the trade is invalid.">${v('thesis')}</textarea>
+        <div class="field-hint">No thesis, no position. This is the discipline.</div>
+      </div>
+      <div class="drawer-foot">
+        <button class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
+        <button class="btn btn-primary" onclick="savePosition()">Save Position</button>
+      </div>`;
+  }
+
+  if (mode === 'watchlist') {
+    const w = id ? S.wl.find(x=>x.id===id) : null;
+    const v = k => w?.[k] ?? '';
+    const setupOpts = ['', ...SETUP_TYPES].map(s =>
+      `<option value="${s}" ${v('setup')===s?'selected':''}>${s||'— Select setup type (optional) —'}</option>`).join('');
+    return `
+      <div class="field-row">
+        <div class="field"><label class="fl req">Ticker</label><input type="text" id="fw_ticker" value="${v('ticker')}" placeholder="AAPL" maxlength="8" style="text-transform:uppercase;font-weight:700;font-size:14px"></div>
+        <div class="field"><label class="fl">Company Name</label><input type="text" id="fw_name" value="${v('name')}" placeholder="Apple Inc"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="fl">Support Level</label><input type="number" id="fw_sup" value="${v('support')}" placeholder="170.00" step="0.01"></div>
+        <div class="field"><label class="fl">Resistance Level</label><input type="number" id="fw_res" value="${v('resist')}" placeholder="190.00" step="0.01"></div>
+      </div>
+      <div class="field"><label class="fl">Setup Type</label><select id="fw_setup" onchange="onSetupChange('fw_setup','fw_cl_wrap')">${setupOpts}</select></div>
+      <div id="fw_cl_wrap"></div>
+      <div class="field" style="margin-top:.5rem">
+        <label class="fl req">Setup Notes — what are you watching for?</label>
+        <textarea id="fw_notes" placeholder="What's the setup? What confirmation do you need before entering? What level matters?">${v('notes')}</textarea>
+      </div>
+      <div class="drawer-foot">
+        <button class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveWatchlist()">Save Candidate</button>
+      </div>`;
+  }
+
+  if (mode === 'close') {
+    const p = S.pos.find(x=>x.id===id);
+    if (!p) return '<p style="font-family:var(--mono);color:var(--text3)">Position not found.</p>';
+    return `
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1.5rem">
+        <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:.4rem">
+          <span style="font-family:var(--head);font-size:20px;font-weight:800">${p.ticker}</span>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">@ $${p.entryPrice}</span>
+          ${p.setup ? `<span class="pos-setup-tag" style="font-size:9px">${p.setup}</span>` : ''}
+          ${scoreBadge(getScore(p.checklist), p.setup)}
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:.65rem">Target $${p.target} · Stop $${p.stop}</div>
+        <div class="thesis-text" style="font-size:12px">${p.thesis}</div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="fl req">Exit Price</label><input type="number" id="fc_price" placeholder="Exit price" step="0.01"></div>
+        <div class="field"><label class="fl">Exit Date</label><input type="date" id="fc_date" value="${new Date().toISOString().split('T')[0]}"></div>
+      </div>
+      <div class="field"><label class="fl">Outcome</label><select id="fc_outcome"><option value="win">Win</option><option value="loss">Loss</option><option value="scratch">Scratch / Break Even</option></select></div>
+      <div class="field"><label class="fl">What Happened</label><textarea id="fc_notes" placeholder="Did the thesis play out? What moved price? Where did you feel uncertain? What did you observe?"></textarea></div>
+      <div class="drawer-foot">
+        <button class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
+        <button class="btn btn-ghost" onclick="closeTrade(false)">Close — No Debrief</button>
+        <button class="btn btn-ai" onclick="closeTrade(true)">⬡ Close + Debrief</button>
+      </div>`;
+  }
+}
+
+// CRUD
+function savePosition() {
+  const ticker = (document.getElementById('f_ticker')?.value||'').trim().toUpperCase();
+  const thesis = (document.getElementById('f_thesis')?.value||'').trim();
+  const entry  = parseFloat(document.getElementById('f_entry')?.value);
+  const target = parseFloat(document.getElementById('f_target')?.value);
+  const stop   = parseFloat(document.getElementById('f_stop')?.value);
+  const setup  = document.getElementById('f_setup')?.value || '';
+  if (!ticker||!thesis||!entry||!target||!stop) { alert('Ticker, entry, target, stop, and thesis are all required.'); return; }
+  const checklist = readChecklist('f_cl_wrap', setup);
+  const obj = { id: dEditId||uid(), ticker, thesis, entryPrice:entry, target, stop, setup, checklist, score:getScore(checklist), name:(document.getElementById('f_name')?.value||'').trim(), entryDate:document.getElementById('f_date')?.value||new Date().toISOString().split('T')[0] };
+  if (dEditId) { const i=S.pos.findIndex(x=>x.id===dEditId); if(i>=0) S.pos[i]=obj; } else S.pos.push(obj);
+  persist(); closeDrawer(); render();
+}
+
+function deletePosition(id) {
+  if (!confirm('Remove this position?')) return;
+  S.pos = S.pos.filter(x=>x.id!==id);
+  persist(); render();
+}
+
+function saveWatchlist() {
+  const ticker = (document.getElementById('fw_ticker')?.value||'').trim().toUpperCase();
+  const notes  = (document.getElementById('fw_notes')?.value||'').trim();
+  if (!ticker||!notes) { alert('Ticker and setup notes are required.'); return; }
+  const setup = document.getElementById('fw_setup')?.value || '';
+  const checklist = readChecklist('fw_cl_wrap', setup);
+  const obj = { id:dEditId||uid(), ticker, notes, setup, checklist, score:getScore(checklist), name:(document.getElementById('fw_name')?.value||'').trim(), support:parseFloat(document.getElementById('fw_sup')?.value)||null, resist:parseFloat(document.getElementById('fw_res')?.value)||null, addedDate:new Date().toISOString().split('T')[0] };
+  if (dEditId) { const i=S.wl.findIndex(x=>x.id===dEditId); if(i>=0) S.wl[i]=obj; } else S.wl.push(obj);
+  persist(); closeDrawer(); render();
+}
+
+function deleteWatch(id) { S.wl=S.wl.filter(x=>x.id!==id); persist(); render(); }
+
+function promoteWatch(id) {
+  const w = S.wl.find(x=>x.id===id);
+  if (!w) return;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-positions').classList.add('active');
+  document.querySelectorAll('.nav-item')[0].classList.add('active');
+  render();
+  openDrawer('position');
+  setTimeout(() => {
+    const fields = { f_ticker:w.ticker, f_name:w.name||'', f_stop:w.support||'', f_target:w.resist||'', f_rawNotes:w.notes||'' };
+    Object.entries(fields).forEach(([id,val]) => { const el=document.getElementById(id); if(el) el.value=val; });
+    if (w.setup) {
+      const se = document.getElementById('f_setup');
+      if (se) { se.value = w.setup; onSetupChange('f_setup','f_cl_wrap'); }
+      setTimeout(() => {
+        if (w.checklist?.length) w.checklist.forEach((c,i) => { if(c) toggleCL('f_cl_wrap',i); });
+      }, 120);
+    }
+  }, 100);
+}
+
+async function closeTrade(withDebrief) {
+  const exitPrice = parseFloat(document.getElementById('fc_price')?.value);
+  if (!exitPrice) { alert('Exit price is required.'); return; }
+  const p = S.pos.find(x=>x.id===dEditId);
+  if (!p) return;
+  const exitNotes = (document.getElementById('fc_notes')?.value||'').trim();
+  const closed = { ...p, exitPrice, exitDate:document.getElementById('fc_date')?.value, outcome:document.getElementById('fc_outcome')?.value, exitNotes, debrief:null, closedAt:Date.now() };
+  if (withDebrief) {
+    document.querySelectorAll('.drawer-foot .btn').forEach(b=>b.disabled=true);
+    const ab = document.querySelector('.btn-ai');
+    if (ab) ab.textContent = '⬡ Running Debrief…';
+    closed.debrief = await callClaude(debriefPrompt(p, exitNotes, exitPrice));
+  }
+  S.cl.unshift(closed);
+  S.pos = S.pos.filter(x=>x.id!==dEditId);
+  persist(); closeDrawer();
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-closed').classList.add('active');
+  document.querySelectorAll('.nav-item')[2].classList.add('active');
+  render();
+}
+
+// AI
+function getKey() { return localStorage.getItem(K.api)||''; }
+
+async function callClaude(prompt) {
+  const key = getKey();
+  if (!key) { alert('No API key set. Go to Settings.'); return null; }
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+    });
+    if (!res.ok) { const e=await res.json().catch(()=>{}); alert('API error: '+(e?.error?.message||res.status)); return null; }
+    const d = await res.json();
+    return d.content?.[0]?.text || null;
+  } catch(e) { alert('Network error: '+e.message); return null; }
+}
+
+function clContext(setup, checklist) {
+  if (!setup||!checklist?.length||!CHECKLISTS[setup]) return '';
+  const qs = CHECKLISTS[setup];
+  return `\nChecklist (${checklist.filter(Boolean).length}/4 conditions met):\n${qs.map((q,i)=>(checklist[i]?'✓':'✗')+' '+q).join('\n')}`;
+}
+
+async function articulateThesis() {
+  const raw    = (document.getElementById('f_rawNotes')?.value||'').trim();
+  const setup  = document.getElementById('f_setup')?.value||'';
+  const ticker = (document.getElementById('f_ticker')?.value||'this asset').trim().toUpperCase();
+  const cl     = readChecklist('f_cl_wrap', setup);
+  const box    = document.getElementById('thesisBox');
+  const spin   = document.getElementById('thesisSpinner');
+  const textEl = document.getElementById('thesisText');
+  if (!raw && !setup) { alert('Select a setup type or describe the setup first.'); return; }
+  box.classList.add('open'); spin.style.display='inline'; textEl.textContent='';
+  const prompt = `You are a trading journal assistant. A trader is setting up a ${setup||'trade'} on ${ticker}. Write a concise trade thesis in 2 to 4 sentences covering: the setup type, the key price level or structure, the rationale for entry, and what would invalidate the trade. Write in first person. Stay close to what the trader described. Do not add analysis they did not provide.
+
+Trader's notes: "${raw||'Not provided — use checklist context.'}"${clContext(setup, cl)}
+
+Write the thesis now. No preamble.`;
+  const result = await callClaude(prompt);
+  spin.style.display = 'none';
+  if (result) { textEl.textContent = result; } else { box.classList.remove('open'); }
+}
+
+function acceptThesis() {
+  const t = document.getElementById('thesisText')?.textContent||'';
+  if (t) document.getElementById('f_thesis').value = t;
+  document.getElementById('thesisBox').classList.remove('open');
+}
+
+function debriefPrompt(p, exitNotes, exitPrice) {
+  return `You are a trading journal assistant. Analyze this closed trade directly and honestly. Identify what held up in the original thesis, what didn't, and one concrete lesson. Do not be encouraging. Be direct.
+
+Setup type: ${p.setup||'Not specified'}
+Thesis: "${p.thesis}"${clContext(p.setup, p.checklist)}
+Entry: $${p.entryPrice} on ${p.entryDate} · Target: $${p.target} · Stop: $${p.stop}
+Exit: $${exitPrice}
+What happened: "${exitNotes||'Not provided'}"
+
+Write 3 to 5 sentences. Paragraph form. No bullet points. No preamble.`;
+}
+
+async function generateShare(id) {
+  const p = S.pos.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('shareModal').classList.add('open');
+  document.getElementById('shareBody').textContent = 'Generating…';
+  const prompt = `You are helping a trader share a position with friends learning to invest. Write a plain-English summary — no jargon, no filler. Cover what the stock is, the setup, the key price levels, and the reasoning. 3 to 5 sentences maximum. Do not editorialize beyond the original thesis.
+
+Ticker: ${p.ticker}${p.name?' ('+p.name+')':''}
+Setup: ${p.setup||'Not specified'}
+Entry: $${p.entryPrice} · Target: $${p.target} · Stop: $${p.stop}
+Thesis: "${p.thesis}"`;
+  const result = await callClaude(prompt);
+  document.getElementById('shareBody').textContent = result || 'Could not generate. Check API key in Settings.';
+}
+
+function closeModal() { document.getElementById('shareModal').classList.remove('open'); }
+
+function copyShare() {
+  navigator.clipboard.writeText(document.getElementById('shareBody').textContent).then(() => {
+    const btn = document.querySelector('.modal-foot .btn-primary');
+    const orig = btn.textContent; btn.textContent = '✓ Copied';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+
+async function runClosedDebrief(id) {
+  const t = S.cl.find(x=>x.id===id);
+  if (!t) return;
+  const btn = event.currentTarget;
+  btn.disabled=true; btn.textContent='⬡ Running…';
+  const d = await callClaude(debriefPrompt(t, t.exitNotes, t.exitPrice));
+  if (d) { t.debrief=d; persist(); render(); }
+  else { btn.disabled=false; btn.textContent='⬡ Run Debrief'; }
+}
+
+// Render
+function render() {
+  renderMacro(); renderPositions(); renderWatchlist(); renderClosed(); renderBadges(); renderApiStatus();
+  const el = document.getElementById('posDate');
+  if (el) el.textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric',year:'numeric'});
+}
+
+function rrCalc(p) {
+  const r = p.entryPrice - p.stop;
+  return r > 0 ? ((p.target - p.entryPrice) / r).toFixed(1) : '—';
+}
+
+function cell(val, lbl, cls='') {
+  return `<div class="sum-cell"><div class="sum-val ${cls}">${val}</div><div class="sum-lbl">${lbl}</div></div>`;
+}
+
+function renderPositions() {
+  const el  = document.getElementById('positionsList');
+  const sum = document.getElementById('posSummary');
+  const rot = document.getElementById('rotationBar');
+  if (!el) return;
+  const mc = {'risk-on':'g','caution':'a','risk-off':'r'}[S.macro];
+  const ml = MACRO_LABELS[S.macro];
+
+  if (!S.pos.length) {
+    sum.innerHTML = cell('0','Positions') + cell('—','Avg R/R') + cell(ml,'Macro',mc);
+    rot.innerHTML = '';
+    el.innerHTML  = `<div class="empty"><span class="empty-glyph">◈</span>No active positions.<br>Add one to begin tracking.</div>`;
+    return;
+  }
+
+  const avgRR = (S.pos.reduce((a,p) => { const r=p.entryPrice-p.stop; return a+(r>0?(p.target-p.entryPrice)/r:0); },0)/S.pos.length).toFixed(1);
+  const scored = S.pos.filter(p=>p.score!=null);
+  const avgSc  = scored.length ? (scored.reduce((a,p)=>a+p.score,0)/scored.length).toFixed(1) : '—';
+
+  sum.innerHTML = cell(S.pos.length,'Positions') + cell(avgRR+':1','Avg R/R') + cell(avgSc!=='—'?avgSc+'/4':'—','Avg Score') + cell(ml,'Macro',mc);
+
+  const weak  = S.pos.filter(p=>p.score!=null && p.score<=2);
+  const ready = S.wl.filter(w=>w.score!=null && w.score>=3 && w.setup);
+  rot.innerHTML = (weak.length||ready.length) ? `
+    <div class="rotation-bar">
+      <span class="rot-label">Rotation</span>
+      ${weak.map(p=>`<span class="rot-chip rot-out">↓ ${p.ticker} · ${p.score}/4</span>`).join('')}
+      ${ready.map(w=>`<span class="rot-chip rot-in">↑ ${w.ticker} · ${w.score}/4 ready</span>`).join('')}
+    </div>` : '';
+
+  el.innerHTML = S.pos.map(p => {
+    const days = Math.max(0, Math.floor((Date.now()-new Date(p.entryDate))/86400000));
+    const rr   = rrCalc(p);
+    const qs   = p.setup && p.checklist?.length ? CHECKLISTS[p.setup] : null;
+    const clHtml = qs ? `
+      <div class="cl-review">
+        <div class="field-micro-label">Checklist · ${p.setup}</div>
+        <div class="cl-review-grid">
+          ${qs.map((q,i)=>`<div class="cl-review-item ${p.checklist[i]?'yes':''}"><div class="pip ${p.checklist[i]?'pip-y':'pip-n'}"></div>${q}</div>`).join('')}
+        </div>
+      </div>` : '';
+    return `
+    <div class="pos-card">
+      <div class="pos-card-head" onclick="toggleCard('${p.id}')">
+        <div class="pos-ticker-wrap">
+          <div class="pos-ticker">${p.ticker}</div>
+          <div class="pos-company">${p.name||'—'}</div>
+        </div>
+        <div class="pos-tags">
+          ${p.setup?`<span class="pos-setup-tag ${p.setup==='Momentum'?'momentum-tag':''}">${p.setup}</span>`:''}
+          ${scoreBadge(p.score, p.setup)}
+        </div>
+        <div class="pos-levels">
+          <div class="pos-level"><div class="pos-level-val">$${Number(p.entryPrice).toLocaleString()}</div><div class="pos-level-lbl">Entry</div></div>
+          <div class="pos-level"><div class="pos-level-val tgt">$${Number(p.target).toLocaleString()}</div><div class="pos-level-lbl">Target</div></div>
+          <div class="pos-level"><div class="pos-level-val stp">$${Number(p.stop).toLocaleString()}</div><div class="pos-level-lbl">Stop</div></div>
+          <div class="pos-level"><div class="pos-level-val amb">${rr}:1</div><div class="pos-level-lbl">R/R</div></div>
+        </div>
+      </div>
+      <div class="pos-card-body" id="body-${p.id}">
+        ${clHtml}
+        <div class="thesis-block"><div class="field-micro-label">Trade Thesis</div><div class="thesis-text">${p.thesis}</div></div>
+        <div class="card-meta-row">
+          <span class="meta-chip">Entry <strong>${p.entryDate}</strong></span>
+          <span class="meta-chip">Held <strong>${days}d</strong></span>
+          <div class="card-actions">
+            <button class="btn btn-ai btn-sm" onclick="generateShare('${p.id}')">⬡ Share</button>
+            <button class="btn btn-ghost btn-sm" onclick="openDrawer('position','${p.id}')">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="openDrawer('close','${p.id}')">Close Trade</button>
+            <button class="btn btn-danger btn-sm" onclick="deletePosition('${p.id}')">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id) { document.getElementById('body-'+id)?.classList.toggle('open'); }
+
+function renderWatchlist() {
+  const el = document.getElementById('watchlistList');
+  if (!el) return;
+  if (!S.wl.length) { el.innerHTML=`<div class="empty"><span class="empty-glyph">◎</span>Watchlist is empty.<br>Add candidates you're tracking before entry.</div>`; return; }
+  el.innerHTML = S.wl.map(w=>`
+    <div class="wl-card">
+      <div class="wl-ticker-wrap"><div class="wl-ticker">${w.ticker}</div><div class="wl-date">${w.addedDate}</div></div>
+      <div class="wl-body">
+        <div class="wl-setup-row">
+          ${w.setup?`<span class="pos-setup-tag" style="font-size:9px">${w.setup}</span>`:''}
+          ${scoreBadge(w.score, w.setup)}
+        </div>
+        <div class="wl-notes">${w.notes}</div>
+        <div class="wl-levels">
+          ${w.support?`<div class="wl-level-item"><span>Support</span>$${w.support}</div>`:''}
+          ${w.resist?`<div class="wl-level-item"><span>Resistance</span>$${w.resist}</div>`:''}
+        </div>
+      </div>
+      <div class="wl-actions">
+        <button class="btn btn-primary btn-sm" onclick="promoteWatch('${w.id}')">→ Enter</button>
+        <button class="btn btn-ghost btn-sm" onclick="openDrawer('watchlist','${w.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteWatch('${w.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderClosed() {
+  const el = document.getElementById('closedList');
+  if (!el) return;
+  if (!S.cl.length) { el.innerHTML=`<div class="empty"><span class="empty-glyph">◇</span>No closed trades yet.</div>`; return; }
+  el.innerHTML = S.cl.map(t=>{
+    const pr = t.exitPrice&&t.entryPrice ? ((t.exitPrice-t.entryPrice)/t.entryPrice*100) : null;
+    const pnl = pr!==null ? (pr>=0?'+':'')+pr.toFixed(1)+'%' : '—';
+    const pc  = pr===null?'':pr>=0?'tgt':'stp';
+    const oc  = {win:'outcome-win',loss:'outcome-loss',scratch:'outcome-scratch'}[t.outcome]||'outcome-scratch';
+    return `
+    <div class="closed-card">
+      <div class="closed-head">
+        <div class="pos-ticker-wrap"><div class="pos-ticker" style="font-size:20px">${t.ticker}</div><div class="pos-company">${t.name||'—'}</div></div>
+        <div class="pos-tags">${t.setup?`<span class="pos-setup-tag" style="font-size:9px">${t.setup}</span>`:''}${scoreBadge(t.score,t.setup)}</div>
+        <div class="pos-levels" style="margin-left:auto;margin-right:1rem">
+          <div class="pos-level"><div class="pos-level-val">$${t.entryPrice}</div><div class="pos-level-lbl">Entry</div></div>
+          <div class="pos-level"><div class="pos-level-val">$${t.exitPrice}</div><div class="pos-level-lbl">Exit</div></div>
+          <div class="pos-level"><div class="pos-level-val ${pc}">${pnl}</div><div class="pos-level-lbl">P&L</div></div>
+        </div>
+        <span class="outcome-tag ${oc}">${(t.outcome||'CLOSED').toUpperCase()}</span>
+      </div>
+      <div class="closed-body">
+        <div class="field-micro-label">Original Thesis</div>
+        <div class="thesis-text" style="margin-bottom:${t.exitNotes?'1rem':'0'}">${t.thesis}</div>
+        ${t.exitNotes?`<div class="field-micro-label" style="margin-top:1rem">What Happened</div><div class="thesis-text">${t.exitNotes}</div>`:''}
+        ${t.debrief?`<div class="debrief-box"><div class="debrief-label">⬡ Claude Debrief</div><div class="debrief-text">${t.debrief}</div></div>`:`<div style="margin-top:1rem"><button class="btn btn-ai btn-sm" onclick="runClosedDebrief('${t.id}')">⬡ Run Debrief</button></div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderBadges() {
+  const b=(id,n)=>{const el=document.getElementById(id);if(el)el.textContent=n;};
+  b('badge-pos',S.pos.length); b('badge-wl',S.wl.length); b('badge-cl',S.cl.length);
+}
+
+function saveApiKey() {
+  const val=(document.getElementById('apiKeyInput')?.value||'').trim();
+  if (!val) return;
+  localStorage.setItem(K.api,val);
+  document.getElementById('apiKeyInput').value='';
+  renderApiStatus(); alert('API key saved.');
+}
+
+function renderApiStatus() {
+  const el=document.getElementById('apiStatus'); if(!el) return;
+  const has=!!getKey();
+  el.textContent=has?'SET ✓':'NOT SET';
+  el.className='api-badge '+(has?'api-ok':'api-no');
+}
+
+function exportData() {
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));
+  a.download='sankofa_trades_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();
+}
+
+function clearAll() {
+  if (!confirm('Delete all data? Cannot be undone.')) return;
+  [K.pos,K.wl,K.cl,K.macro].forEach(k=>localStorage.removeItem(k));
+  load(); render();
+}
+
+load(); render();
+</script>
+</body>
+</html>
