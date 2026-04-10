@@ -203,6 +203,52 @@ body{
 .drill-btn::before{content:'▶';font-size:8px}
 .drill-btn:hover{opacity:.85}
 
+/* ── DRILL DEBRIEF PANEL ──────────────────────────── */
+.debrief-panel{
+  background:var(--surface);border:1px solid var(--border-mid);
+  border-radius:4px;margin-bottom:1rem;box-shadow:var(--shadow);overflow:hidden;
+}
+[data-theme="dark"] .debrief-panel{border-top:2px solid var(--teal)}
+.debrief-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1.25rem;border-bottom:1px solid var(--border);
+  background:var(--teal-bg);cursor:pointer;
+}
+.debrief-head-left{display:flex;align-items:center;gap:.65rem}
+.debrief-title{font-family:var(--fm);font-size:11px;color:var(--teal);letter-spacing:.15em;text-transform:uppercase}
+.debrief-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:2px;background:var(--teal-bg);border:1px solid var(--teal-dim);color:var(--teal)}
+.debrief-chevron{font-family:var(--fm);font-size:10px;color:var(--text-3);transition:transform .2s}
+.debrief-panel.open .debrief-chevron{transform:rotate(90deg)}
+.debrief-body{display:none;padding:.85rem 1.25rem;flex-direction:column;gap:.75rem}
+.debrief-panel.open .debrief-body{display:flex}
+.debrief-last-log{
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:.65rem .85rem;font-size:12px;color:var(--text-2);line-height:1.7;
+}
+.dl-header{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem}
+.dl-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:baseline;margin-bottom:.2rem}
+.dl-label{font-family:var(--fm);font-size:10px;color:var(--text-3);min-width:80px}
+.dl-val{font-size:12px;color:var(--text-2)}
+.debrief-ws-chips{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.25rem}
+.debrief-ws-chip{font-family:var(--fm);font-size:10px;padding:1px 7px;border-radius:2px;background:var(--coral-bg);border:1px solid var(--coral);color:var(--coral)}
+.debrief-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.debrief-btn{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .85rem;border-radius:2px;cursor:pointer;transition:all .12s;border:1px solid}
+.debrief-btn-primary{background:var(--teal);color:var(--bg);border-color:var(--teal)}
+.debrief-btn-primary:hover{opacity:.85}.debrief-btn-primary:disabled{opacity:.3;cursor:not-allowed}
+.debrief-btn-secondary{background:none;color:var(--text-3);border-color:var(--border-mid)}
+.debrief-btn-secondary:hover{color:var(--text-2);border-color:var(--border-hi)}
+.debrief-ai-out{
+  background:var(--surface);border:1px solid var(--border-mid);
+  border-left:2px solid var(--teal);border-radius:3px;
+  padding:.75rem .9rem;font-size:13px;color:var(--text);line-height:1.7;display:none;
+}
+.debrief-ai-out.show{display:block}
+.debrief-ai-out p{margin-bottom:.4rem}.debrief-ai-out p:last-child{margin-bottom:0}
+.debrief-ai-out strong{color:var(--text);font-weight:600}
+.debrief-ai-out code{font-family:var(--fm);font-size:11px;background:var(--bg3);color:var(--teal);padding:1px 5px;border-radius:2px}
+.debrief-cursor{display:inline-block;width:6px;height:12px;background:var(--teal);vertical-align:middle;margin-left:2px;animation:blink .7s infinite}
+.debrief-empty{font-family:var(--fm);font-size:11px;color:var(--text-4);text-align:center;padding:.75rem;letter-spacing:.06em}
+
 /* ── MONDAY BANNER ────────────────────────────────── */
 .mon-banner{
   background:var(--purple-bg);
@@ -434,6 +480,49 @@ body{
 .drill-prompt-lbl{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem}
 .drill-prompt-text{font-size:12px;color:var(--text-2);line-height:1.6}
 .drill-prompt-hint{font-family:var(--fm);font-size:10px;color:var(--text-3);margin-top:.3rem}
+
+/* ── INLINE DRILL WIDGET ──────────────────────────── */
+.idrill{
+  margin-top:.65rem;
+  border:1px solid var(--teal-dim);
+  border-left:2px solid var(--teal);
+  border-radius:3px;
+  background:var(--teal-bg);
+  overflow:hidden;
+}
+.idrill-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem .8rem;border-bottom:1px solid var(--teal-dim);
+}
+.idrill-lbl{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase}
+.idrill-reset{font-family:var(--fm);font-size:9px;color:var(--text-4);background:none;border:none;cursor:pointer;letter-spacing:.06em;padding:0;transition:color .1s}
+.idrill-reset:hover{color:var(--teal)}
+.idrill-challenge{padding:.6rem .8rem;font-size:12px;color:var(--text-2);line-height:1.6}
+.idrill-hint{font-family:var(--fm);font-size:10px;color:var(--text-3);padding:0 .8rem .5rem;line-height:1.5}
+.idrill-thread{display:flex;flex-direction:column;gap:.5rem;padding:.5rem .8rem;max-height:280px;overflow-y:auto}
+.idrill-thread::-webkit-scrollbar{width:3px}
+.idrill-thread::-webkit-scrollbar-thumb{background:var(--teal-dim);border-radius:2px}
+.idrill-msg-u{align-self:flex-end;max-width:80%;background:var(--surface2);border:1px solid var(--border-mid);border-radius:4px 4px 0 4px;padding:.4rem .65rem;font-size:12px;color:var(--text-2)}
+.idrill-msg-a{align-self:flex-start;width:100%;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--teal);border-radius:0 4px 4px 4px;padding:.5rem .7rem;font-size:12px;color:var(--text);line-height:1.65}
+.idrill-msg-a p{margin-bottom:.35rem}.idrill-msg-a p:last-child{margin-bottom:0}
+.idrill-msg-a code{font-family:var(--fm);font-size:11px;background:var(--bg3);color:var(--teal);padding:1px 4px;border-radius:2px}
+.idrill-msg-a pre{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:.45rem .65rem;margin:.3rem 0;overflow-x:auto}
+.idrill-msg-a pre code{background:none;border:none;padding:0;color:var(--text-2);font-size:11px}
+.idrill-msg-a strong{color:var(--text);font-weight:600}
+.idrill-thinking{display:flex;gap:3px;align-items:center;padding:.4rem .5rem}
+.idrill-dot{width:4px;height:4px;border-radius:50%;background:var(--teal-dim);animation:blink 1.2s infinite}
+.idrill-dot:nth-child(2){animation-delay:.2s}.idrill-dot:nth-child(3){animation-delay:.4s}
+.idrill-ibar{display:flex;gap:.4rem;padding:.5rem .8rem;border-top:1px solid var(--teal-dim);align-items:flex-end}
+.idrill-inp{
+  flex:1;background:var(--surface);border:1px solid var(--border-mid);border-radius:3px;
+  color:var(--text);font-family:var(--fb);font-size:12px;line-height:1.5;
+  padding:.4rem .65rem;resize:none;min-height:34px;max-height:100px;outline:none;
+  transition:border-color .15s;
+}
+.idrill-inp:focus{border-color:var(--teal-dim)}
+.idrill-inp::placeholder{color:var(--text-4);font-family:var(--fm);font-size:10px;letter-spacing:.04em}
+.idrill-send{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:var(--teal);color:var(--bg);border:none;border-radius:2px;padding:.4rem .7rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
+.idrill-send:hover{opacity:.85}.idrill-send:disabled{opacity:.3;cursor:not-allowed}
 
 /* ── SESSION LOGGER ───────────────────────────────── */
 .log-body{padding:.75rem}
@@ -820,6 +909,35 @@ body{
 .bk-btn:hover{background:var(--surface2);border-color:var(--border-hi)}
 .bk-msg{font-family:var(--fm);font-size:10px;color:var(--green);display:none;letter-spacing:.06em}
 .bk-file{display:none}
+/* ── GIT COMMIT PANEL ─────────────────────────────── */
+.git-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--green);border-radius:3px;
+  padding:.75rem 1rem;margin-top:.75rem;
+}
+.git-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.6rem;
+}
+.git-title{font-family:var(--fm);font-size:9.5px;color:var(--green);letter-spacing:.12em;text-transform:uppercase}
+.git-repo{font-family:var(--fm);font-size:9px;color:var(--text-4);letter-spacing:.04em;text-decoration:none}
+.git-repo:hover{color:var(--text-3)}
+.git-cmds{display:flex;flex-direction:column;gap:.35rem}
+.git-row{
+  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  background:var(--bg3);border:1px solid var(--border);border-radius:2px;
+  padding:.35rem .6rem;
+}
+.git-cmd{font-family:var(--fm);font-size:11.5px;color:var(--text-2);flex:1}
+.git-cmd em{color:var(--text-4);font-style:normal}
+.git-copy{
+  font-family:var(--fm);font-size:9px;color:var(--text-4);
+  background:none;border:1px solid var(--border);border-radius:2px;
+  padding:1px 6px;cursor:pointer;letter-spacing:.06em;
+  transition:all .1s;white-space:nowrap;flex-shrink:0;
+}
+.git-copy:hover{color:var(--green);border-color:var(--green)}
+.git-note{font-family:var(--fm);font-size:9.5px;color:var(--text-4);margin-top:.5rem;letter-spacing:.03em;line-height:1.6}
 </style>
 </head>
 <body>
@@ -855,7 +973,7 @@ body{
   <!-- Monday Banner -->
   <div class="mon-banner" id="monBanner">
     <p>▶ MONDAY SCAN — 20 MIN. ECOSYSTEM CHECK. PLAN STAYS CURRENT.</p>
-    <a href="damon_plan_v9.html#protocol">OPEN PROTOCOL →</a>
+    <a href="AaE_Plan.html#protocol">OPEN PROTOCOL →</a>
   </div>
 
   <!-- North Star -->
@@ -897,6 +1015,25 @@ body{
   </div>
 
   <!-- 2-col: Python + Logger -->
+  <!-- AI Session Debrief -->
+  <div class="debrief-panel fade-up fade-up-3" id="debriefPanel">
+    <div class="debrief-head" onclick="toggleDebrief()">
+      <div class="debrief-head-left">
+        <span class="debrief-title">◎ Drill Debrief</span>
+        <span class="debrief-badge" id="debriefBadge">No session yet</span>
+      </div>
+      <span class="debrief-chevron">▶</span>
+    </div>
+    <div class="debrief-body" id="debriefBody">
+      <div id="debriefLogView"></div>
+      <div class="debrief-actions" id="debriefActions" style="display:none">
+        <button class="debrief-btn debrief-btn-primary" id="debriefRunBtn" onclick="runDebrief()">▶ Analyse with Claude</button>
+        <button class="debrief-btn debrief-btn-secondary" onclick="openDrillEngine()">Open Drill Engine</button>
+      </div>
+      <div class="debrief-ai-out" id="debriefAiOut"></div>
+    </div>
+  </div>
+
   <div class="grid-2 fade-up fade-up-4">
 
     <!-- Python Curriculum -->
@@ -920,10 +1057,26 @@ body{
           </div>
         </div>
         <div class="py-modules" id="pyModules"></div>
-        <div class="drill-prompt" id="drillPrompt" style="display:none">
-          <div class="drill-prompt-lbl">▸ Active Drill</div>
-          <div class="drill-prompt-text" id="drillPromptText"></div>
-          <div class="drill-prompt-hint" id="drillPromptHint"></div>
+        <div class="idrill" id="idrillWidget" style="display:none">
+          <div class="idrill-head">
+            <span class="idrill-lbl">▸ Active Drill</span>
+            <button class="idrill-reset" onclick="idrillReset()">RESET</button>
+          </div>
+          <div class="idrill-challenge" id="idrillChallenge"></div>
+          <div class="idrill-hint" id="idrillHint"></div>
+          <div class="idrill-thread" id="idrillThread"></div>
+          <div class="idrill-ibar" id="idrillIbar" style="display:none">
+            <textarea class="idrill-inp" id="idrillInp" rows="1"
+              placeholder="TYPE YOUR ANSWER OR QUESTION..."
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();idrillSend()}"></textarea>
+            <button class="idrill-send" id="idrillSend" onclick="idrillSend()">Send</button>
+          </div>
+        </div>
+        <div class="drill-prompt" id="drillNextPrompt" style="display:none">
+          <div class="drill-prompt-lbl">▸ Resume — Next Drill</div>
+          <div class="drill-prompt-text" id="drillNextText"></div>
+          <div class="drill-prompt-hint" id="drillNextHint"></div>
         </div>
       </div>
     </div>
@@ -1145,8 +1298,31 @@ body{
       <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#A78BFA;width:0%"></div></div><div class="pb-wks">Wks 1–6</div></div>
       <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#00D4C8;width:0%"></div></div><div class="pb-wks">Wks 7–13</div></div>
       <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#F5A623;width:0%"></div></div><div class="pb-wks">Wks 14–20</div></div>
-      <div><div class="pb-lbl">Phase 4 · Job Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#FF6B4A;width:0%"></div></div><div class="pb-wks">Wks 21–24</div></div>
+      <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#FF6B4A;width:0%"></div></div><div class="pb-wks">Wks 21–24</div></div>
     </div>
+  </div>
+
+  <!-- Git Commit -->
+  <div class="git-panel">
+    <div class="git-head">
+      <span class="git-title">⬡ Daily Commit</span>
+      <a class="git-repo" href="https://github.com/dmn-Collins-glitch/sankofa-tools" target="_blank">dmn-Collins-glitch/sankofa-tools ↗</a>
+    </div>
+    <div class="git-cmds">
+      <div class="git-row">
+        <span class="git-cmd">git add <em>&lt;filename&gt;</em></span>
+        <button class="git-copy" onclick="copyCmd(this,'git add ')">copy</button>
+      </div>
+      <div class="git-row">
+        <span class="git-cmd">git commit -m <em>"description"</em></span>
+        <button class="git-copy" onclick="copyCmd(this,'git commit -m &quot;&quot;')">copy</button>
+      </div>
+      <div class="git-row">
+        <span class="git-cmd">git push</span>
+        <button class="git-copy" onclick="copyCmd(this,'git push')">copy</button>
+      </div>
+    </div>
+    <div class="git-note">cd ~/dev/projects/sankofa-tools &nbsp;·&nbsp; run from repo directory &nbsp;·&nbsp; one commit = streak alive</div>
   </div>
 
   <!-- Session List -->
@@ -1163,15 +1339,15 @@ body{
 
   <!-- Footer Links -->
   <div class="footer-bar">
-    <a class="fl-link" href="damon_plan_v9.html"><div class="fl-dot" style="background:var(--teal)"></div>Plan v9</a>
+    <a class="fl-link" href="AaE_Plan.html"><div class="fl-dot" style="background:var(--teal)"></div>Plan</a>
     <div class="fl-sep"></div>
-    <a class="fl-link" href="damon_plan_v9.html#protocol"><div class="fl-dot" style="background:var(--purple)"></div>Protocol</a>
+    <a class="fl-link" href="AaE_Plan.html#protocol"><div class="fl-dot" style="background:var(--purple)"></div>Protocol</a>
     <div class="fl-sep"></div>
     <a class="fl-link" href="https://docs.anthropic.com" target="_blank"><div class="fl-dot" style="background:var(--teal)"></div>Anthropic Docs</a>
     <div class="fl-sep"></div>
     <a class="fl-link" href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>AWS CCP</a>
     <div class="fl-sep"></div>
-    <a class="fl-link" href="https://www.tutorialsdojo.com/" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>Tutorials Dojo</a>
+    <a class="fl-link" href="https://explore.skillbuilder.aws/learn" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>AWS Skill Builder</a>
     <div class="fl-sep"></div>
     <a class="fl-link" href="https://www.deeplearning.ai/courses/" target="_blank"><div class="fl-dot" style="background:var(--purple)"></div>DeepLearning.AI</a>
     <div class="fl-sep"></div>
@@ -1195,21 +1371,295 @@ body{
 
 </div>
 <script>
+// ── INLINE DRILL WIDGET ────────────────────────────────
+let idrillHist=[], idrillActive=false, idrillRunning=false, idrillMod=null;
+
+function idrillInit(mod){
+  idrillMod=mod;
+  idrillHist=[];
+  idrillActive=true;
+  document.getElementById('idrillThread').innerHTML='';
+  document.getElementById('idrillIbar').style.display='flex';
+  // Kick off with the challenge as first AI message
+  const sys=`You are a concise Python drill coach. Damon is working on Module ${mod.num}: ${mod.name}.
+CHALLENGE: ${mod.prompt}
+HINT: ${mod.hint}
+
+Your job: coach him through this specific challenge. Ask for his attempt first — don't solve it for him. When he shares code, give direct feedback: what's correct, what's wrong, and why. One focused response at a time. Keep it under 8 lines unless explaining an error. If he gets it right, confirm briefly and offer one extension challenge.`;
+  idrillCall(sys,'Start the drill — ask him to write his attempt without giving the answer.');
+}
+
+function idrillReset(){
+  const nextMod=PY_MODULES.find(m=>!pyDone[m.num]);
+  if(!nextMod)return;
+  idrillActive=false;
+  idrillInit(nextMod);
+}
+
+function idrillAddMsg(text, isUser){
+  const thread=document.getElementById('idrillThread');
+  const el=document.createElement('div');
+  el.className=isUser?'idrill-msg-u':'idrill-msg-a';
+  if(isUser){el.textContent=text;}
+  else{el.innerHTML=idrillFmt(text);}
+  thread.appendChild(el);
+  requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+  return el;
+}
+
+function idrillFmt(t){
+  t=t.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<pre><code>${c.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`);
+  t=t.replace(/`([^`]+)`/g,'<code>$1</code>');
+  t=t.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  return t.split(/\n\n+/).map(p=>{p=p.trim();if(!p)return'';if(p.startsWith('<pre>'))return p;return`<p>${p.replace(/\n/g,'<br>')}</p>`;}).filter(Boolean).join('');
+}
+
+function idrillThink(){
+  const thread=document.getElementById('idrillThread');
+  const el=document.createElement('div');
+  el.className='idrill-thinking';el.id='idrillThk';
+  el.innerHTML='<div class="idrill-dot"></div><div class="idrill-dot"></div><div class="idrill-dot"></div>';
+  thread.appendChild(el);
+  requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
+}
+function idrillUnthink(){const e=document.getElementById('idrillThk');if(e)e.remove();}
+
+async function idrillCall(sys, userMsg){
+  if(idrillRunning)return;
+  idrillRunning=true;
+  const btn=document.getElementById('idrillSend');
+  if(btn)btn.disabled=true;
+  idrillHist.push({role:'user',content:userMsg});
+  idrillThink();
+
+  const key=localStorage.getItem('de_api_key')||'';
+  if(!key){idrillUnthink();idrillAddMsg('API key not set — open Drill Engine to configure it.',false);idrillRunning=false;if(btn)btn.disabled=false;return;}
+
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,stream:true,system:sys||idrillSys(),messages:idrillHist})
+    });
+    idrillUnthink();
+    if(!r.ok){const err=await r.json();idrillAddMsg(`⚠ API error — ${err.error?.message||'check key'}`,false);idrillRunning=false;if(btn)btn.disabled=false;return;}
+
+    const el=idrillAddMsg('',false);
+    const reader=r.body.getReader();const decoder=new TextDecoder();
+    let full='',buf='';
+    while(true){
+      const{done,value}=await reader.read();if(done)break;
+      buf+=decoder.decode(value,{stream:true});
+      const lines=buf.split('\n');buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data:'))continue;
+        const d=line.slice(5).trim();if(d==='[DONE]')continue;
+        try{const p=JSON.parse(d);if(p.type==='content_block_delta'&&p.delta?.type==='text_delta'){full+=p.delta.text;el.innerHTML=idrillFmt(full);document.getElementById('idrillThread').scrollTop=document.getElementById('idrillThread').scrollHeight;}}catch(e){}
+      }
+    }
+    idrillHist.push({role:'assistant',content:full});
+  }catch(err){idrillUnthink();idrillAddMsg(`⚠ Network error — ${err.message}`,false);}
+
+  idrillRunning=false;if(btn)btn.disabled=false;
+  setTimeout(()=>document.getElementById('idrillInp')?.focus(),80);
+}
+
+function idrillSys(){
+  if(!idrillMod)return'';
+  return`You are a concise Python drill coach. Damon is working on Module ${idrillMod.num}: ${idrillMod.name}.
+CHALLENGE: ${idrillMod.prompt}
+HINT: ${idrillMod.hint}
+Coach him through this challenge. Ask for his attempt first. Give direct feedback. Keep it under 8 lines unless explaining an error.`;
+}
+
+function idrillSend(){
+  const inp=document.getElementById('idrillInp');
+  const t=inp.value.trim();if(!t)return;
+  inp.value='';inp.style.height='auto';
+  idrillAddMsg(t,true);
+  idrillCall(null,t);
+}
+
 // ── DRILL ENGINE ───────────────────────────────────────
 function openDrillEngine(){
   window.open('AaE_Drill_Engine.html','_blank');
 }
 
+// ── DRILL DEBRIEF ──────────────────────────────────────
+let debriefOpen=false;
+function toggleDebrief(){
+  debriefOpen=!debriefOpen;
+  document.getElementById('debriefPanel').classList.toggle('open',debriefOpen);
+  localStorage.setItem('v11_debriefOpen',debriefOpen?'1':'0');
+}
+
+function renderDebrief(){
+  let log=null;
+  try{log=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+
+  const badge=document.getElementById('debriefBadge');
+  const logView=document.getElementById('debriefLogView');
+  const actions=document.getElementById('debriefActions');
+
+  if(!log){
+    badge.textContent='No session yet';
+    logView.innerHTML=`<div class="debrief-empty">No drill session logged yet — run the Drill Engine and end a session to see analysis here.</div>`;
+    actions.style.display='none';
+    return;
+  }
+
+  const isCCP = log.mode === 'ccp';
+  const moduleLabel = isCCP
+    ? `${log.domain} · ${log.domainName}`
+    : `${log.module} · ${log.moduleName}`;
+  const subLabel = isCCP ? `${log.subdomain} · ${log.subdomainName}` : null;
+
+  // Format date display
+  const dayLabel=log.date===todayStr()?'TODAY':parseLD(log.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();
+  badge.textContent=`${isCCP?log.domain:log.module} · ${dayLabel}`;
+
+  const wsHtml=log.weakSpots?.length
+    ?log.weakSpots.map(w=>`<span class="debrief-ws-chip">${w}</span>`).join('')
+    :'<span style="font-family:var(--fm);font-size:10px;color:var(--green)">None flagged</span>';
+
+  logView.innerHTML=`<div class="debrief-last-log">
+    <div class="dl-header">Last Drill Session</div>
+    <div class="dl-row"><span class="dl-label">Module</span><span class="dl-val">${moduleLabel}</span></div>
+    ${subLabel?`<div class="dl-row"><span class="dl-label">Subdomain</span><span class="dl-val">${subLabel}</span></div>`:''}
+    <div class="dl-row"><span class="dl-label">Date</span><span class="dl-val">${dayLabel}</span></div>
+    <div class="dl-row"><span class="dl-label">Drills</span><span class="dl-val">${log.drills||0}</span></div>
+    ${log.nextFocus?`<div class="dl-row"><span class="dl-label">Next focus</span><span class="dl-val">${log.nextFocus}</span></div>`:''}
+    <div class="dl-row" style="margin-top:.35rem"><span class="dl-label">Weak spots</span></div>
+    <div class="debrief-ws-chips">${wsHtml}</div>
+  </div>`;
+  actions.style.display='flex';
+}
+
+let debriefRunning=false;
+async function runDebrief(){
+  if(debriefRunning)return;
+  let log=null;
+  try{log=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+  if(!log)return;
+
+  debriefRunning=true;
+  const btn=document.getElementById('debriefRunBtn');
+  btn.disabled=true;btn.textContent='Analysing…';
+
+  const out=document.getElementById('debriefAiOut');
+  out.classList.add('show');
+  out.innerHTML='<span class="debrief-cursor"></span>';
+
+  const isCCP = log.mode === 'ccp';
+
+  const prompt = isCCP
+    ? `You are a concise AWS CCP exam coach. Damon just finished a CCP drill session. Give him a tight, honest debrief in 6-8 lines max.
+
+SESSION DATA:
+Domain: ${log.domain} · ${log.domainName}
+Subdomain: ${log.subdomain} · ${log.subdomainName}
+Drills completed: ${log.drills||0}
+Weak spots flagged: ${log.weakSpots?.length?log.weakSpots.join(', '):'None'}
+Next focus: ${log.nextFocus||'Not specified'}
+${log.nextQuestion?'Next question cued:\n'+log.nextQuestion:''}
+
+DEBRIEF FORMAT (follow exactly):
+1. One-line honest assessment of where he stands on this subdomain
+2. If weak spots: one sentence on each — the exact exam-tested distinction and fastest fix
+3. One specific action before next session (concrete, not vague)
+4. One line: what closing this domain unlocks for the overall score
+
+Be direct. No filler. Use plain text, no markdown headers.`
+    : `You are a concise Applied AI accelerator coach. Damon just finished a Python drill session. Give him a tight, honest debrief in 6-8 lines max.
+
+SESSION DATA:
+Module: ${log.module} · ${log.moduleName}
+Drills completed: ${log.drills||0}
+Weak spots flagged: ${log.weakSpots?.length?log.weakSpots.join(', '):'None'}
+Next focus: ${log.nextFocus||'Not specified'}
+${log.nextDrill?'Next drill cued:\n'+log.nextDrill:''}
+
+DEBRIEF FORMAT (follow exactly):
+1. One-line summary of where he stands on this module (honest, not encouraging fluff)
+2. If weak spots: one sentence on each — why it matters and the fastest fix
+3. One specific thing to do before next session (actionable, concrete)
+4. One line: what successful completion of this module unlocks
+
+Be direct. No filler. Use plain text, no markdown headers.`;
+
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':localStorage.getItem('de_api_key')||'',
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:400,
+        stream:true,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+
+    if(!r.ok){
+      const err=await r.json();
+      out.innerHTML=`<p style="color:var(--coral);font-family:var(--fm);font-size:11px;">⚠ API error — ${err.error?.message||'check console'}</p>`;
+      btn.disabled=false;btn.textContent='▶ Analyse with Claude';
+      debriefRunning=false;return;
+    }
+
+    const reader=r.body.getReader();
+    const decoder=new TextDecoder();
+    let full='',buf='';
+    while(true){
+      const{done,value}=await reader.read();if(done)break;
+      buf+=decoder.decode(value,{stream:true});
+      const lines=buf.split('\n');buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data:'))continue;
+        const d=line.slice(5).trim();if(d==='[DONE]')continue;
+        try{
+          const p=JSON.parse(d);
+          if(p.type==='content_block_delta'&&p.delta?.type==='text_delta'){
+            full+=p.delta.text;
+            out.innerHTML=fmtDebrief(full)+'<span class="debrief-cursor"></span>';
+          }
+        }catch(e){}
+      }
+    }
+    // Remove cursor
+    out.innerHTML=fmtDebrief(full);
+    btn.textContent='▶ Re-analyse';
+  }catch(err){
+    out.innerHTML=`<p style="color:var(--coral);font-family:var(--fm);font-size:11px;">⚠ Network error — ${err.message}</p>`;
+    btn.textContent='▶ Analyse with Claude';
+  }
+
+  btn.disabled=false;debriefRunning=false;
+}
+
+function fmtDebrief(t){
+  t=t.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  t=t.replace(/`([^`]+)`/g,'<code>$1</code>');
+  return t.split(/\n\n+/).map(p=>{
+    p=p.trim();if(!p)return'';
+    return`<p>${p.replace(/\n/g,'<br>')}</p>`;
+  }).filter(Boolean).join('');
+}
+
 // ── CONSTANTS ─────────────────────────────────────────
 const PHASES = [
   {num:1,wk:[1,6],   color:'#A78BFA',label:'Foundation',
-   northStar:'Leave Phase 1 with the CCP cert, a working Python environment, one real GitHub project, and zero shaky fundamentals. <strong>Speed matters less than depth here.</strong>'},
+   northStar:'Claude Shell is the forcing function — not the output. Every Python module unlocks a shell feature. CCP drilling is domain-targeted, not full-mock. Leave Phase 1 with the cert passed, the shell shipped, and <strong>every module understood through code you wrote and can explain.</strong>'},
   {num:2,wk:[7,13],  color:'#00D4C8',label:'Eval Layer',
    northStar:'"How do you know if your AI is working?" — Phase 2 is your answer. Build the evals mindset AND the code to back it up. <strong>The HITL project here is what makes you non-generic.</strong>'},
   {num:3,wk:[14,20], color:'#F5A623',label:'Agentic',
-   northStar:'The jump from "I call the API" to "I run a reliable agentic pipeline in the cloud" is <strong>the jump from student to employable.</strong> Both projects this phase must be deployed, not just local.'},
-  {num:4,wk:[21,24], color:'#FF6B4A',label:'Job Ready',
-   northStar:'Stop building, start telling the story. READMEs, GitHub profile, LinkedIn, interview prep. <strong>The projects only land if the narrative is tight.</strong> First real applications go out this phase.'}
+   northStar:'The jump from "I call the API" to "I run a reliable agentic pipeline in the cloud" is <strong>the threshold where freelance work becomes viable at real scope.</strong> AgentForge runs on LangGraph. Both projects must be deployed, not just local.'},
+  {num:4,wk:[21,24], color:'#FF6B4A',label:'Client Ready',
+   northStar:'Stop building, start operating. The projects become a service menu. READMEs are case studies, not documentation. <strong>First client engagement or active pipeline closes by Week 24.</strong> Sekhem is the template — real client, real problem, real stakes.'}
 ];
 
 const PY_MODULES = [
@@ -1236,13 +1686,34 @@ const PY_MODULES = [
    hint:'Hint: async def, await session.get(), and async with aiohttp.ClientSession() as session.'},
 ];
 
+// Rotating daily CCP cert objectives for Phase 1 (cycles by day-of-year)
+const CCP_DAILY_OBJECTIVES = [
+  {text:'Run one CCP mock exam on AWS Skill Builder',         hint:'Free tier — log your score in the CCP tracker after.'},
+  {text:'Drill CCP Domain 2: Shared Responsibility Model',    hint:'Focus: who manages what — RDS vs EC2, managed vs unmanaged services.'},
+  {text:'Drill CCP Domain 2: IAM — users, roles, policies',  hint:'Explicit deny always wins. Practice the policy evaluation logic cold.'},
+  {text:'Drill CCP Domain 4: Pricing models',                hint:'On-Demand vs Reserved vs Spot vs Savings Plans — know the selection criteria.'},
+  {text:'Drill CCP Domain 4: Billing tools',                 hint:'Cost Explorer vs Budgets vs Cost Anomaly Detection — know which does what.'},
+  {text:'Drill CCP Domain 2: Security services',             hint:'Shield vs WAF vs GuardDuty vs Inspector — distinct use cases, not interchangeable.'},
+  {text:'Drill CCP Domain 4: Support plan tiers',            hint:'Response times, TAM access, Trusted Advisor checks — memorize the tier boundaries.'},
+];
+
+function getCCPDailyObjective(){
+  const start=new Date(2026,0,1);
+  const today=new Date();
+  const dayOfYear=Math.floor((today-start)/86400000);
+  return CCP_DAILY_OBJECTIVES[dayOfYear % CCP_DAILY_OBJECTIVES.length];
+}
+
 // Phase-derived daily missions
 const PHASE_MISSIONS = {
-  1:[
-    {text:'Run one CCP mock exam on Tutorials Dojo',    hint:'Log your score in the CCP tracker after.',            tag:'cert',   cat:'cert'},
-    {text:'Complete today\'s Python drill — work through the active module',hint:'Log it as a Drill session when done.',tag:'code',   cat:'drill'},
-    {text:'Commit at least one file to GitHub',         hint:'Even a README update counts. No days without commits.',tag:'code',   cat:'code'},
-  ],
+  1:(()=>{
+    const cert=getCCPDailyObjective();
+    return [
+      {text:cert.text, hint:cert.hint, tag:'cert', cat:'cert'},
+      {text:'Complete today\'s Python drill — then apply it to Claude Shell',hint:'Each module unlocks a shell feature. Drill it, then build it.',tag:'code',   cat:'drill'},
+      {text:'Commit at least one file to GitHub',         hint:'Even a README update counts. No days without commits.',tag:'code',   cat:'code'},
+    ];
+  })(),
   2:[
     {text:'Study AWS SAA for at least 45 minutes',      hint:'Focus: VPC, EC2, S3, Lambda, IAM.',                  tag:'cert',   cat:'cert'},
     {text:'Work on EvalKit or ReviewLoop project',      hint:'Even 30 minutes of building beats 0.',               tag:'code',   cat:'project'},
@@ -1255,7 +1726,7 @@ const PHASE_MISSIONS = {
   ],
   4:[
     {text:'Polish one project README with screenshots', hint:'One well-documented project beats five undocumented.',tag:'review', cat:'review'},
-    {text:'Send at least 2 targeted job applications',  hint:'Applied AI engineer, HITL engineer, LLM engineer.',  tag:'review', cat:'review'},
+    {text:'Reach out to one potential client or collaborator',hint:'Sekhem is the template — people in your circle with real AI problems.',tag:'review', cat:'review'},
     {text:'Study for AWS AI Practitioner (AIF-C01)',    hint:'Final cert. Focus: foundation models, responsible AI.',tag:'cert',  cat:'cert'},
   ],
 };
@@ -1411,8 +1882,16 @@ function renderPyModules(){
   document.getElementById('pyRingLabel').textContent=pct+'%';
   document.getElementById('pyPct').textContent=pct+'%';
   document.getElementById('pyMeta').textContent=doneMods+' / 7 modules';
+
+  // Read drill engine state for live stats
+  let deState=null;
+  try{deState=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
+  const deSuffix=deState?.lastActivity
+    ?` · last drilled ${deState.lastActivity===todayStr()?'today':parseLD(deState.lastActivity).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
+    :'';
+
   document.getElementById('pySubtext').textContent=nextMod
-    ?`M${nextMod.num} active — ${nextMod.name}`
+    ?`M${nextMod.num} active — ${nextMod.name}${deSuffix}`
     :'All modules complete';
 
   document.getElementById('pyModules').innerHTML=PY_MODULES.map(m=>{
@@ -1428,14 +1907,28 @@ function renderPyModules(){
     </div>`;
   }).join('');
 
-  // Drill prompt
-  const prompt=document.getElementById('drillPrompt');
+  // Inline drill widget — show for active module
+  const widget=document.getElementById('idrillWidget');
   if(nextMod){
-    prompt.style.display='block';
-    document.getElementById('drillPromptText').textContent=nextMod.prompt;
-    document.getElementById('drillPromptHint').textContent=nextMod.hint;
+    widget.style.display='block';
+    document.getElementById('idrillChallenge').textContent=nextMod.prompt;
+    document.getElementById('idrillHint').textContent='Hint: '+nextMod.hint;
+    // Only init if not already running
+    if(!idrillActive) idrillInit(nextMod);
   } else {
-    prompt.style.display='none';
+    widget.style.display='none';
+  }
+
+  // Next drill from last log — show if available and module matches
+  let lastLog=null;
+  try{lastLog=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+  const nextPromptEl=document.getElementById('drillNextPrompt');
+  if(lastLog?.nextDrill&&nextMod&&lastLog.module===`M${nextMod.num}`){
+    nextPromptEl.style.display='block';
+    document.getElementById('drillNextText').textContent=lastLog.nextDrill;
+    document.getElementById('drillNextHint').textContent=lastLog.nextFocus?`Focus: ${lastLog.nextFocus}`:'';
+  } else {
+    nextPromptEl.style.display='none';
   }
 }
 
@@ -1526,7 +2019,7 @@ function renderHeatmap(){
   }
   const dn=['M','T','W','T','F','S','S'];
   for(let d=0;d<7;d++){
-    const dl=document.createElement('div');dl.className='hm-dl';dl.style.cssText=`grid-column:1;grid-row:${d+2}`;dl.textContent=dn[d];grid.appendChild(dl);
+    const dl=document.createElement('div');dl.className='hm-dl';dl.style.cssText=`grid-column:1;grid-row:${d+2}`;grid.appendChild(dl);
     for(let w=1;w<=24;w++){
       const idx=(w-1)*7+d;
       const cell=document.createElement('div');cell.className='hm-cell';cell.style.cssText=`grid-column:${w+1};grid-row:${d+2}`;
@@ -1646,6 +2139,13 @@ function resetStart(){
 }
 
 // ── BACKUP ────────────────────────────────────────────
+function copyCmd(btn, cmd){
+  navigator.clipboard.writeText(cmd).then(()=>{
+    btn.textContent='✓';
+    setTimeout(()=>btn.textContent='copy',1500);
+  });
+}
+
 function exportData(){
   const payload={
     v:11,exported:new Date().toISOString(),
@@ -1654,6 +2154,8 @@ function exportData(){
     v9d_start:localStorage.getItem('v9d_start')||'',
     v10_pyDone:localStorage.getItem('v10_pyDone')||'{}',
     v11_mission:localStorage.getItem('v11_mission')||'{}',
+    drill_engine_state:localStorage.getItem('drill_engine_state')||'null',
+    drill_engine_last_log:localStorage.getItem('drill_engine_last_log')||'null',
   };
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
@@ -1675,6 +2177,8 @@ function importData(evt){
       if(d.v9d_start)localStorage.setItem('v9d_start',d.v9d_start);
       if(d.v10_pyDone)localStorage.setItem('v10_pyDone',d.v10_pyDone);
       if(d.v11_mission)localStorage.setItem('v11_mission',d.v11_mission);
+      if(d.drill_engine_state&&d.drill_engine_state!=='null')localStorage.setItem('drill_engine_state',d.drill_engine_state);
+      if(d.drill_engine_last_log&&d.drill_engine_last_log!=='null')localStorage.setItem('drill_engine_last_log',d.drill_engine_last_log);
       load();renderAll();
       showBkMsg('✓ IMPORTED');
     }catch(err){alert('Import failed: '+err.message);}
@@ -1745,17 +2249,17 @@ const PHASE_DETAIL = {
   },
   4:{
     wkRange:[21,24],
-    cert:['AWS AI Practitioner (AIF-C01) — exam week 21','Any Anthropic developer credential if available'],
-    code:['Polish all 5 project READMEs with demo GIFs/screenshots','GitHub profile — pinned projects, clean bio','LinkedIn optimized for "applied AI engineer"','50 targeted job applications','Mock interviews: technical + behavioral'],
+    cert:['AWS AI Practitioner (AIF-C01) — exam week 21','Claude Certified Architect (CCA-F) — target week 17–18 in Phase 3'],
+    code:['Polish all project READMEs as case studies — not just docs','GitHub profile — pinned projects with clear "what I built and why" narrative','LinkedIn optimized for inbound: Applied AI Practitioner — evaluation, HITL, agentic systems','Define service offerings + rough pricing tiers (audit, build, consult)','First client engagement or signed project before week 24 closes'],
     milestones:[
       {label:'AWS AI Practitioner',type:'cert'},{label:'Portfolio live',type:'skill'},
-      {label:'Applications active',type:'skill'},
+      {label:'First client engaged',type:'project'},{label:'Services defined',type:'skill'},
     ],
     weeks:{
-      21:['Sit AWS AI Practitioner exam','Trading Framework README: screenshots, decision examples','Begin LinkedIn optimization'],
-      22:['Claude Shell + EvalKit READMEs: add usage GIFs','GitHub profile: pin 5 projects, write bio','Send first 10 job applications'],
-      23:['ReviewLoop + AgentForge READMEs: HITL and agent demos','CloudMind README: architecture diagram + live link','Send 20 more applications — track responses'],
-      24:['Mock interview: technical walkthrough of each project','Mock interview: behavioral — tell the career story','Final polish pass — fix anything that looks unfinished'],
+      21:['Sit AWS AI Practitioner exam','Trading Framework README: frame as case study with real decision examples','Define 3 service offerings with rough scope and pricing'],
+      22:['Claude Shell + EvalKit READMEs: usage demos, what problem each solves','GitHub profile: pin projects, write bio framed for inbound clients','Reach out to 5 people in your circle with real AI problems'],
+      23:['ReviewLoop + AgentForge READMEs: HITL pipeline and agent system framing','CloudMind README: architecture diagram + live link','Follow up on outreach — convert one conversation to a scoped project'],
+      24:['Final portfolio pass — every project has a clear client-facing narrative','Sekhem AI Tool: confirm build direction, scope first deliverable','First client engagement active or pipeline confirmed'],
     }
   }
 };
@@ -1845,6 +2349,7 @@ function renderAll(){
   renderMission();renderPyModules();renderCCP();
   renderCodedBadge();renderTargets();renderPhaseBrief();
   renderPhaseBars();renderHeatmap();renderSessions();
+  renderDebrief();
 }
 
 load();
@@ -1855,6 +2360,11 @@ if(localStorage.getItem('v11_phaseOpen')==='1'){
 // Restore stop & think open state
 if(localStorage.getItem('v11_st')==='1'){
   document.getElementById('stBlock').classList.add('open');
+}
+// Restore debrief open state
+if(localStorage.getItem('v11_debriefOpen')==='1'){
+  debriefOpen=true;
+  document.getElementById('debriefPanel').classList.add('open');
 }
 renderAll();checkSetup();
 </script>
