@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en" id="planRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applied AI Accelerator — Plan v9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Light theme (default) */
+:root {
+  --bg: #F5F3EE;
+  --surface: #FFFFFF;
+  --surface2: #EDEBE5;
+  --border: #D9D6CE;
+  --border-strong: #B8B4A8;
+  --text: #1A1918;
+  --text-2: #4A4845;
+  --text-3: #7A7773;
+  --teal: #0D5C63;
+  --teal-light: #E0F0F1;
+  --teal-mid: #1A7C85;
+  --amber: #C47B0A;
+  --amber-light: #FDF3DC;
+  --amber-mid: #E8970F;
+  --coral: #C04B2A;
+  --coral-light: #FCEEE9;
+  --purple: #5B3FA0;
+  --purple-light: #EDE8F8;
+  --green: #2A6B3A;
+  --green-light: #E5F3E8;
+  --red: #B83232;
+  --red-light: #FCEAEA;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Figtree', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg: #080C0D;
+  --surface: #141F22;
+  --surface2: #1A282C;
+  --border: #1E3035;
+  --border-strong: #2A4048;
+  --text: #D4E8E8;
+  --text-2: #8BBCBC;
+  --text-3: #4E7A80;
+  --teal: #00D4C8;
+  --teal-light: rgba(0,212,200,.08);
+  --teal-mid: #00897F;
+  --amber: #F5A623;
+  --amber-light: rgba(245,166,35,.08);
+  --amber-mid: #C47B0A;
+  --coral: #FF6B4A;
+  --coral-light: rgba(255,107,74,.08);
+  --purple: #A78BFA;
+  --purple-light: rgba(167,139,250,.08);
+  --green: #34D399;
+  --green-light: rgba(52,211,153,.08);
+  --red: #F87171;
+  --red-light: rgba(248,113,113,.08);
+}
+
+.plan-theme-btn{
+  width:28px;height:28px;border-radius:3px;
+  border:1px solid var(--border-strong);
+  background:var(--surface2);color:var(--text-2);
+  font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;flex-shrink:0;
+}
+.plan-theme-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Layout ── */
+.page { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ── Header ── */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.header-left h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  color: var(--text);
+}
+.header-left h1 span { color: var(--teal); }
+.header-tagline {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 3px;
+  font-style: italic;
+}
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.version-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  background: var(--teal);
+  color: #fff;
+  border-radius: 20px;
+  letter-spacing: .04em;
+}
+.week-tracker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.week-tracker span {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--surface2);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  margin-bottom: 1.75rem;
+  overflow-x: auto;
+}
+.tab-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text-2); background: rgba(255,255,255,.5); }
+.tab-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+
+.pane { display: none; }
+.pane.active { display: block; }
+
+/* ── Cards & surfaces ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.card-sm {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  margin-bottom: .75rem;
+}
+
+/* ── Section labels ── */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: .75rem;
+}
+
+/* ── Overview pane ── */
+.thesis-card {
+  background: var(--teal);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.thesis-card .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .7;
+  margin-bottom: .5rem;
+}
+.thesis-card h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: .6rem;
+}
+.thesis-card p { font-size: 13px; opacity: .88; line-height: 1.65; }
+
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
+.compare-col { border-radius: var(--radius-md); padding: 1rem 1.1rem; }
+.compare-col.drop { background: var(--red-light); border: 1px solid #E8A8A8; }
+.compare-col.add  { background: var(--green-light); border: 1px solid #8FCCA0; }
+.compare-col h4 { font-size: 11px; font-weight: 600; margin-bottom: .5rem; letter-spacing: .04em; text-transform: uppercase; }
+.compare-col.drop h4 { color: var(--red); }
+.compare-col.add h4  { color: var(--green); }
+.compare-col li { font-size: 12.5px; list-style: none; padding-left: 1.1rem; position: relative; line-height: 1.75; color: var(--text-2); }
+.compare-col li::before { position: absolute; left: 0; font-size: 11px; top: 2px; }
+.compare-col.drop li::before { content: "✕"; color: var(--red); }
+.compare-col.add li::before  { content: "✓"; color: var(--green); }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin-bottom: 1rem; }
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: .9rem 1rem;
+  text-align: center;
+}
+.stat-box .num {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--teal);
+  display: block;
+}
+.stat-box .lbl { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+.scan-alert {
+  background: var(--amber-light);
+  border: 1px solid #E8C87A;
+  border-radius: var(--radius-md);
+  padding: .85rem 1.1rem;
+  font-size: 12.5px;
+  color: var(--amber);
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+}
+.scan-alert .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── Phases pane ── */
+.phase-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  margin-bottom: .85rem;
+  overflow: hidden;
+}
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+}
+.phase-header:hover { background: var(--bg); }
+.phase-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.p1 .phase-num { background: var(--purple-light); color: var(--purple); }
+.p2 .phase-num { background: var(--teal-light); color: var(--teal); }
+.p3 .phase-num { background: var(--amber-light); color: var(--amber); }
+.p4 .phase-num { background: var(--coral-light); color: var(--coral); }
+.phase-header-text { flex: 1; }
+.phase-header-text h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.phase-header-text .wks {
+  font-size: 11.5px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+.phase-chevron {
+  font-size: 11px;
+  color: var(--text-3);
+  transition: transform .2s;
+}
+.phase-block.open .phase-chevron { transform: rotate(90deg); }
+.phase-body {
+  display: none;
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.phase-block.open .phase-body { display: block; }
+
+.phase-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+.phase-col-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: .4rem;
+}
+.phase-list { list-style: none; }
+.phase-list li {
+  font-size: 13px;
+  color: var(--text-2);
+  padding: .2rem 0 .2rem 1rem;
+  position: relative;
+  line-height: 1.5;
+}
+.phase-list li::before { content: "→"; position: absolute; left: 0; color: var(--text-3); font-size: 11px; }
+
+.milestone-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; padding-top: .85rem; border-top: 1px solid var(--border); }
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+}
+.badge-cert  { background: var(--green-light); color: var(--green); border: 1px solid #8FCCA0; }
+.badge-proj  { background: var(--teal-light); color: var(--teal); border: 1px solid #8FCCE0; }
+.badge-skill { background: var(--purple-light); color: var(--purple); border: 1px solid #C0B0E8; }
+
+.focus-bar {
+  margin-top: .85rem;
+  padding: .75rem 1rem;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  color: var(--text-2);
+  border-left: 3px solid var(--teal);
+  line-height: 1.6;
+}
+.focus-bar strong { color: var(--teal); font-weight: 600; }
+
+/* ── Certs pane ── */
+.cert-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  margin-bottom: .75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.cert-icon {
+  width: 42px; height: 42px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+.cert-aws  { background: var(--amber-light); color: var(--amber); }
+.cert-dl   { background: var(--purple-light); color: var(--purple); }
+.cert-new  { background: var(--teal-light); color: var(--teal); }
+.cert-drop { background: var(--red-light); color: var(--red); opacity: .8; }
+.cert-body { flex: 1; }
+.cert-body h4 { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 2px; font-family: var(--font-display); }
+.cert-body p  { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+.cert-meta-row { display: flex; align-items: center; gap: .5rem; margin-top: .4rem; flex-wrap: wrap; }
+.cert-timing { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); }
+.status-pill {
+  font-size: 10.5px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+}
+.status-active   { background: var(--amber-light); color: var(--amber); border: 1px solid #E8C87A; }
+.status-next     { background: var(--teal-light); color: var(--teal); border: 1px solid #7FCFDA; }
+.status-planned  { background: var(--surface2); color: var(--text-3); border: 1px solid var(--border); }
+.status-drop     { background: var(--red-light); color: var(--red); border: 1px solid #E8A8A8; }
+.status-new      { background: var(--green-light); color: var(--green); border: 1px solid #8FCCA0; }
+
+.why-note {
+  margin-top: .5rem;
+  font-size: 11.5px;
+  color: var(--text-3);
+  font-style: italic;
+  border-top: 1px solid var(--border);
+  padding-top: .45rem;
+}
+
+.cert-section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 1.25rem 0 .6rem;
+}
+
+.ccp-alert {
+  background: var(--amber-light);
+  border: 1px solid #E8C87A;
+  border-radius: var(--radius-md);
+  padding: .9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.ccp-alert h4 { font-size: 12.5px; font-weight: 600; color: var(--amber); margin-bottom: .3rem; }
+.ccp-alert p  { font-size: 12px; color: #8A5A00; line-height: 1.6; }
+.ccp-progress {
+  margin-top: .75rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.progress-bar-wrap { flex: 1; height: 6px; background: #EDD890; border-radius: 3px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--amber-mid); border-radius: 3px; }
+.progress-label { font-family: var(--font-mono); font-size: 11px; color: var(--amber); font-weight: 500; }
+.progress-target { font-family: var(--font-mono); font-size: 11px; color: var(--text-3); }
+
+/* ── Projects pane ── */
+.proj-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: .75rem;
+  position: relative;
+  overflow: hidden;
+}
+.proj-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+.proj-flagship::before { background: var(--amber-mid); }
+.proj-1::before { background: var(--purple); }
+.proj-2::before { background: var(--teal); }
+.proj-3::before { background: var(--amber-mid); }
+.proj-4::before { background: var(--coral); }
+.proj-5::before { background: var(--green); }
+.proj-6::before { background: var(--teal-mid); }
+.proj-7::before { background: var(--border-strong); }
+
+.flagship-header {
+  background: var(--amber-light);
+  border: 1px solid #E8C87A;
+  border-radius: var(--radius-md);
+  padding: .5rem .9rem;
+  margin-bottom: .6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+
+.proj-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; margin-bottom: .35rem; }
+.proj-header h4 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.proj-header .proj-week {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.proj-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.6; margin-bottom: .5rem; }
+.proj-signals { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .45rem; }
+.proj-signal {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--surface2);
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+}
+.proj-signal.key { background: var(--teal-light); color: var(--teal); border-color: #7FCFDA; }
+
+.proj-arc-note {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: .85rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.65;
+}
+.proj-arc-note strong { color: var(--teal); font-weight: 600; }
+
+.existing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: var(--surface2);
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  margin-bottom: .4rem;
+}
+
+/* ── Weekly Protocol pane ── */
+.protocol-intro {
+  background: var(--teal);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.protocol-intro h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: .35rem;
+}
+.protocol-intro p { font-size: 12.5px; opacity: .88; line-height: 1.65; }
+
+.protocol-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+.protocol-block-header {
+  padding: .9rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.protocol-block-header h3 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+}
+.protocol-block-header .timing {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+.proto-day {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+.day-mon { background: var(--teal-light); color: var(--teal); }
+.day-monthly { background: var(--amber-light); color: var(--amber); }
+
+.protocol-items { padding: .85rem 1.25rem; }
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  padding: .45rem 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item input[type=checkbox] {
+  margin-top: 1px;
+  width: 14px; height: 14px;
+  accent-color: var(--teal);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.check-item label {
+  font-size: 13px;
+  color: var(--text-2);
+  cursor: pointer;
+  line-height: 1.5;
+  flex: 1;
+}
+.check-item label small { display: block; font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.check-item.done label { color: var(--text-3); text-decoration: line-through; }
+
+.signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; padding: .85rem 1.25rem; border-top: 1px solid var(--border); }
+.signal-box {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: .65rem .85rem;
+  border: 1px solid var(--border);
+}
+.signal-box h5 { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: .25rem; }
+.signal-box p  { font-size: 11px; color: var(--text-3); line-height: 1.5; }
+
+.trigger-card {
+  background: var(--coral-light);
+  border: 1px solid #E8B0A0;
+  border-radius: var(--radius-md);
+  padding: .85rem 1.1rem;
+  margin-top: .75rem;
+}
+.trigger-card h4 { font-size: 12px; font-weight: 600; color: var(--coral); margin-bottom: .35rem; }
+.trigger-list { list-style: none; }
+.trigger-list li { font-size: 12px; color: #7A3A28; line-height: 1.7; padding-left: .9rem; position: relative; }
+.trigger-list li::before { content: "!"; position: absolute; left: 0; color: var(--coral); font-weight: 700; }
+
+.reset-btn {
+  margin-top: .75rem;
+  padding: .45rem .9rem;
+  font-size: 11.5px;
+  font-family: var(--font-body);
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-3);
+  cursor: pointer;
+}
+.reset-btn:hover { background: var(--surface2); }
+
+/* ── Day 0 setup block ── */
+.day0-block {
+  border: 2px solid var(--teal);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  margin-bottom: .85rem;
+  overflow: hidden;
+}
+.day0-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+  background: var(--teal-light);
+}
+.day0-header:hover { background: #d0edef; }
+.day0-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.day0-header-text { flex: 1; }
+.day0-header-text h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--teal);
+}
+.day0-header-text .wks {
+  font-size: 11.5px;
+  color: var(--teal-mid);
+  font-family: var(--font-mono);
+}
+.day0-chevron { font-size: 11px; color: var(--teal); transition: transform .2s; }
+.day0-block.open .day0-chevron { transform: rotate(90deg); }
+.day0-body {
+  display: none;
+  border-top: 1px solid var(--teal-dim);
+}
+.day0-block.open .day0-body { display: block; }
+.day0-intro {
+  padding: .85rem 1.25rem .6rem;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.65;
+  background: #f0fafb;
+  border-bottom: 1px solid var(--border);
+}
+.day0-intro strong { color: var(--teal); font-weight: 600; }
+.setup-section {
+  padding: .6rem 1.25rem 0;
+}
+.setup-section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: .75rem 0 .4rem;
+  padding-top: .6rem;
+  border-top: 1px solid var(--border);
+}
+.setup-section-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+.setup-items { padding-bottom: .5rem; }
+.setup-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  padding: .4rem 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.setup-item:last-child { border-bottom: none; }
+.setup-item input[type=checkbox] {
+  margin-top: 2px;
+  width: 14px; height: 14px;
+  accent-color: var(--teal);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.setup-item label {
+  font-size: 13px;
+  color: var(--text-2);
+  cursor: pointer;
+  line-height: 1.5;
+  flex: 1;
+}
+.setup-item label small { display: block; font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.setup-item label code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: var(--surface2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+}
+.setup-item.done label { color: var(--text-3); text-decoration: line-through; }
+.day0-progress {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .85rem 1.25rem;
+  border-top: 1px solid var(--border);
+  background: #f0fafb;
+}
+.day0-prog-bar { flex: 1; height: 6px; background: var(--teal-light); border-radius: 3px; overflow: hidden; }
+.day0-prog-fill { height: 100%; background: var(--teal); border-radius: 3px; transition: width .3s; }
+.day0-prog-label { font-family: var(--font-mono); font-size: 11px; color: var(--teal); white-space: nowrap; }
+.day0-reset { font-size: 11px; font-family: var(--font-body); background: none; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text-3); cursor: pointer; padding: .3rem .65rem; }
+.day0-reset:hover { background: var(--surface2); }
+
+/* ── Misc ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+.note-inline {
+  font-size: 11.5px;
+  color: var(--text-3);
+  font-style: italic;
+  margin-top: .4rem;
+}
+
+/* ── Pillar cards ── */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+.pillar-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: .95rem 1.1rem;
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+}
+.pillar-icon {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 1px;
+}
+.pillar-body h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: .25rem;
+  font-family: var(--font-display);
+}
+.pillar-body p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.pillar-teal   { background: var(--teal-light);   border-color: #8FCFDA; }
+.pillar-teal   .pillar-icon { color: var(--teal); }
+.pillar-teal   .pillar-body h4 { color: var(--teal); }
+.pillar-purple { background: var(--purple-light); border-color: #C0B0E8; }
+.pillar-purple .pillar-icon { color: var(--purple); }
+.pillar-purple .pillar-body h4 { color: var(--purple); }
+.pillar-amber  { background: var(--amber-light);  border-color: #E8C87A; }
+.pillar-amber  .pillar-icon { color: var(--amber); }
+.pillar-amber  .pillar-body h4 { color: var(--amber); }
+.pillar-coral  { background: var(--coral-light);  border-color: #E8B0A0; }
+.pillar-coral  .pillar-icon { color: var(--coral); }
+.pillar-coral  .pillar-body h4 { color: var(--coral); }
+.pillar-green  { background: var(--green-light);  border-color: #8FCCA0; }
+.pillar-green  .pillar-icon { color: var(--green); }
+.pillar-green  .pillar-body h4 { color: var(--green); }
+.pillar-gray   { background: var(--surface2);     border-color: var(--border-strong); }
+.pillar-gray   .pillar-icon { color: var(--text-3); }
+.pillar-gray   .pillar-body h4 { color: var(--text-2); }
+
+@media (max-width: 580px) {
+  .pillars-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 580px) {
+  .compare-grid { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  .phase-cols { grid-template-columns: 1fr; }
+  .signal-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Applied AI <span>Accelerator</span></h1>
+      <div class="header-tagline">Damon · Independent Applied AI Practitioner · 24 Weeks</div>
+    </div>
+    <div class="header-right">
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <button class="plan-theme-btn" id="planThemeBtn" onclick="togglePlanTheme()" title="Toggle theme">☀</button>
+        <div class="version-badge">v9.2</div>
+      </div>
+      <div class="week-tracker" id="weekTracker">Week <span id="currentWeek">—</span> of 24</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('overview', this)">Overview</button>
+    <button class="tab-btn" onclick="switchTab('phases', this)">Phases</button>
+    <button class="tab-btn" onclick="switchTab('certs', this)">Certs</button>
+    <button class="tab-btn" onclick="switchTab('projects', this)">Projects</button>
+    <button class="tab-btn" onclick="switchTab('protocol', this)">Weekly Protocol</button>
+  </div>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div class="pane active" id="pane-overview">
+
+    <div class="thesis-card">
+      <div class="label">Positioning Thesis</div>
+      <h2>Independent Applied AI Practitioner — HITL &amp; Evaluation Specialist</h2>
+      <p>The goal is not a title — it's operational independence in the AI/ML space. The capability stack being built here (evaluation engineering, HITL pipeline design, agentic systems, cloud deployment) translates directly into discrete services that clients pay for. The cert stack builds credibility. The project arc builds proof. The freelance model means choosing the problems, building compounding IP, and operating without a company's constraints on what's worth building.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><span class="num">24</span><div class="lbl">weeks total</div></div>
+      <div class="stat-box"><span class="num">5</span><div class="lbl">certs (active)</div></div>
+      <div class="stat-box"><span class="num">7</span><div class="lbl">portfolio projects</div></div>
+      <div class="stat-box"><span class="num">4</span><div class="lbl">phases</div></div>
+    </div>
+
+    <div class="section-label">What this plan is built on</div>
+    <div class="pillars-grid">
+      <div class="pillar-card pillar-teal">
+        <div class="pillar-icon">①</div>
+        <div class="pillar-body">
+          <h4>AWS AI Practitioner (AIF-C01)</h4>
+          <p>Replaces the retiring ML Specialty. Validates AI/ML concepts, foundation models, responsible AI, and AWS AI services — the kind of credential that answers "why should I trust you" before a client engagement starts.</p>
+        </div>
+      </div>
+      <div class="pillar-card pillar-purple">
+        <div class="pillar-icon">②</div>
+        <div class="pillar-body">
+          <h4>DeepLearning.AI short courses</h4>
+          <p>Evals + Debugging and Agentic AI Systems. More signal per hour than any long-form cert in this category. Sequenced to pair directly with EvalKit and AgentForge builds.</p>
+        </div>
+      </div>
+      <div class="pillar-card pillar-amber">
+        <div class="pillar-icon">③</div>
+        <div class="pillar-body">
+          <h4>Trading framework as anchor</h4>
+          <p>Already shipped. Promoted to flagship — the piece you open a client conversation with. Systematic scoring, rotation logic, real stakes. Demonstrates domain-specific applied AI with genuine skin in the game. Clients read this differently than interviewers do — in a better way.</p>
+        </div>
+      </div>
+      <div class="pillar-card pillar-coral">
+        <div class="pillar-icon">④</div>
+        <div class="pillar-body">
+          <h4>HITL as explicit specialty</h4>
+          <p>ReviewLoop is the differentiator project. Almost no one at the freelance/junior level can talk about annotation pipelines, disagreement logging, and labeled dataset export — let alone build them. This becomes a billable service: "I design HITL workflows that keep AI systems accountable." The EU AI Act is making this mandatory infrastructure.</p>
+        </div>
+      </div>
+      <div class="pillar-card pillar-green">
+        <div class="pillar-icon">⑤</div>
+        <div class="pillar-body">
+          <h4>Narrative-arc project stack</h4>
+          <p>7 projects that tell one coherent story — and double as a service menu. API fluency → eval thinking → HITL → agents → deployed. Each feeds the next. The arc is the portfolio. For freelance, each project is also a proof-of-service: EvalKit shows you can audit AI quality, ReviewLoop shows you can build oversight pipelines, AgentForge shows you can ship autonomous systems.</p>
+        </div>
+      </div>
+      <div class="pillar-card pillar-gray">
+        <div class="pillar-icon">⑥</div>
+        <div class="pillar-body">
+          <h4>Weekly iteration protocol</h4>
+          <p>Baked-in Monday scan + monthly review. The plan versions forward as the ecosystem shifts. A plan that doesn't update is a plan that goes stale.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ PHASES ═══ -->
+  <div class="pane" id="pane-phases">
+
+    <!-- Day 0: Environment Setup -->
+    <div class="day0-block" id="day0">
+      <div class="day0-header" onclick="togglePhase('day0')">
+        <div class="day0-num">0</div>
+        <div class="day0-header-text">
+          <h3>Day 0 — Environment &amp; Dev Setup</h3>
+          <div class="wks">Complete before Week 1 begins</div>
+        </div>
+        <div class="day0-chevron">▶</div>
+      </div>
+      <div class="day0-body">
+        <div class="day0-intro">
+          <strong>Prerequisite:</strong> Everything here should be done and verified before you touch cert study or code. A broken environment costs hours you don't have. Check each item off as confirmed working — not just installed, but tested.
+        </div>
+
+        <div class="setup-section">
+
+          <div class="setup-section-label">Code editors</div>
+          <div class="setup-items" id="setup-editors">
+            <div class="setup-item" onclick="toggleSetup(this,'setup-editors',0)"><input type="checkbox"><label>VS Code installed and launched<small>Download from code.visualstudio.com — verify it opens without errors</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-editors',1)"><input type="checkbox"><label>Cursor installed and launched<small>Download from cursor.com — it's a VS Code fork, same layout</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-editors',2)"><input type="checkbox"><label>Key VS Code extensions installed<small>Python, Pylance, GitLens, REST Client — install same set in Cursor</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-editors',3)"><input type="checkbox"><label>Cursor AI features working<small>Try Tab completion and Cmd+K on a test file — confirm AI responds</small></label></div>
+          </div>
+
+          <div class="setup-section-label">Python environment</div>
+          <div class="setup-items" id="setup-python">
+            <div class="setup-item" onclick="toggleSetup(this,'setup-python',0)"><input type="checkbox"><label>Python 3.11+ installed<small>Run <code>python --version</code> in terminal — confirm 3.11 or higher</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-python',1)"><input type="checkbox"><label>pip working<small>Run <code>pip --version</code> — should return a version number</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-python',2)"><input type="checkbox"><label>Virtual environments working<small>Run <code>python -m venv test-env</code> then <code>source test-env/bin/activate</code> (Mac/Linux) or <code>test-env\Scripts\activate</code> (Windows)</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-python',3)"><input type="checkbox"><label>Anthropic SDK installed<small>Run <code>pip install anthropic</code> — then <code>python -c "import anthropic; print('ok')"</code></small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-python',4)"><input type="checkbox"><label>Python interpreter selected in VS Code / Cursor<small>Cmd+Shift+P → "Python: Select Interpreter" — pick the venv or system Python</small></label></div>
+          </div>
+
+          <div class="setup-section-label">Git &amp; GitHub</div>
+          <div class="setup-items" id="setup-git">
+            <div class="setup-item" onclick="toggleSetup(this,'setup-git',0)"><input type="checkbox"><label>Git installed<small>Run <code>git --version</code> — confirm it returns a version</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-git',1)"><input type="checkbox"><label>Git identity configured<small>Run <code>git config --global user.name "Your Name"</code> and <code>git config --global user.email "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8af3e5ffcaeff2ebe7fae6efa4e9e5e7">[email&#160;protected]</a>"</code></small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-git',2)"><input type="checkbox"><label>GitHub account active and accessible<small>Log in at github.com — confirm you can see your profile and create repos</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-git',3)"><input type="checkbox"><label>SSH key or HTTPS auth working<small>Clone any public repo and confirm it succeeds without credential prompts</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-git',4)"><input type="checkbox"><label>First test repo created and pushed<small>Create a repo on GitHub, clone it, add a README.md, commit, and push — confirm it appears on GitHub</small></label></div>
+          </div>
+
+          <div class="setup-section-label">API keys &amp; environment variables</div>
+          <div class="setup-items" id="setup-keys">
+            <div class="setup-item" onclick="toggleSetup(this,'setup-keys',0)"><input type="checkbox"><label>Anthropic API key obtained<small>console.anthropic.com → API Keys → create a key — keep it out of any git repo</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-keys',1)"><input type="checkbox"><label>.env file pattern working<small>Install <code>pip install python-dotenv</code> — test loading an API key from a .env file into a script</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-keys',2)"><input type="checkbox"><label>.gitignore configured<small>Add <code>.env</code> and <code>__pycache__/</code> to .gitignore in every project — confirm a .env file does NOT show in <code>git status</code></small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-keys',3)"><input type="checkbox"><label>AWS account created<small>aws.amazon.com → create account — free tier is sufficient for all Phase 1–2 work</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-keys',4)"><input type="checkbox"><label>AWS CLI installed and configured<small>Run <code>aws --version</code> then <code>aws configure</code> with your access key, secret, and region (us-east-1)</small></label></div>
+          </div>
+
+          <div class="setup-section-label">Verify everything together</div>
+          <div class="setup-items" id="setup-verify">
+            <div class="setup-item" onclick="toggleSetup(this,'setup-verify',0)"><input type="checkbox"><label>Hello Claude script runs successfully<small>Write a 10-line Python script that calls the Anthropic API and prints a response — this confirms Python + SDK + API key + venv all work together</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-verify',1)"><input type="checkbox"><label>Script committed and pushed to GitHub<small>The hello-claude script lives in a real repo — not just on your machine</small></label></div>
+            <div class="setup-item" onclick="toggleSetup(this,'setup-verify',2)"><input type="checkbox"><label>Cursor AI assisted with at least one edit<small>Open the script in Cursor, use Tab or Cmd+K to have it suggest a change — accept or reject it consciously</small></label></div>
+          </div>
+
+        </div>
+
+        <div class="day0-progress">
+          <div class="day0-prog-bar"><div class="day0-prog-fill" id="day0ProgFill" style="width:0%"></div></div>
+          <span class="day0-prog-label" id="day0ProgLabel">0 / 20 complete</span>
+          <button class="day0-reset" onclick="resetDay0()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase-block p1" id="ph1">
+      <div class="phase-header" onclick="togglePhase('ph1')">
+        <div class="phase-num">1</div>
+        <div class="phase-header-text">
+          <h3>Lock the Foundation</h3>
+          <div class="wks">Weeks 1–6</div>
+        </div>
+        <div class="phase-chevron">▶</div>
+      </div>
+      <div class="phase-body">
+        <div class="focus-bar"><strong>North star:</strong> Claude Shell is the forcing function — not the output. Every Python module unlocks a shell feature. CCP drilling is domain-targeted, not full-mock. Leave Phase 1 with the cert passed, the shell shipped, and every module understood through code you wrote and can explain.</div>
+
+        <div style="margin-bottom:.85rem;">
+          <div class="phase-col-label">Build-first rule</div>
+          <div style="font-size:12.5px;color:var(--text-2);line-height:1.65;padding:.5rem .75rem;background:var(--teal-light);border-left:3px solid var(--teal);border-radius:var(--radius-sm);">You can build with a concept before drilling it — but before moving to the next Claude Shell feature, drill the concept that powered the last one to resolution. Working code and understood code are not the same thing. Both are required.</div>
+        </div>
+
+        <div class="phase-cols">
+          <div>
+            <div class="phase-col-label">Week 1 — First working API call</div>
+            <ul class="phase-list">
+              <li>M2 Functions: wrap API call in <code>send_message()</code> and <code>get_response()</code></li>
+              <li>Claude Shell: file exists in repo, calls API, prints response</li>
+              <li>CCP: D2 Security &amp; Compliance only — 20–30 Qs/day in Drill Engine, no full mocks</li>
+              <li><strong>Checkpoint:</strong> Working API call from terminal. API key in .env. Claude responds.</li>
+            </ul>
+            <div class="phase-col-label" style="margin-top:.75rem;">Week 2 — Multi-turn conversation</div>
+            <ul class="phase-list">
+              <li>M3 Lists/Dicts/Loops: conversation history is a list of message dicts — M3 gates multi-turn</li>
+              <li>M4 Files/.env: formally drill what you've been using in practice</li>
+              <li>Claude Shell: reads .env, maintains session history across turns</li>
+              <li>CCP: shift entirely to D4 Billing/Pricing — same drilling pattern</li>
+              <li><strong>Checkpoint:</strong> Multi-turn shell. .env loading. Session history builds.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-label">Week 3 — Error handling + CCP diagnostic</div>
+            <ul class="phase-list">
+              <li>M5 APIs+JSON: formalize response parsing, error states, status codes</li>
+              <li>Claude Shell: handles failures gracefully, writes sessions to file</li>
+              <li>CCP: first full diagnostic mock — if 820+ composite, schedule exam</li>
+              <li><strong>Checkpoint:</strong> Shell handles errors. Sessions logged. CCP exam date set.</li>
+            </ul>
+            <div class="phase-col-label" style="margin-top:.75rem;">Week 4 — CCP exam + class refactor</div>
+            <ul class="phase-list">
+              <li>CCP: sit the exam. Done.</li>
+              <li>M6 Classes: refactor Claude Shell from script to <code>ClaudeShell</code> class — real refactor, real reason</li>
+              <li><strong>Checkpoint:</strong> CCP passed. Class-based shell committed to repo.</li>
+            </ul>
+            <div class="phase-col-label" style="margin-top:.75rem;">Week 5 — Streaming + v1.0</div>
+            <ul class="phase-list">
+              <li>M7 Async: streaming responses — shell outputs as Claude types, not after</li>
+              <li>Claude Shell v1.0: configurable system prompts, JSON export, streaming, complete README</li>
+              <li><strong>Checkpoint:</strong> Claude Shell v1.0 pushed to GitHub. README is a case study.</li>
+            </ul>
+            <div class="phase-col-label" style="margin-top:.75rem;">Week 6 — Buffer + Sekhem scoping</div>
+            <ul class="phase-list">
+              <li>Safety net if CCP or any module needed more time</li>
+              <li>Begin scoping Sekhem AI Tool — define build direction before Phase 2 starts</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="milestone-row">
+          <span class="badge badge-cert">CCP pass — Week 4</span>
+          <span class="badge badge-proj">Claude Shell v1.0 — Week 5</span>
+          <span class="badge badge-skill">M1–M7 complete</span>
+          <span class="badge badge-skill">Build-first proven</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-block p2" id="ph2">
+      <div class="phase-header" onclick="togglePhase('ph2')">
+        <div class="phase-num">2</div>
+        <div class="phase-header-text">
+          <h3>Build the Eval Layer</h3>
+          <div class="wks">Weeks 7–13</div>
+        </div>
+        <div class="phase-chevron">▶</div>
+      </div>
+      <div class="phase-body">
+        <div class="focus-bar"><strong>North star:</strong> "How do you know if your AI is working?" — Phase 2 is your answer. Build the evals mindset AND the code to back it up. The HITL project here is the differentiator that makes you non-generic.</div>
+        <div class="phase-cols">
+          <div>
+            <div class="phase-col-label">Cert work</div>
+            <ul class="phase-list">
+              <li>AWS SAA-C03: study weeks 7–12</li>
+              <li>Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing</li>
+              <li>DeepLearning.AI: Evaluating &amp; Debugging GenAI (week 10)</li>
+              <li>SAA exam: target week 12–13</li>
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-label">Coding &amp; projects</div>
+            <ul class="phase-list">
+              <li>Python intermediate: requests, JSON, async basics, classes</li>
+              <li>Project 2: EvalKit — automated LLM output scoring</li>
+              <li>Project 3: ReviewLoop — HITL annotation interface</li>
+              <li>APIs: Anthropic, basic REST patterns</li>
+            </ul>
+          </div>
+        </div>
+        <div class="milestone-row">
+          <span class="badge badge-cert">SAA-C03 pass</span>
+          <span class="badge badge-cert">DL.AI Evals</span>
+          <span class="badge badge-proj">Project 2: EvalKit</span>
+          <span class="badge badge-proj">Project 3: ReviewLoop</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-block p3" id="ph3">
+      <div class="phase-header" onclick="togglePhase('ph3')">
+        <div class="phase-num">3</div>
+        <div class="phase-header-text">
+          <h3>Agentic Systems + Cloud Deploy</h3>
+          <div class="wks">Weeks 14–20</div>
+        </div>
+        <div class="phase-chevron">▶</div>
+      </div>
+      <div class="phase-body">
+        <div class="focus-bar"><strong>North star:</strong> Agents and deployed systems. The jump from "I call the API" to "I run a reliable agentic pipeline in the cloud" is the jump from capable to deployable — the threshold where freelance work becomes viable at real scope. Both projects this phase must be deployed, not just local.</div>
+        <div class="phase-cols">
+          <div>
+            <div class="phase-col-label">Cert work</div>
+            <ul class="phase-list">
+              <li>DeepLearning.AI: Agentic AI Systems (week 14–15)</li>
+              <li>AWS Bedrock hands-on labs (concurrent)</li>
+              <li>Begin AWS AI Practitioner prep (week 18)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-label">Coding &amp; projects</div>
+            <ul class="phase-list">
+              <li>Tool use, function calling, multi-step agents</li>
+              <li>Project 4: AgentForge — agentic research assistant built on <strong>LangGraph</strong> (stateful, branching, HITL checkpoints)</li>
+              <li>Project 5: CloudMind — full-stack deployed app on AWS</li>
+              <li>Docker basics, Lambda, S3, basic CI/CD</li>
+            </ul>
+          </div>
+        </div>
+        <div class="milestone-row">
+          <span class="badge badge-cert">DL.AI Agents</span>
+          <span class="badge badge-proj">Project 4: AgentForge</span>
+          <span class="badge badge-proj">Project 5: CloudMind (deployed)</span>
+          <span class="badge badge-skill">AWS Bedrock</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-block p4" id="ph4">
+      <div class="phase-header" onclick="togglePhase('ph4')">
+        <div class="phase-num">4</div>
+        <div class="phase-header-text">
+          <h3>Portfolio Polish + Client Ready</h3>
+          <div class="wks">Weeks 21–24</div>
+        </div>
+        <div class="phase-chevron">▶</div>
+      </div>
+      <div class="phase-body">
+        <div class="focus-bar"><strong>North star:</strong> Stop building, start operating. The projects become a service menu. READMEs, GitHub, LinkedIn — all framed for inbound client trust, not recruiter screening. First client engagement or active pipeline by end of week 24. The Sekhem AI tool is already the template: real client, real problem, real stakes.</div>
+        <div class="phase-cols">
+          <div>
+            <div class="phase-col-label">Cert work</div>
+            <ul class="phase-list">
+              <li>AWS AI Practitioner (AIF-C01) — exam week 21</li>
+              <li>Any Anthropic developer credential if available</li>
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-label">Client readiness</div>
+            <ul class="phase-list">
+              <li>Polish all project READMEs — framed as case studies, not just code</li>
+              <li>GitHub profile — pinned projects with clear "what I built and why it matters" narrative</li>
+              <li>LinkedIn optimized for inbound: "Applied AI Practitioner — evaluation, HITL, agentic systems"</li>
+              <li>Define service offerings + rough pricing tiers (audit, build, consult)</li>
+              <li>Network outreach — Sekhem model: people in your circle with real AI problems</li>
+              <li>First client engagement or signed first project before week 24 closes</li>
+            </ul>
+          </div>
+        </div>
+        <div class="milestone-row">
+          <span class="badge badge-cert">AWS AI Practitioner</span>
+          <span class="badge badge-skill">Portfolio live</span>
+          <span class="badge badge-proj">First client engaged</span>
+          <span class="badge badge-skill">Services defined</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ CERTS ═══ -->
+  <div class="pane" id="pane-certs">
+
+    <div class="ccp-alert">
+      <h4>⚠ CCP Review Mode — Current Priority</h4>
+      <p>Practice score: <strong>769</strong> (up from 658). Target is 850+. Two domains flagged Needs Improvement: <strong>Domain 2 — Security &amp; Compliance (30%)</strong> and <strong>Domain 4 — Billing, Pricing &amp; Support (12%)</strong>. Together they represent 42% of the exam. Domain 3 is passing. Do not sit the exam until hitting 820+ consistently on practice.</p>
+      <div class="ccp-progress">
+        <div class="progress-label">769</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:68%"></div></div>
+        <div class="progress-target">Target: 850+</div>
+      </div>
+    </div>
+
+    <div class="cert-section-label">Active cert stack</div>
+
+    <div class="cert-card">
+      <div class="cert-icon cert-aws">AWS<br>CCP</div>
+      <div class="cert-body">
+        <h4>AWS Certified Cloud Practitioner</h4>
+        <p>In review. Foundational vocabulary and AWS ecosystem fluency. Required before SAA. Not the destination — the on-ramp.</p>
+        <div class="cert-meta-row">
+          <span class="status-pill status-active">In review</span>
+          <span class="cert-timing">Target: Weeks 1–6</span>
+        </div>
+        <div class="why-note">Score 769 → 850+ target. D2 (Security) and D4 (Billing) flagged Needs Improvement. Drill these domains before sitting.</div>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon cert-aws">AWS<br>SAA</div>
+      <div class="cert-body">
+        <h4>AWS Solutions Architect Associate (SAA-C03)</h4>
+        <p>Real architectural thinking. VPC design, compute + storage options, Lambda, IAM policies, RDS. This cert signals you can actually design systems — not just name services.</p>
+        <div class="cert-meta-row">
+          <span class="status-pill status-next">Up next</span>
+          <span class="cert-timing">Target: Weeks 7–12</span>
+        </div>
+        <div class="why-note">The most hiring-signal-dense AWS cert for engineering roles. Do not skip.</div>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon cert-dl">DL.AI<br>EVAL</div>
+      <div class="cert-body">
+        <h4>DeepLearning.AI: Evaluating &amp; Debugging GenAI</h4>
+        <p>Short-form (4–6 hrs). Covers evals-as-code, trace analysis, systematic testing of LLM outputs. Directly paired with Project 2 (EvalKit). More hiring signal per hour than any long-form cert in this category.</p>
+        <div class="cert-meta-row">
+          <span class="status-pill status-planned">Planned</span>
+          <span class="cert-timing">Target: Week 10</span>
+        </div>
+        <div class="why-note">DeepLearning.AI short courses are respected by AI teams. This one specifically fills the "eval mindset" gap.</div>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon cert-dl">DL.AI<br>AGNT</div>
+      <div class="cert-body">
+        <h4>DeepLearning.AI: Building Agentic AI Systems</h4>
+        <p>Short-form. Tool use, multi-step planning, agent orchestration patterns. Directly paired with Project 4 (AgentForge). Covers concepts now baked into Anthropic, OpenAI, and LangGraph workflows.</p>
+        <div class="cert-meta-row">
+          <span class="status-pill status-planned">Planned</span>
+          <span class="cert-timing">Target: Week 14–15</span>
+        </div>
+        <div class="why-note">Keeps you current on agentic patterns as they evolve rapidly. Will likely need iteration if major framework shifts happen.</div>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon cert-new">AWS<br>AIF</div>
+      <div class="cert-body">
+        <h4>AWS Certified AI Practitioner (AIF-C01)</h4>
+        <p>New cert (released 2024). Covers AI/ML concepts, foundation models, responsible AI, AWS AI services (Bedrock, SageMaker, Comprehend, Rekognition). Direct replacement signal for the retiring ML Specialty at the foundational tier.</p>
+        <div class="cert-meta-row">
+          <span class="status-pill status-new">New addition</span>
+          <span class="cert-timing">Target: Week 20–21</span>
+        </div>
+        <div class="why-note">Specifically validates "I understand AI in cloud contexts" — exactly what applied AI engineer roles are filtering for. High scan priority: monitor for AIF-C01 content updates.</div>
+      </div>
+    </div>
+
+    <div class="cert-section-label">Dropped from v8</div>
+
+    <div class="cert-card" style="opacity:.6">
+      <div class="cert-icon cert-drop">AWS<br>MLS</div>
+      <div class="cert-body">
+        <h4>AWS ML Specialty — DROPPED</h4>
+        <p>Confirmed retiring. Do not pursue. AIF-C01 + DeepLearning.AI short courses cover the signal value with less time and more relevance.</p>
+        <div class="cert-meta-row"><span class="status-pill status-drop">Retired</span></div>
+      </div>
+    </div>
+
+    <div class="cert-card" style="opacity:.6">
+      <div class="cert-icon cert-drop">NET+</div>
+      <div class="cert-body">
+        <h4>CompTIA Network+ — DROPPED</h4>
+        <p>Wrong narrative for this track. Signals sysadmin/networking career path, not applied AI engineering. Not worth the time cost.</p>
+        <div class="cert-meta-row"><span class="status-pill status-drop">Dropped</span></div>
+      </div>
+    </div>
+
+    <div class="cert-card" style="opacity:.6">
+      <div class="cert-icon cert-drop">IBM<br>AIE</div>
+      <div class="cert-body">
+        <h4>IBM AI Engineering — DROPPED</h4>
+        <p>Low hiring signal in 2025–2026. Long time investment for weak return. DeepLearning.AI short courses outperform it in signal per hour by a wide margin.</p>
+        <div class="cert-meta-row"><span class="status-pill status-drop">Dropped</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ PROJECTS ═══ -->
+  <div class="pane" id="pane-projects">
+
+    <div class="proj-arc-note">
+      Seven projects, two tiers. The <strong>flagship + real-stakes tier</strong> leads with work that has actual skin in the game — a live trading framework and an AI tool for a brand you're building. The <strong>capability tier</strong> proves the technical depth: API fluency → eval thinking → HITL design → agentic systems → cloud deploy. Together they form a coherent "applied AI engineer" narrative that's hard to fake.
+    </div>
+
+    <!-- FLAGSHIP -->
+    <div class="proj-card proj-flagship">
+      <div class="proj-header">
+        <h4>★ Flagship · Trading Framework</h4>
+        <div class="proj-week">Pinned #1 on GitHub</div>
+      </div>
+      <div class="flagship-header">Already shipped — anchor piece — open the laptop with this</div>
+      <div class="proj-desc">Rules-based aggressive growth screening framework with two interactive tools: a multi-holding portfolio screener (5-indicator scoring system, rotation logic, drawdown rules) and a monthly review workflow. Demonstrates systematic thinking, algorithmic scoring design, and real interactive tooling — all with actual stakes. Frame it as: "I built the decision framework first, then the tools to run it."</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">Algorithmic scoring</span>
+        <span class="proj-signal key">Systematic framework design</span>
+        <span class="proj-signal">React / Vite</span>
+        <span class="proj-signal">Macro override logic</span>
+        <span class="proj-signal">Real use case + real stakes</span>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <div class="proj-card proj-1">
+      <div class="proj-header">
+        <h4>01 · Sekhem AI — Wellness Brand Tool</h4>
+        <div class="proj-week">Weeks 4–6</div>
+      </div>
+      <div class="proj-desc">AI-powered tool built for the family wellness brand (Sekhem Body / Sika &amp; Root). Options: product ingredient explainer (customer Q&amp;A bot), formulation assistant (ingredient pairing + safety lookup), or brand voice copywriter. The personal stakes make this authentic — you're not demoing for a fake company, you're building for a real one. Frame it as a real client project.</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">Real-world AI integration</span>
+        <span class="proj-signal key">Anthropic API</span>
+        <span class="proj-signal">System prompt design</span>
+        <span class="proj-signal">Domain-specific context</span>
+        <span class="proj-signal">Brand voice tuning</span>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="proj-card proj-2">
+      <div class="proj-header">
+        <h4>02 · Claude Shell</h4>
+        <div class="proj-week">Weeks 3–4</div>
+      </div>
+      <div class="proj-desc">CLI tool wrapping the Anthropic API. Multi-turn conversation with session logging, history export, and configurable system prompts. First pure Python project — demonstrates API fluency, file I/O, and CLI design. The "hello world" of this portfolio, done properly.</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">Anthropic API</span>
+        <span class="proj-signal key">Python CLI</span>
+        <span class="proj-signal">argparse / click</span>
+        <span class="proj-signal">JSON logging</span>
+        <span class="proj-signal">Git + GitHub</span>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="proj-card proj-3">
+      <div class="proj-header">
+        <h4>03 · EvalKit</h4>
+        <div class="proj-week">Weeks 8–10</div>
+      </div>
+      <div class="proj-desc">Automated prompt evaluation harness. Input a prompt suite, get scored outputs with pass/fail assertions, regression diffs, and a results dashboard. Answers the question every AI team is asking: "how do we know if this is working?" Pairs with DL.AI Evals cert. Referenced by AgentForge (projects connect).</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">Evals-as-code</span>
+        <span class="proj-signal key">LLM output scoring</span>
+        <span class="proj-signal">Pytest / assertions</span>
+        <span class="proj-signal">JSON schema validation</span>
+        <span class="proj-signal">HTML report output</span>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="proj-card proj-4">
+      <div class="proj-header">
+        <h4>04 · ReviewLoop</h4>
+        <div class="proj-week">Weeks 11–13</div>
+      </div>
+      <div class="proj-desc">Human-in-the-loop annotation interface. Presents LLM outputs for human review, captures accept/reject/edit decisions, logs disagreements, and exports labeled datasets. The HITL specialty project — rare at junior level, high differentiation signal. This is the one that makes you non-generic.</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">HITL pipeline</span>
+        <span class="proj-signal key">Annotation UX</span>
+        <span class="proj-signal">Flask or FastAPI</span>
+        <span class="proj-signal">SQLite storage</span>
+        <span class="proj-signal">Dataset export (JSONL)</span>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="proj-card proj-5">
+      <div class="proj-header">
+        <h4>05 · AgentForge</h4>
+        <div class="proj-week">Weeks 14–16</div>
+      </div>
+      <div class="proj-desc">Agentic research assistant with tool use. Given a query, it plans, web-searches, synthesizes, and returns structured outputs with citations. Multi-step planning, tool calling, and output validation via EvalKit — the projects connect deliberately. Pairs with DL.AI Agents cert.</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">Tool use / function calling</span>
+        <span class="proj-signal key">Agentic planning</span>
+        <span class="proj-signal">Web search integration</span>
+        <span class="proj-signal">Structured outputs</span>
+        <span class="proj-signal">Error recovery loops</span>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="proj-card proj-6">
+      <div class="proj-header">
+        <h4>06 · CloudMind</h4>
+        <div class="proj-week">Weeks 17–20</div>
+      </div>
+      <div class="proj-desc">Full-stack deployed AI app on AWS. Frontend + API layer + LLM backend, deployed via Lambda or EC2, with S3 for storage and basic CloudWatch monitoring. The deployment project — proves you can take it to production, not just localhost. The capstone of the capability tier.</div>
+      <div class="proj-signals">
+        <span class="proj-signal key">AWS deployment</span>
+        <span class="proj-signal key">Lambda / API Gateway</span>
+        <span class="proj-signal">S3 + CloudWatch</span>
+        <span class="proj-signal">CI/CD basics</span>
+        <span class="proj-signal">AWS Bedrock option</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ WEEKLY PROTOCOL ═══ -->
+  <div class="pane" id="pane-protocol">
+
+    <div class="protocol-intro">
+      <h2>The Iteration Protocol</h2>
+      <p>A plan that doesn't update is a plan that goes stale. The AI/HITL ecosystem is moving fast — new models, new frameworks, retiring certs, shifting job titles. This protocol bakes in deliberate checkpoints so the plan stays current. Scan, log, adjust.</p>
+    </div>
+
+    <!-- Monday scan -->
+    <div class="protocol-block">
+      <div class="protocol-block-header">
+        <div class="proto-day day-mon">MON</div>
+        <h3>Weekly Ecosystem Scan</h3>
+        <div class="timing">~20 min every Monday</div>
+      </div>
+      <div class="protocol-items" id="monday-checks">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Anthropic blog + changelog <small>anthropic.com/news — new models, API changes, new features</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Simon Willison's blog (simonwillison.net) <small>Best signal-to-noise ratio in the LLM space. If he's writing about it, it matters.</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>LinkedIn: search "applied AI engineer" jobs — what's new? <small>Note any new required skills, tools, or frameworks you haven't seen before</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>GitHub Trending: filter by Python + AI/LLM tags <small>New repos with 500+ stars in a week often signal an ecosystem shift</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>AWS What's New (aws.amazon.com/new) — AI/ML section <small>Watch for Bedrock updates, new model availability, cert announcements</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Log anything flagged to a running "signal doc" <small>One note per signal: what it is, why it might matter, whether it changes the plan</small></label>
+        </div>
+      </div>
+      <div class="signal-grid">
+        <div class="signal-box">
+          <h5>Green signal (note it, no change)</h5>
+          <p>New model release, minor API update, interesting new project, new DL.AI course</p>
+        </div>
+        <div class="signal-box">
+          <h5>Yellow signal (discuss, maybe adjust)</h5>
+          <p>Framework dominance shift, cert expiry announced, job posting pattern change</p>
+        </div>
+        <div class="signal-box">
+          <h5>Red signal (act now)</h5>
+          <p>Cert retiring (like ML Spec), major new tool replacing what you're building toward, hiring freeze in target category</p>
+        </div>
+        <div class="signal-box">
+          <h5>Skip entirely</h5>
+          <p>Twitter hype without GitHub, anything about "superintelligence timeline," vague AI news with no technical substance</p>
+        </div>
+      </div>
+      <div style="padding: .5rem 1.25rem .85rem; display:flex; align-items:center; gap:.75rem;">
+        <button class="reset-btn" onclick="resetChecks('monday-checks')">Reset checklist</button>
+      </div>
+    </div>
+
+    <!-- Monthly review -->
+    <div class="protocol-block">
+      <div class="protocol-block-header">
+        <div class="proto-day day-monthly">1st</div>
+        <h3>Monthly Plan Review</h3>
+        <div class="timing">~45 min, first Monday of month</div>
+      </div>
+      <div class="protocol-items" id="monthly-checks">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Review cert sequence — any retirements, new certs, exam changes? <small>Especially watch AIF-C01 content updates and DL.AI new course releases</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Review project list — any now obsolete? Any new gap to fill? <small>If a tool you're building toward is now default in every framework, the project loses signal</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Review tech stack — anything in the daily tool calls that needs updating? <small>New Anthropic SDK version, new LangGraph patterns, new AWS SDK behaviors</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Review job market — title trends shifting? New required skills emerging? <small>Track "applied AI engineer," "AI systems engineer," "LLM engineer," "eval engineer"</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Update the plan version if anything changed <small>Bump v9.x → v9.(x+1) in the header, log what changed and why</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Update the daily dashboard heatmap week count <small>Keep the dashboard synced with actual current week in the plan</small></label>
+        </div>
+      </div>
+      <div style="padding: .5rem 1.25rem .85rem; display:flex; align-items:center; gap:.75rem;">
+        <button class="reset-btn" onclick="resetChecks('monthly-checks')">Reset checklist</button>
+      </div>
+    </div>
+
+    <!-- Plan triggers -->
+    <div class="trigger-card">
+      <h4>Immediate plan adjustment triggers</h4>
+      <ul class="trigger-list">
+        <li>Any cert on the active stack announces retirement or major restructure</li>
+        <li>A new Anthropic developer certification launches</li>
+        <li>AWS Bedrock adds a feature that makes Project 5 (CloudMind) significantly easier or obsolete</li>
+        <li>A new dominant eval framework emerges that makes EvalKit less relevant</li>
+        <li>Job posting data shows a strong shift toward a skill not in the current plan (e.g., LangGraph becomes table stakes)</li>
+        <li>You're consistently hitting weekly targets 2+ weeks ahead — accelerate the timeline</li>
+      </ul>
+    </div>
+
+    <!-- Dashboard note -->
+    <div class="card" style="margin-top: 1rem;">
+      <div class="section-label">Dashboard integration</div>
+      <p style="font-size:13px; color:var(--text-2); line-height:1.65;">The daily dashboard (streak tracker, session log, heatmap) runs alongside this plan — not separately. Monday scan results get logged as a session note. Monthly review triggers a dashboard reflection entry. Phase transitions are milestone markers on the heatmap. The two tools talk to each other: the dashboard shows what you did, this plan shows where it's going.</p>
+      <div style="margin-top:.75rem; padding:.65rem .9rem; background:var(--amber-light); border:1px solid var(--amber); border-radius:var(--radius-sm); font-size:12px; color:var(--amber-dim); line-height:1.6;">
+        <strong style="color:var(--amber);">Apr 2026 ecosystem notes:</strong> Anthropic console has moved to <strong>platform.claude.com</strong> (console.anthropic.com still redirects for now). AgentForge (Project 4) targets <strong>LangGraph</strong> as the framework — it has won the production/enterprise tier for stateful agentic workflows. AutoGen is in maintenance mode; do not start new projects on it.
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:3rem; text-align:center;">
+    <p style="font-size:11px; color:var(--text-3); font-family:var(--font-mono);">Plan v9.2 · Updated April 2026 · Freelance pivot: thesis, Phase 4, pillars reframed · AgentForge → LangGraph · Console URL updated · Next review: <span id="nextReview">—</span></p>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function togglePlanTheme(){
+  const root=document.getElementById('planRoot');
+  const cur=root.getAttribute('data-theme')||'light';
+  const next=cur==='dark'?'light':'dark';
+  root.setAttribute('data-theme',next);
+  document.getElementById('planThemeBtn').textContent=next==='dark'?'☀':'◑';
+  localStorage.setItem('v11_theme',next);
+}
+
+function applyPlanTheme(){
+  const t=localStorage.getItem('v11_theme')||'light';
+  document.getElementById('planRoot').setAttribute('data-theme',t);
+  document.getElementById('planThemeBtn').textContent=t==='dark'?'☀':'◑';
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  btn.classList.add('active');
+  localStorage.setItem('v9_tab', id);
+}
+
+function togglePhase(id) {
+  const block = document.getElementById(id);
+  block.classList.toggle('open');
+  // Save state for both phase-blocks and day0
+  const state = {};
+  document.querySelectorAll('.phase-block, .day0-block').forEach(b => {
+    if(b.id) state[b.id] = b.classList.contains('open');
+  });
+  localStorage.setItem('v9_phases', JSON.stringify(state));
+  if(id === 'day0') updateDay0Progress();
+}
+
+// ── Day 0 setup checklist ──────────────────────────────
+const DAY0_TOTAL = 20;
+
+function toggleSetup(item, groupId, idx) {
+  const cb = item.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  item.classList.toggle('done', cb.checked);
+  saveSetup();
+  updateDay0Progress();
+}
+
+function saveSetup() {
+  const data = {};
+  document.querySelectorAll('.setup-item').forEach((item, i) => {
+    data['s_' + i] = item.querySelector('input').checked;
+  });
+  localStorage.setItem('v9_setup', JSON.stringify(data));
+}
+
+function loadSetup() {
+  try {
+    const data = JSON.parse(localStorage.getItem('v9_setup') || '{}');
+    document.querySelectorAll('.setup-item').forEach((item, i) => {
+      if(data['s_' + i]) {
+        item.querySelector('input').checked = true;
+        item.classList.add('done');
+      }
+    });
+  } catch(e) {}
+}
+
+function updateDay0Progress() {
+  const items = document.querySelectorAll('.setup-item');
+  const done = [...items].filter(i => i.querySelector('input').checked).length;
+  const total = items.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  const fill = document.getElementById('day0ProgFill');
+  const lbl  = document.getElementById('day0ProgLabel');
+  if(fill) fill.style.width = pct + '%';
+  if(lbl)  lbl.textContent = done + ' / ' + total + ' complete' + (pct === 100 ? ' ✓' : '');
+}
+
+function resetDay0() {
+  if(!confirm('Reset all Day 0 setup items?')) return;
+  document.querySelectorAll('.setup-item').forEach(item => {
+    item.querySelector('input').checked = false;
+    item.classList.remove('done');
+  });
+  saveSetup();
+  updateDay0Progress();
+}
+
+function toggleCheck(item) {
+  const cb = item.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  item.classList.toggle('done', cb.checked);
+  saveChecks();
+}
+
+function saveChecks() {
+  const data = {};
+  document.querySelectorAll('.check-item').forEach((item, i) => {
+    data[i] = item.querySelector('input').checked;
+  });
+  localStorage.setItem('v9_checks', JSON.stringify(data));
+}
+
+function loadChecks() {
+  try {
+    const data = JSON.parse(localStorage.getItem('v9_checks') || '{}');
+    document.querySelectorAll('.check-item').forEach((item, i) => {
+      if (data[i]) {
+        item.querySelector('input').checked = true;
+        item.classList.add('done');
+      }
+    });
+  } catch(e) {}
+}
+
+function resetChecks(containerId) {
+  const container = document.getElementById(containerId);
+  container.querySelectorAll('.check-item').forEach(item => {
+    item.querySelector('input').checked = false;
+    item.classList.remove('done');
+  });
+  saveChecks();
+}
+
+function getWeekNumber() {
+  const start = localStorage.getItem('v9_start');
+  if (!start) return null;
+  const diff = Date.now() - parseInt(start);
+  return Math.min(24, Math.max(1, Math.ceil(diff / (7 * 24 * 3600 * 1000))));
+}
+
+function setStartDate() {
+  if (!localStorage.getItem('v9_start')) {
+    localStorage.setItem('v9_start', Date.now().toString());
+  }
+}
+
+function getNextMonday() {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = (8 - day) % 7 || 7;
+  d.setDate(d.getDate() + diff);
+  // First Monday of next month
+  const nm = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+  while(nm.getDay() !== 1) nm.setDate(nm.getDate() + 1);
+  return nm.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  applyPlanTheme();
+  setStartDate();
+  loadChecks();
+  loadSetup();
+  updateDay0Progress();
+
+  // Hash-based tab routing (used by dashboard Monday banner link)
+  const hash = window.location.hash.replace('#','');
+  const validTabs = ['overview','phases','certs','projects','protocol'];
+  if (hash && validTabs.includes(hash)) {
+    const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick')?.includes("'" + hash + "'"));
+    if (btn) { switchTab(hash, btn); }
+  } else {
+    // Restore last saved tab
+    const savedTab = localStorage.getItem('v9_tab');
+    if (savedTab) {
+      const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick')?.includes("'" + savedTab + "'"));
+      if (btn) switchTab(savedTab, btn);
+    }
+  }
+
+  // Restore phase + day0 open states
+  try {
+    const phaseState = JSON.parse(localStorage.getItem('v9_phases') || '{}');
+    Object.entries(phaseState).forEach(([id, open]) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('open', open);
+    });
+  } catch(e) {}
+
+  // Set next review date in footer
+  const nr = document.getElementById('nextReview');
+  if (nr) nr.textContent = getNextMonday();
+
+  // Set current week display
+  const wk = getWeekNumber();
+  const cwEl = document.getElementById('currentWeek');
+  if (cwEl) cwEl.textContent = wk || '—';
+});
+</script>
+</body>
+</html>
