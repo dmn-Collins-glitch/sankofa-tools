@@ -536,7 +536,7 @@ body {
   margin-bottom: .4rem;
 }
 
-/* ── Weekly Protocol pane ── */
+/* ── SNKF Intelligence Protocol pane ── */
 .protocol-intro {
   background: var(--teal);
   color: #fff;
@@ -588,6 +588,32 @@ body {
 }
 .day-mon { background: var(--teal-light); color: var(--teal); }
 .day-monthly { background: var(--amber-light); color: var(--amber); }
+.day-daily { background: var(--purple-light); color: var(--purple); }
+.day-biweekly { background: #e0f0e8; color: #2a7a50; }
+
+.agent-role-map {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .75rem 1rem;
+  margin: .85rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.8;
+}
+.agent-role-map strong { color: var(--teal); }
+.protocol-tier-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: .4rem 1.25rem .2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
 
 .protocol-items { padding: .85rem 1.25rem; }
 .check-item {
@@ -870,7 +896,7 @@ body {
     <button class="tab-btn" onclick="switchTab('phases', this)">Phases</button>
     <button class="tab-btn" onclick="switchTab('certs', this)">Certs</button>
     <button class="tab-btn" onclick="switchTab('projects', this)">Projects</button>
-    <button class="tab-btn" onclick="switchTab('protocol', this)">Weekly Protocol</button>
+    <button class="tab-btn" onclick="switchTab('protocol', this)">SNKF Protocol</button>
   </div>
 
   <!-- ═══ OVERVIEW ═══ -->
@@ -929,8 +955,8 @@ body {
       <div class="pillar-card pillar-gray">
         <div class="pillar-icon">⑥</div>
         <div class="pillar-body">
-          <h4>Weekly iteration protocol</h4>
-          <p>Baked-in Monday scan + monthly review. The plan versions forward as the ecosystem shifts. A plan that doesn't update is a plan that goes stale.</p>
+          <h4>SNKF Intelligence Protocol</h4>
+            <p>Four-tier intelligence system (Daily / Weekly / Bi-Weekly / Monthly) covering ecosystem, portfolio positioning, Sekhem brand, and trading. Weekly and bi-weekly tiers are agent-assisted. Daily and monthly stay manual.</p>
         </div>
       </div>
     </div>
@@ -1443,17 +1469,40 @@ body {
   <div class="pane" id="pane-protocol">
 
     <div class="protocol-intro">
-      <h2>The Iteration Protocol</h2>
-      <p>A plan that doesn't update is a plan that goes stale. The AI/HITL ecosystem is moving fast — new models, new frameworks, retiring certs, shifting job titles. This protocol bakes in deliberate checkpoints so the plan stays current. Scan, log, adjust.</p>
+      <h2>SNKF Intelligence Protocol</h2>
+      <p>A plan that doesn't update is a plan that goes stale. Four tiers — Daily, Weekly, Bi-Weekly, Monthly — covering the AI/HITL ecosystem, portfolio positioning, Sekhem brand intelligence, and trading framework. The weekly and bi-weekly tiers are agent-assisted: the SNKF Protocol Agent fetches and summarizes all sources, you review and act. Daily and monthly tiers stay manual — habit layer and judgment layer respectively.</p>
     </div>
 
-    <!-- Monday scan -->
+    <!-- DAILY -->
+    <div class="protocol-block">
+      <div class="protocol-block-header">
+        <div class="proto-day day-daily">DAY</div>
+        <h3>Daily Check-In</h3>
+        <div class="timing">~5 min · manual · habit layer</div>
+      </div>
+      <div class="protocol-items" id="daily-checks">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>GitHub streak check <small>github.com/dmn-Collins-glitch — did you push today? Streak alive? This one stays manual — the habit is the point.</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Market macro switch — S&amp;P 500 vs 10M MA <small>Agent-assisted: fetches price + MA, outputs MACRO SWITCH → ON or OFF, logs to snkf_protocol/logs/daily_log.json</small></label>
+        </div>
+      </div>
+      <div style="padding: .5rem 1.25rem .85rem; display:flex; align-items:center; gap:.75rem;">
+        <button class="reset-btn" onclick="resetChecks('daily-checks')">Reset checklist</button>
+      </div>
+    </div>
+
+    <!-- WEEKLY -->
     <div class="protocol-block">
       <div class="protocol-block-header">
         <div class="proto-day day-mon">MON</div>
-        <h3>Weekly Ecosystem Scan</h3>
-        <div class="timing">~20 min every Monday</div>
+        <h3>Weekly Intelligence Scan</h3>
+        <div class="timing">~15 min review · agent fetches · every Monday</div>
       </div>
+      <div class="protocol-tier-label">Ecosystem</div>
       <div class="protocol-items" id="monday-checks">
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
@@ -1461,23 +1510,33 @@ body {
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Simon Willison's blog (simonwillison.net) <small>Best signal-to-noise ratio in the LLM space. If he's writing about it, it matters.</small></label>
+          <label>Simon Willison's blog (simonwillison.net) <small>Best signal-to-noise in the LLM space. If he's writing about it, it matters.</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>LinkedIn: search "applied AI engineer" jobs — what's new? <small>Note any new required skills, tools, or frameworks you haven't seen before</small></label>
+          <label>GitHub Trending: Python + AI/LLM tags <small>New repos with 500+ stars in a week often signal an ecosystem shift</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>GitHub Trending: filter by Python + AI/LLM tags <small>New repos with 500+ stars in a week often signal an ecosystem shift</small></label>
+          <label>AWS What's New — AI/ML section <small>Watch for Bedrock updates, new model availability, cert announcements</small></label>
+        </div>
+      </div>
+      <div class="protocol-tier-label">Portfolio &amp; Market Positioning</div>
+      <div class="protocol-items" id="positioning-checks">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>LinkedIn job scan — "applied AI engineer" + "HITL" <small>Note new required skills, tools, or frameworks you haven't seen before. Track title drift.</small></label>
+        </div>
+      </div>
+      <div class="protocol-tier-label">Sekhem Brand Intelligence</div>
+      <div class="protocol-items" id="sekhem-checks">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Competitor scan — Black-owned indie body care brands <small>Agent searches verified IG/TikTok accounts + web. Flag new products, campaigns, or positioning moves from small-cap peers.</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>AWS What's New (aws.amazon.com/new) — AI/ML section <small>Watch for Bedrock updates, new model availability, cert announcements</small></label>
-        </div>
-        <div class="check-item" onclick="toggleCheck(this)">
-          <input type="checkbox">
-          <label>Log anything flagged to a running "signal doc" <small>One note per signal: what it is, why it might matter, whether it changes the plan</small></label>
+          <label>CPG + AI tools scan <small>Any new AI tools targeting small wellness or beauty brands? Formulation assistants, brand voice tools, customer service agents.</small></label>
         </div>
       </div>
       <div class="signal-grid">
@@ -1499,41 +1558,75 @@ body {
         </div>
       </div>
       <div style="padding: .5rem 1.25rem .85rem; display:flex; align-items:center; gap:.75rem;">
-        <button class="reset-btn" onclick="resetChecks('monday-checks')">Reset checklist</button>
+        <button class="reset-btn" onclick="resetChecks('monday-checks'); resetChecks('positioning-checks'); resetChecks('sekhem-checks')">Reset checklist</button>
       </div>
     </div>
 
-    <!-- Monthly review -->
+    <!-- BI-WEEKLY -->
+    <div class="protocol-block">
+      <div class="protocol-block-header">
+        <div class="proto-day day-biweekly">2WK</div>
+        <h3>Bi-Weekly Deep Scan</h3>
+        <div class="timing">~15 min review · agent fetches · every other Monday</div>
+      </div>
+      <div class="protocol-items" id="biweekly-checks">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>LangChain / LangGraph changelog <small>GitHub releases — anything breaking or relevant to Product 2 (Cleaning Ops Agentic System)</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>DeepLearning.AI updates <small>New course drops, cert path changes — direct impact on the certification roadmap</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Hacker News "Who's Hiring" thread <small>news.ycombinator.com — AI/ML hiring signals, note stack requirements and title patterns</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>LinkedIn post performance review <small>What content landed this period? Adjust build-in-public cadence accordingly.</small></label>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox">
+          <label>Freelance market scan — Upwork "AI agent" gigs <small>Research mode only (not actively seeking). What are clients asking for? Note skill gaps vs. current stack.</small></label>
+        </div>
+      </div>
+      <div style="padding: .5rem 1.25rem .85rem; display:flex; align-items:center; gap:.75rem;">
+        <button class="reset-btn" onclick="resetChecks('biweekly-checks')">Reset checklist</button>
+      </div>
+    </div>
+
+    <!-- MONTHLY -->
     <div class="protocol-block">
       <div class="protocol-block-header">
         <div class="proto-day day-monthly">1st</div>
         <h3>Monthly Plan Review</h3>
-        <div class="timing">~45 min, first Monday of month</div>
+        <div class="timing">~20 min · manual · judgment layer · first Monday of month</div>
       </div>
       <div class="protocol-items" id="monthly-checks">
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Review cert sequence — any retirements, new certs, exam changes? <small>Especially watch AIF-C01 content updates and DL.AI new course releases</small></label>
+          <label>Trading framework review — 44-holding universe <small>Full 5-indicator score on each position. Rotation decisions. Macro override check. These are judgment calls — agent doesn't touch this.</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Review project list — any now obsolete? Any new gap to fill? <small>If a tool you're building toward is now default in every framework, the project loses signal</small></label>
+          <label>FDA / cosmetic regulation check <small>fda.gov — any new guidance affecting Sekhem formulations, labeling, or ingredient safety classifications</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Review tech stack — anything in the daily tool calls that needs updating? <small>New Anthropic SDK version, new LangGraph patterns, new AWS SDK behaviors</small></label>
+          <label>Portfolio narrative audit <small>Does your GitHub + LinkedIn still accurately reflect where the plan is? Adjust public positioning if there's drift.</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Review job market — title trends shifting? New required skills emerging? <small>Track "applied AI engineer," "AI systems engineer," "LLM engineer," "eval engineer"</small></label>
+          <label>Protocol audit — is the tier structure still right? <small>Add, remove, or promote items. If an item consistently yields no signal, cut it.</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Update the plan version if anything changed <small>Bump v9.x → v9.(x+1) in the header, log what changed and why</small></label>
+          <label>Review cert sequence — any retirements, exam changes? <small>Especially watch AIF-C01 content updates, MLA-C01 timeline, and DL.AI new course releases</small></label>
         </div>
         <div class="check-item" onclick="toggleCheck(this)">
           <input type="checkbox">
-          <label>Update the daily dashboard heatmap week count <small>Keep the dashboard synced with actual current week in the plan</small></label>
+          <label>Update plan version if anything changed <small>Bump v9.x → v9.(x+1) in the header, log what changed and why</small></label>
         </div>
       </div>
       <div style="padding: .5rem 1.25rem .85rem; display:flex; align-items:center; gap:.75rem;">
@@ -1557,7 +1650,7 @@ body {
     <!-- Dashboard note -->
     <div class="card" style="margin-top: 1rem;">
       <div class="section-label">Dashboard integration</div>
-      <p style="font-size:13px; color:var(--text-2); line-height:1.65;">The daily dashboard (streak tracker, session log, heatmap) runs alongside this plan — not separately. Monday scan results get logged as a session note. Monthly review triggers a dashboard reflection entry. Phase transitions are milestone markers on the heatmap. The two tools talk to each other: the dashboard shows what you did, this plan shows where it's going.</p>
+      <p style="font-size:13px; color:var(--text-2); line-height:1.65;">The daily dashboard (streak tracker, session log, heatmap) runs alongside this plan — not separately. Weekly briefing results get logged as a session note. Monthly review triggers a dashboard reflection entry. Phase transitions are milestone markers on the heatmap. The SNKF Protocol Agent lives in <code style="font-size:11px; background:var(--bg); padding:1px 4px; border-radius:3px;">claude_shell/snkf_protocol/</code> — it handles the fetch layer so you own the judgment layer.</p>
       <div style="margin-top:.75rem; padding:.65rem .9rem; background:var(--amber-light); border:1px solid var(--amber); border-radius:var(--radius-sm); font-size:12px; color:var(--amber-dim); line-height:1.6;">
         <strong style="color:var(--amber);">Apr 2026 ecosystem notes:</strong> Anthropic console has moved to <strong>platform.claude.com</strong> (console.anthropic.com still redirects for now). AgentForge (Project 4) targets <strong>LangGraph</strong> as the framework — it has won the production/enterprise tier for stateful agentic workflows. AutoGen is in maintenance mode; do not start new projects on it.
       </div>
@@ -1566,7 +1659,7 @@ body {
   </div>
 
   <div style="margin-top:3rem; text-align:center;">
-    <p style="font-size:11px; color:var(--text-3); font-family:var(--font-mono);">Plan v9.2 · Updated April 2026 · Freelance pivot: thesis, Phase 4, pillars reframed · AgentForge → LangGraph · Console URL updated · Next review: <span id="nextReview">—</span></p>
+    <p style="font-size:11px; color:var(--text-3); font-family:var(--font-mono);">Plan v9.3 · Updated April 2026 · SNKF Intelligence Protocol: 4-tier expanded (Daily/Weekly/Bi-Weekly/Monthly), agent-assisted fetch layer added, Sekhem + Trading + Positioning tracks integrated · Next review: <span id="nextReview">—</span></p>
   </div>
 
 </div>
