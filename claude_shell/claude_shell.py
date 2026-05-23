@@ -82,6 +82,10 @@ def init_history():
     """Return a fresh, empty conversation history."""
     return []
 
+def print_history(history):
+    for role in history:
+        print(f"role: {role['role']}, content: {role['content']}")
+
 
 # ── Main loop ─────────────────────────────────────────────
 
