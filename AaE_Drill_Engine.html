@@ -120,6 +120,22 @@ textarea#inp::placeholder{color:var(--t4);font-family:var(--fm);font-size:11px;l
 .bsend:hover{opacity:.85}.bsend:disabled{opacity:.3;cursor:not-allowed}
 .bend{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:none;color:var(--t3);border:1px solid var(--bm);border-radius:3px;padding:.5rem .7rem;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
 .bend:hover{color:var(--amber);border-color:var(--amber)}.bend:disabled{opacity:.3;cursor:not-allowed}
+.bcomplete{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:none;color:var(--t3);border:1px solid var(--border);border-radius:3px;padding:.5rem .7rem;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
+.bcomplete:hover{color:var(--green);border-color:var(--green)}
+
+/* MODULE COMPLETE MODAL */
+.mod-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:500;padding:1rem;backdrop-filter:blur(6px)}
+.mod-box{background:var(--surface);border:1px solid var(--bm);border-top:2px solid var(--green);border-radius:4px;padding:1.75rem;max-width:440px;width:100%;box-shadow:0 0 40px rgba(52,211,153,.1)}
+.mod-box h2{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--text);margin-bottom:.35rem}
+.mod-box p{font-size:12.5px;color:var(--t2);line-height:1.65;margin-bottom:.75rem}
+.mod-snapshot{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.65rem .8rem;font-family:var(--fm);font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:1rem;max-height:180px;overflow-y:auto}
+.mod-snap-hd{color:var(--teal);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.35rem;font-family:var(--fm)}
+.mod-snap-ws{color:var(--coral);font-size:10px;margin-top:.35rem}
+.mod-btns{display:flex;gap:.65rem}
+.mod-confirm{flex:1;padding:.65rem;background:var(--green);color:var(--bg);border:none;border-radius:3px;font-family:var(--fm);font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:opacity .15s}
+.mod-confirm:hover{opacity:.85}
+.mod-cancel{padding:.65rem 1rem;background:none;color:var(--t3);border:1px solid var(--bm);border-radius:3px;font-family:var(--fm);font-size:12px;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:all .15s}
+.mod-cancel:hover{color:var(--text);border-color:var(--bh)}
 
 /* API KEY OVERLAY */
 .key-overlay{
@@ -186,6 +202,22 @@ textarea#inp::placeholder{color:var(--t4);font-family:var(--fm);font-size:11px;l
   </div>
 </div>
 
+<!-- Module Complete Modal -->
+<div class="mod-overlay" id="modOverlay" style="display:none">
+  <div class="mod-box">
+    <h2>Complete Module?</h2>
+    <p>Snapshots this module to the interleave registry. Future sessions will include retrieval drills from completed modules, weighted toward weak spots.</p>
+    <div class="mod-snapshot">
+      <div class="mod-snap-hd">Snapshot Preview</div>
+      <div id="modSnapContent"></div>
+    </div>
+    <div class="mod-btns">
+      <button class="mod-cancel" onclick="document.getElementById('modOverlay').style.display='none'">Cancel</button>
+      <button class="mod-confirm" onclick="confirmCompleteModule()">✓ Complete Module</button>
+    </div>
+  </div>
+</div>
+
 <header class="hdr">
   <span class="brand">Drill Engine</span>
   <div class="pills">
@@ -237,6 +269,7 @@ textarea#inp::placeholder{color:var(--t4);font-family:var(--fm);font-size:11px;l
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"></textarea>
       </div>
       <button class="bsend" id="bsend" onclick="send()">Send</button>
+      <button class="bcomplete" id="bcomplete" onclick="completeModule()" title="Mark module complete &amp; snapshot to registry">Complete M<span id="completeModNum">1</span></button>
       <button class="bend" id="bend" onclick="endSession()">End Session</button>
     </div>
   </div>
@@ -279,24 +312,38 @@ function resetKey(){
 // ── MODULE DEFINITIONS ─────────────────────────────────
 const MODULES = [
   {num:1, name:'Variables & Types', file:'m1.py',
+   prompt:'Write a function that takes a name and age, returns a formatted string like "Damon (32) — Applied AI Engineer". Then print it.',
+   hint:'Use an f-string. What happens if age is a string instead of int?',
    defaultCovered:['String repetition: "5" * 2 = "55" — operators are type-aware','Type conversion: int(), str(), float()','String concatenation TypeError across types','f-strings: preferred for mixed-type output','type() returns class info','/ always float; // floor division; % modulo','input() and user input handling'],
    defaultStillTo:['Boolean type: True/False, case-sensitive','Comparison operators: ==, !=, <, >, <=, >=','None type','Variable naming rules (snake_case, no reserved words)','Multiple assignment: a, b = 1, 2','Constants convention: ALL_CAPS','Augmented assignment: +=, -=, *=, /=']},
   {num:2, name:'Functions', file:'m2.py',
+   prompt:'Write three functions: one that adds two numbers, one that reverses a string, one that returns True if a number is even. Call each one.',
+   hint:'What is the difference between print() and return? Try removing return and see what breaks.',
    defaultCovered:[],
    defaultStillTo:['def keyword and function anatomy','Arguments and parameters','return vs print — key difference','Scope: local vs global','Default argument values','Multiple return values','Docstrings']},
   {num:3, name:'Lists, Dicts, Loops', file:'m3.py',
+   prompt:'Given a list of scores [82, 91, 67, 74, 95, 88], write code that prints only scores above 80 and calculates their average.',
+   hint:'Use a list comprehension for filtering, then sum() and len() for the average.',
    defaultCovered:[],
    defaultStillTo:['List indexing and slicing','List methods: append, pop, remove, sort','Dict creation and access','Dict methods: .get(), .items(), .keys(), .values()','for loops over lists and dicts','while loops','List comprehensions','Nested data structures']},
   {num:4, name:'Files & .env', file:'m4.py',
+   prompt:'Write a script that reads a .env file containing API_KEY=abc123, loads it with python-dotenv, and prints "Key loaded: [first 4 chars]***".',
+   hint:'pip install python-dotenv. Use os.getenv() after load_dotenv(). Never print the full key.',
    defaultCovered:[],
    defaultStillTo:['open() and the with statement','read(), readlines(), write()','python-dotenv: load_dotenv()','os.getenv()','File paths: relative vs absolute','.gitignore for .env files']},
   {num:5, name:'APIs + JSON', file:'m5.py',
+   prompt:'Write a function that calls the Anthropic API with a user message and returns the text response. Add a try/except that prints "API call failed: [error]" on any exception.',
+   hint:'Use the anthropic Python SDK. Check data.content[0].text for the response text.',
    defaultCovered:[],
    defaultStillTo:['requests.get() and requests.post()','response.json() and response.status_code','json.dumps() and json.loads()','Anthropic SDK: client.messages.create()','Parsing data.content[0].text','try/except for API errors','HTTP status codes']},
   {num:6, name:'Classes (light)', file:'m6.py',
+   prompt:'Build a simple SessionLogger class with an __init__ that sets self.sessions = [], an add(category, minutes, note) method, and a summary() method that prints total sessions and total minutes.',
+   hint:'self is the instance. summary() should loop over self.sessions — a list of dicts.',
    defaultCovered:[],
    defaultStillTo:['class definition','__init__ and self','Instance variables','Instance methods','Creating instances','__str__ method']},
   {num:7, name:'Async basics', file:'m7.py',
+   prompt:'Convert a synchronous requests.get() call to use aiohttp in an async function. Call it with asyncio.run(). Confirm the response arrives correctly.',
+   hint:'async def, await session.get(), and async with aiohttp.ClientSession() as session.',
    defaultCovered:[],
    defaultStillTo:['async def and await keyword','asyncio.run()','aiohttp for async HTTP','async with context manager','Why async matters for API throughput']},
 ];
@@ -336,13 +383,117 @@ const CCP_DOMAINS = [
   ]},
 ];
 
+// ══ CONSOLIDATED STORAGE CORE (v1) ══════════════════════
+// Single root key replacing drill_engine_state / _ccp_state / _modules / _last_log.
+// Covered topics are now objects: {topic, firstSeen, confirmed}.
+//  - firstSeen: ISO date the topic was first drilled (enables capability-delta)
+//  - confirmed: true once applied UNPROMPTED (mastery-through-use), via [CONFIRMED:] marker
+// de_api_key and v9d_start are NOT touched (shared / dashboard-owned).
+const DRILL_ROOT='sankofa_drill_v1';
+const OLD_KEYS={py:'drill_engine_state',ccp:'drill_engine_ccp_state',reg:'drill_engine_modules',log:'drill_engine_last_log'};
+
+function _emptyStore(){
+  return {schemaVersion:1, python:null, ccp:null, registry:{}, lastLog:null, migratedFrom:null};
+}
+function loadRoot(){
+  try{
+    const raw=localStorage.getItem(DRILL_ROOT);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return migrateOrInit();
+}
+function saveRoot(root){
+  try{localStorage.setItem(DRILL_ROOT,JSON.stringify(root));}
+  catch(e){console.error('drill store save failed',e);}
+}
+
+// Normalize a covered entry (string OR already-object) into the {topic,firstSeen,confirmed} shape.
+function _normTopic(entry,dateFallback){
+  if(entry&&typeof entry==='object'&&'topic' in entry){
+    return {topic:entry.topic, firstSeen:entry.firstSeen||dateFallback, confirmed:!!entry.confirmed};
+  }
+  return {topic:String(entry), firstSeen:dateFallback, confirmed:false};
+}
+
+// One-time migration. Reads the 4 legacy keys, folds them in, LEAVES THEM INTACT as fallback.
+function migrateOrInit(){
+  const root=_emptyStore();
+  const today=todayStrDE();
+  let found=false;
+  // Python branch
+  try{
+    const oldPy=JSON.parse(localStorage.getItem(OLD_KEYS.py)||'null');
+    if(oldPy){
+      found=true;
+      root.python={
+        currentModule:oldPy.currentModule||1,
+        moduleName:oldPy.moduleName||'',
+        covered:(oldPy.covered||[]).map(t=>_normTopic(t,today)),
+        allWeakSpots:oldPy.allWeakSpots||[],
+        stillTo:oldPy.stillTo||[],
+        totalSessions:oldPy.totalSessions||0,
+        totalDrills:oldPy.totalDrills||0,
+        lastActivity:oldPy.lastActivity||today
+      };
+    }
+  }catch(e){}
+  // CCP branch — covered is keyed by subdomain id
+  try{
+    const oldCcp=JSON.parse(localStorage.getItem(OLD_KEYS.ccp)||'null');
+    if(oldCcp){
+      found=true;
+      const cov={};
+      if(oldCcp.covered) for(const sid in oldCcp.covered){
+        cov[sid]=(oldCcp.covered[sid]||[]).map(t=>_normTopic(t,today));
+      }
+      root.ccp={
+        currentDomain:oldCcp.currentDomain||2,
+        currentSubIdx:oldCcp.currentSubIdx||0,
+        covered:cov,
+        allWeakSpots:oldCcp.allWeakSpots||[],
+        totalSessions:oldCcp.totalSessions||0,
+        totalDrills:oldCcp.totalDrills||0,
+        lastActivity:oldCcp.lastActivity||today
+      };
+    }
+  }catch(e){}
+  // Registry branch — completed module snapshots
+  try{
+    const oldReg=JSON.parse(localStorage.getItem(OLD_KEYS.reg)||'null');
+    if(oldReg&&Object.keys(oldReg).length){
+      found=true;
+      for(const k in oldReg){
+        const m=oldReg[k];
+        root.registry[k]={...m, coveredTopics:(m.coveredTopics||[]).map(t=>_normTopic(t,m.completedDate||today))};
+      }
+    }
+  }catch(e){}
+  // Last log — carried verbatim
+  try{
+    const oldLog=JSON.parse(localStorage.getItem(OLD_KEYS.log)||'null');
+    if(oldLog){found=true; root.lastLog=oldLog;}
+  }catch(e){}
+
+  root.migratedFrom=found?today:null;
+  saveRoot(root);
+  return root;
+}
+
+// Helpers to extract a plain list of topic strings (back-compat for code that wants strings)
+function topicStrings(coveredArr){return (coveredArr||[]).map(t=>t.topic);}
+
 // ── CCP STATE MANAGEMENT ────────────────────────────────
+// loadCCPState/saveCCPState now delegate to the consolidated root.
+// Returned object keeps the legacy shape callers expect, but `covered[sid]`
+// holds {topic,firstSeen,confirmed} objects. Call sites that need strings use topicStrings().
 function loadCCPState(){
-  try{return JSON.parse(localStorage.getItem('drill_engine_ccp_state')||'null');}
-  catch(e){return null;}
+  const root=loadRoot();
+  return root.ccp;
 }
 function saveCCPState(state){
-  localStorage.setItem('drill_engine_ccp_state',JSON.stringify(state));
+  const root=loadRoot();
+  root.ccp=state;
+  saveRoot(root);
 }
 function getCurrDomain(){
   const state=loadCCPState();
@@ -359,11 +510,13 @@ function getCurrSub(){
   return d.subdomains[Math.min(idx,d.subdomains.length-1)];
 }
 function loadState(){
-  try{return JSON.parse(localStorage.getItem('drill_engine_state')||'null');}
-  catch(e){return null;}
+  const root=loadRoot();
+  return root.python;
 }
 function saveState(state){
-  localStorage.setItem('drill_engine_state',JSON.stringify(state));
+  const root=loadRoot();
+  root.python=state;
+  saveRoot(root);
 }
 function getCurrMod(){
   const state=loadState();
@@ -373,6 +526,102 @@ function getCurrMod(){
 function todayStrDE(){
   const d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+// ── MODULE REGISTRY (interleave) ──────────────────────
+function loadRegistry(){
+  const root=loadRoot();
+  return root.registry||{};
+}
+function saveRegistry(reg){
+  const root=loadRoot();
+  root.registry=reg;
+  saveRoot(root);
+}
+
+function buildInterleaveSection(){
+  const reg=loadRegistry();
+  const mod=getCurrMod();
+  const priorKeys=Object.keys(reg).filter(k=>parseInt(k.replace('M',''))<mod.num);
+  if(!priorKeys.length) return '';
+  const lines=priorKeys.map(k=>{
+    const m=reg[k];
+    const ws=m.weakSpots&&m.weakSpots.length?m.weakSpots.slice(0,4).join(', '):'none flagged';
+    return `${k} ${m.moduleName} [weak: ${ws}]`;
+  });
+  return `\nINTERLEAVE (mandatory every session): Include 1-2 retrieval drills from prior modules below. Prefix these with "↩ M# Review —" instead of plain [DRILL], but still open each with [DRILL] on its own line so the counter fires. Prioritize weak spots.
+PRIOR MODULES: ${lines.join(' | ')}`;
+}
+
+function completeModule(){
+  const mod=getCurrMod();
+  const state=loadState()||{};
+  const reg=loadRegistry();
+  const key=`M${mod.num}`;
+  const existing=reg[key];
+  const covTopics=state.covered||[];
+  const ws=state.allWeakSpots||[];
+  const reviewCount=existing?existing.reviewCount:0;
+  const topicStr=t=>(t&&typeof t==='object'&&'topic' in t)?t.topic:String(t);
+  const confirmedCount=covTopics.filter(t=>t&&typeof t==='object'&&t.confirmed).length;
+
+  // Build snapshot preview
+  const covHtml=covTopics.length
+    ?covTopics.slice(-6).map(c=>`<div>· ${topicStr(c).split(/\s[—|]\s/)[0]}</div>`).join('')
+    :'<div style="color:var(--t4)">No covered topics logged yet</div>';
+  const wsHtml=ws.length
+    ?`<div class="mod-snap-ws">Weak spots (${ws.length}): ${ws.slice(0,5).join(', ')}${ws.length>5?' …':''}</div>`
+    :'<div style="color:var(--green);font-size:10px">No weak spots flagged ✓</div>';
+  const confHtml=confirmedCount?`<div style="color:var(--green);font-size:10px;margin-top:2px">✓ ${confirmedCount} confirmed (applied unprompted)</div>`:'';
+
+  document.getElementById('modSnapContent').innerHTML=
+    `<strong style="color:var(--text)">${key} · ${mod.name}</strong><br>`+
+    `<span style="color:var(--t3);font-size:10px">Sessions: ${state.totalSessions||0} · Drills: ${state.totalDrills||0} · ${existing?'Previously registered — will update':'First registration'}</span>`+
+    `<div style="margin:.5rem 0 .25rem">${covHtml}</div>${wsHtml}${confHtml}`;
+
+  document.getElementById('modOverlay').style.display='flex';
+}
+
+function confirmCompleteModule(){
+  const mod=getCurrMod();
+  const state=loadState()||{};
+  const reg=loadRegistry();
+  const key=`M${mod.num}`;
+  const existing=reg[key]||{};
+
+  reg[key]={
+    moduleName:mod.name,
+    completedDate:existing.completedDate||todayStrDE(),
+    lastReviewedDate:todayStrDE(),
+    coveredTopics:state.covered||[],
+    weakSpots:state.allWeakSpots||[],
+    totalSessions:state.totalSessions||0,
+    totalDrills:state.totalDrills||0,
+    reviewCount:(existing.reviewCount||0)
+  };
+  saveRegistry(reg);
+
+  // Advance to next module
+  const nextNum=Math.min(mod.num+1, MODULES.length);
+  state.currentModule=nextNum;
+  state.covered=[];
+  state.allWeakSpots=[];
+  state.totalSessions=0;
+  state.totalDrills=0;
+  saveState(state);
+  updateHeader();
+
+  document.getElementById('modOverlay').style.display='none';
+
+  // Confirm in thread
+  const nextMod=MODULES[nextNum-1];
+  const thread=document.getElementById('thread');
+  const el=document.createElement('div');
+  el.className='msg ma';
+  el.innerHTML=`<p style="color:var(--green);font-family:var(--fm);font-size:12px;">✓ ${key} · ${mod.name} registered to interleave registry.</p>`+
+    `<p style="font-family:var(--fm);font-size:12px;color:var(--teal);margin-top:.35rem">→ Now on ${nextMod?`M${nextMod.num} · ${nextMod.name}`:'all modules complete'}. End session and start fresh to begin.</p>`;
+  thread.appendChild(el);
+  requestAnimationFrame(()=>thread.scrollTop=thread.scrollHeight);
 }
 
 // ── DYNAMIC SYSTEM PROMPT ──────────────────────────────
@@ -385,20 +634,24 @@ function buildSystem(){
 function buildPythonSystem(){
   const state=loadState();
   const mod=getCurrMod();
-  const covered=state?.covered?.length?state.covered:mod.defaultCovered;
+  const coveredRaw=state?.covered?.length?state.covered:mod.defaultCovered;
   const stillTo=state?.stillTo?.length?state.stillTo:mod.defaultStillTo;
   const seqStr=MODULES.map(m=>`M${m.num} ${m.name}${m.num===mod.num?' (CURRENT)':''}`).join(' → ');
 
-  // Condense concept labels — strip explanatory text after colon/dash to save tokens
+  // covered entries may be {topic,confirmed} objects (saved) or strings (defaults)
+  const asObj=e=>(e&&typeof e==='object'&&'topic' in e)?e:{topic:String(e),confirmed:false};
+  const covObjs=coveredRaw.map(asObj);
   const condense=c=>c.split(/\s[—:–]\s/)[0].trim();
-  const covShort=covered.map(condense);
+  const confirmedShort=covObjs.filter(o=>o.confirmed).map(o=>condense(o.topic));
+  const coveredShort=covObjs.filter(o=>!o.confirmed).map(o=>condense(o.topic));
   const stillShort=stillTo.map(condense);
   const seqShort=MODULES.map(m=>`M${m.num}${m.num===mod.num?'*':''}`).join('→');
 
   return `Drill coach for Damon. Direct, no fluff.
 CONTEXT: Applied AI accelerator. Python beginner. M${mod.num}: ${mod.name}. IDE: Cursor/Mac, python3, ~/dev/drills/${mod.file}. Seq: ${seqShort}
-COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
-REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → suggest M'+(mod.num+1)}
+COVERED (drilled, not yet applied unprompted): ${coveredShort.length?coveredShort.join(' | '):'none yet'}
+CONFIRMED (applied unprompted — do NOT re-teach; may use as building blocks): ${confirmedShort.length?confirmedShort.join(' | '):'none yet'}
+REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → suggest M'+(mod.num+1)}${buildInterleaveSection()}
 
 COMPOUND DRILLING: Where 2-3 remaining concepts interact naturally, combine them into one snippet that exercises both. This maximizes concepts tested per exchange. Single-concept drills only when a concept must stand alone (e.g. first exposure to a type).
 
@@ -406,9 +659,11 @@ FORMAT:
 [DRILL] on its own line before every drill.
 Give snippet (2-5 lines) or direct question. Ask prediction before he runs it. Wait. He runs, reports. Explain if wrong (2-3 lines). Next drill immediately.
 
-RULES: Predict first always. Correct→"Exactly."/"Correct." + next drill. Wrong→brief why + next. Responses ≤6 lines unless explaining error. No intros or mid-session summaries. Concept question→2 lines answer + drill.
+RULES: Predict first always. Before confirming correct, verify the answer internally — never fire "Exactly." before checking the actual output. Correct→"Exactly."/"Correct." + next drill. Wrong→brief why + next. Responses ≤6 lines unless explaining error. No intros or mid-session summaries. Concept question→2 lines answer + drill.
 
 WEAK: [WEAK: <concept ≤5 words>] — one per response, genuine struggles only.
+CLEAR: [CLEAR: <exact concept>] — if you incorrectly flagged a weak spot and the user demonstrates they had it right, emit this to remove it from the record.
+CONFIRMED: [CONFIRMED: <exact concept>] — emit ONLY when he uses a concept correctly WITHOUT the drill prompting it (applied/spontaneous recall in service of a different task), not merely answering a drill about it. This is the mastery-through-use signal. One per response max.
 
 END SESSION log format exactly:
 ---LOG---
@@ -425,19 +680,24 @@ function buildCCPSystem(){
   const domain=getCurrDomain();
   const sub=getCurrSub();
   const ccpState=loadCCPState();
-  const covered=ccpState?.covered?.[sub.id]||[];
-  const stillTo=sub.concepts.filter(c=>!covered.includes(c));
+  const coveredRaw=ccpState?.covered?.[sub.id]||[];
+  const asObj=e=>(e&&typeof e==='object'&&'topic' in e)?e:{topic:String(e),confirmed:false};
+  const covObjs=coveredRaw.map(asObj);
+  const coveredTopics=covObjs.map(o=>o.topic);
+  const stillTo=sub.concepts.filter(c=>!coveredTopics.includes(c));
   const flaggedDomains=CCP_DOMAINS.filter(d=>d.flagged).map(d=>`D${d.num} ${d.name} (${d.weight}%)`).join(', ');
 
   // Condense concepts to identifiers — strip explanatory text to save tokens
   const condense=c=>c.split(/\s[—:–]\s/)[0].split(':')[0].trim();
-  const covShort=covered.map(condense);
+  const confirmedShort=covObjs.filter(o=>o.confirmed).map(o=>condense(o.topic));
+  const coveredShort=covObjs.filter(o=>!o.confirmed).map(o=>condense(o.topic));
   const stillShort=stillTo.map(condense);
 
   return `CCP drill coach for Damon. Direct, exam-focused, no fluff.
-CONTEXT: CLF-C02. Score 769→850+. Flagged: ${flaggedDomains}.
+CONTEXT: CLF-C02. Target 850+. Flagged: ${flaggedDomains}.
 FOCUS: D${domain.num} ${domain.name} (${domain.weight}%)${domain.flagged?' ⚠ NEEDS IMPROVEMENT':''} / ${sub.id} ${sub.name}
-COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
+COVERED (drilled, not yet applied unprompted): ${coveredShort.length?coveredShort.join(' | '):'none yet'}
+CONFIRMED (recalled unprompted — do NOT re-teach): ${confirmedShort.length?confirmedShort.join(' | '):'none yet'}
 REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → next subdomain'}
 
 COMPOUND DRILLING: The exam tests concepts in combination. Where 2-3 remaining concepts interact naturally (e.g. shared responsibility + encryption, pricing model + use case, IAM deny + policy type), build one MCQ that requires understanding of both. Single-concept questions only for first exposure to a concept or when isolation is pedagogically necessary. Compound questions = more exam-realistic + more coverage per token.
@@ -446,10 +706,12 @@ FORMAT:
 [DRILL] on its own line before every question.
 MCQ preferred (A/B/C/D, plausible distractors). Ask for answer + reasoning. Wait. Confirm or correct with 2-3 line explanation of why right is right and wrong is wrong. Next question immediately.
 
-RULES: One question at a time. Distractors must be plausible. Correct→"Correct." + one reinforcement line + next. Wrong→explain right answer + why distractor fails + next. Responses ≤8 lines unless complex distinction requires more. No intros or summaries. Concept question→2 lines + drill.
+RULES: One question at a time. Distractors must be plausible. Before confirming correct, verify the answer internally — never fire "Correct." before checking that the chosen option is actually right. Correct→"Correct." + one reinforcement line + next. Wrong→explain right answer + why distractor fails + next. Responses ≤8 lines unless complex distinction requires more. No intros or summaries. Concept question→2 lines + drill.
 PRIORITY DISTINCTIONS: shared responsibility gray areas (RDS/EC2 OS patching), explicit deny always wins, Shield Std vs Adv, SG stateful vs NACL stateless, Cost Explorer vs Budgets vs Anomaly Detection, support tier response times, RI Standard vs Convertible, Savings Plans types.
 
 WEAK: [WEAK: <concept ≤5 words>] — one per response, genuine struggles only.
+CLEAR: [CLEAR: <exact concept>] — if you incorrectly flagged a weak spot and the user demonstrates they had it right, emit this to remove it from the record.
+CONFIRMED: [CONFIRMED: <exact concept>] — emit ONLY when he recalls/applies a concept correctly WITHOUT the question prompting it (e.g. references it accurately while reasoning about a different question), not merely answering an MCQ about it. Mastery-through-use signal. One per response max.
 
 END SESSION log format exactly:
 ---LOG---
@@ -465,7 +727,7 @@ NEXT FOCUS: <one line>
 
 // ── HISTORY ───────────────────────────────────────────
 const HIST_CAP=10;
-let hist=[],weakSpots=[],drills=0;
+let hist=[],weakSpots=[],drills=0,confirmedThisSession=[];
 function trimHist(){if(hist.length>HIST_CAP)hist=hist.slice(hist.length-HIST_CAP);}
 
 // ── HEADER ────────────────────────────────────────────
@@ -487,6 +749,8 @@ function updateHeader(){
     toggle.textContent='PY';
     toggle.style.color='';
     toggle.style.borderColor='';
+    const cmn=document.getElementById('completeModNum');
+    if(cmn) cmn.textContent=mod.num;
   }
   const startStr=localStorage.getItem('v9d_start')||'';
   if(startStr){
@@ -508,6 +772,10 @@ function showPythonOpts(){
   document.getElementById('startScreen').classList.add('gone');
   document.getElementById('pyScreen').classList.remove('gone');
   updateHeader();
+  // Update button text to reflect current module
+  const mod=getCurrMod();
+  const freshBtn=document.querySelector('#pyScreen .sbtn');
+  if(freshBtn) freshBtn.querySelector('span:nth-child(2)').textContent=`Start fresh — M${mod.num} · ${mod.name}`;
 }
 
 function showCCPSel(){
@@ -556,7 +824,8 @@ function startFresh(){
   const mod=getCurrMod();
   go();
   addU(`Start fresh — M${mod.num} drills`);
-  call(`Start a fresh M${mod.num} drill session. In one line, note what's been covered. Then go straight into the next untouched concept. First drill now.`);
+  const challenge=mod.prompt?`\n\nACTIVE CHALLENGE FOR THIS MODULE:\n${mod.prompt}\n${mod.hint?'Hint: '+mod.hint:''}\n\nOpen with this challenge as the first drill. Frame it as [DRILL], ask him to predict or write the answer before running it.`:'';
+  call(`Start a fresh M${mod.num} drill session. In one line, note what's been covered. Then go straight into the first drill now.${challenge}`);
 }
 
 function startPaste(){
@@ -609,6 +878,14 @@ function finalizeA(el, fullText){
   const wms=[...fullText.matchAll(/\[WEAK:\s*([^\]]+)\]/gi)];
   wms.forEach(m=>addWS(m[1].trim()));
 
+  // Weak spot removal — coach emits [CLEAR: concept] when it was a coaching error
+  const clears=[...fullText.matchAll(/\[CLEAR:\s*([^\]]+)\]/gi)];
+  clears.forEach(m=>removeWS(m[1].trim()));
+
+  // CONFIRMED extraction — coach emits [CONFIRMED: concept] on applied/unprompted recall
+  const confs=[...fullText.matchAll(/\[CONFIRMED:\s*([^\]]+)\]/gi)];
+  confs.forEach(m=>{const c=m[1].trim(); if(!confirmedThisSession.includes(c))confirmedThisSession.push(c);});
+
   // Drill counter — count [DRILL] markers Claude outputs
   const drillMarkers=(fullText.match(/\[DRILL\]/gi)||[]).length;
   if(drillMarkers>0){drills+=drillMarkers;document.getElementById('dc').textContent=drills;}
@@ -616,7 +893,8 @@ function finalizeA(el, fullText){
   // Log block extraction + localStorage write
   const lm=fullText.match(/---LOG---([\s\S]+?)---END---/);
   if(lm){
-    const rawLog=lm[1].trim();
+    // Patch model's drill count with authoritative client-side value
+    const rawLog=lm[1].trim().replace(/^(DRILLS:\s*)\d+/m, `$1${drills}`);
     const lb=document.createElement('div');
     lb.className='logb';
     lb.innerHTML=`<div class="logb-hd">◎ Session Log — saved to dashboard</div>`+
@@ -628,6 +906,34 @@ function finalizeA(el, fullText){
 
   el.classList.remove('streaming');
   scrollThread();
+}
+
+// Merge newly-covered topic strings into an existing covered-object array.
+// Preserves firstSeen + confirmed on existing entries; stamps new ones with today.
+// Applies any concepts confirmed this session (fuzzy, case-insensitive match).
+function mergeCovered(existingArr, newTopicStrings, confirmedList){
+  const today=todayStrDE();
+  const byKey={};
+  (existingArr||[]).forEach(e=>{
+    const o=(e&&typeof e==='object'&&'topic' in e)?{topic:e.topic,firstSeen:e.firstSeen||today,confirmed:!!e.confirmed}:{topic:String(e),firstSeen:today,confirmed:false};
+    byKey[o.topic.toLowerCase()]=o;
+  });
+  (newTopicStrings||[]).forEach(t=>{
+    const k=t.toLowerCase();
+    if(!byKey[k]) byKey[k]={topic:t,firstSeen:today,confirmed:false};
+  });
+  // apply confirmations
+  (confirmedList||[]).forEach(c=>{
+    const k=c.toLowerCase();
+    if(byKey[k]){byKey[k].confirmed=true;}
+    else{
+      // confirmed a concept not yet in covered — add it, confirmed
+      const hit=Object.keys(byKey).find(kk=>kk.includes(k)||k.includes(kk));
+      if(hit) byKey[hit].confirmed=true;
+      else byKey[k]={topic:c,firstSeen:today,confirmed:true};
+    }
+  });
+  return Object.values(byKey);
 }
 
 function saveSessionLog(rawLog){
@@ -649,24 +955,23 @@ function saveSessionLog(rawLog){
       subdomainName:sub.name,
       drills:drills,
       weakSpots:[...new Set([...weakSpots,...wsFromLog])],
+      confirmed:[...confirmedThisSession],
       nextQuestion:getField('NEXT QUESTION'),
       nextFocus:getField('NEXT FOCUS'),
       raw:rawLog
     };
-    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
-    // Update CCP cumulative state
     const state=loadCCPState()||{};
     state.currentDomain=domain.num;
     state.totalSessions=(state.totalSessions||0)+1;
     state.totalDrills=(state.totalDrills||0)+drills;
     state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
     state.lastActivity=todayStrDE();
-    if(covered.length){
-      if(!state.covered) state.covered={};
-      const existing=state.covered[sub.id]||[];
-      state.covered[sub.id]=[...new Set([...existing,...covered])];
+    if(!state.covered) state.covered={};
+    if(covered.length||confirmedThisSession.length){
+      state.covered[sub.id]=mergeCovered(state.covered[sub.id], covered, confirmedThisSession);
     }
     saveCCPState(state);
+    const root=loadRoot(); root.lastLog=log; saveRoot(root);
   } else {
     const mod=getCurrMod();
     const log={
@@ -676,11 +981,11 @@ function saveSessionLog(rawLog){
       moduleName:mod.name,
       drills:drills,
       weakSpots:[...new Set([...weakSpots,...wsFromLog])],
+      confirmed:[...confirmedThisSession],
       nextDrill:getField('NEXT DRILL'),
       nextFocus:getField('NEXT FOCUS'),
       raw:rawLog
     };
-    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
     const state=loadState()||{};
     state.currentModule=mod.num;
     state.moduleName=mod.name;
@@ -688,11 +993,11 @@ function saveSessionLog(rawLog){
     state.totalDrills=(state.totalDrills||0)+drills;
     state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
     state.lastActivity=todayStrDE();
-    if(covered.length){
-      const existing=state.covered||[];
-      state.covered=[...new Set([...existing,...covered])];
+    if(covered.length||confirmedThisSession.length){
+      state.covered=mergeCovered(state.covered, covered, confirmedThisSession);
     }
     saveState(state);
+    const root=loadRoot(); root.lastLog=log; saveRoot(root);
   }
 }
 
@@ -711,8 +1016,34 @@ function addWS(concept){
   document.getElementById('wc').textContent=weakSpots.length;
 }
 
+function removeWS(concept){
+  // Fuzzy match — concept string from model may not be identical
+  const idx=weakSpots.findIndex(w=>w.toLowerCase()===concept.toLowerCase());
+  if(idx===-1)return;
+  weakSpots.splice(idx,1);
+  // Rebuild sidebar list
+  const list=document.getElementById('wsList');
+  list.innerHTML='';
+  if(weakSpots.length===0){
+    list.innerHTML='<div class="ws-empty" id="wsEmpty">None flagged yet</div>';
+    document.getElementById('wsPill').classList.remove('on');
+  } else {
+    const mod=getCurrMod();
+    weakSpots.forEach(w=>{
+      const item=document.createElement('div');
+      item.className='ws-item';
+      item.innerHTML=`<span class="ws-mod">M${mod.num}</span>${w}`;
+      list.appendChild(item);
+    });
+    const p=document.getElementById('wsPill');
+    p.textContent=`${weakSpots.length} weak spot${weakSpots.length!==1?'s':''}`;
+  }
+  document.getElementById('wc').textContent=weakSpots.length;
+}
+
 function fmt(t){
   t=t.replace(/\[WEAK:[^\]]+\]/gi,'').trim();
+  t=t.replace(/\[CLEAR:[^\]]+\]/gi,'').trim();
   // Normalize [DRILL] to its own paragraph so the hr renders cleanly
   t=t.replace(/\s*\[DRILL\]\s*/gi,'\n\n<hr>\n\n');
   t=t.replace(/---LOG---[\s\S]+?---END---/g,'').trim();
@@ -844,7 +1175,7 @@ function endSession(){
 function switchMode(){
   // Only works from main screen — prevents mid-session mode switch
   backToMain();
-  hist=[];weakSpots=[];drills=0;
+  hist=[];weakSpots=[];drills=0;confirmedThisSession=[];
   document.getElementById('dc').textContent='0';
   document.getElementById('wc').textContent='0';
   document.getElementById('wsList').innerHTML='<div class="ws-empty" id="wsEmpty">None flagged yet</div>';
