@@ -1034,6 +1034,25 @@ body{
     </div>
   </div>
 
+  <!-- Capability Delta — what you can do now vs before -->
+  <div class="debrief-panel fade-up fade-up-3" id="capPanel" style="margin-top:.75rem">
+    <div class="debrief-head" onclick="toggleCap()">
+      <div class="debrief-head-left">
+        <span class="debrief-title">▲ Capability Delta</span>
+        <span class="debrief-badge" id="capBadge">—</span>
+      </div>
+      <span class="debrief-chevron">▶</span>
+    </div>
+    <div class="debrief-body" id="capBody">
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem">
+        <button class="debrief-btn debrief-btn-secondary capwin" data-days="30" onclick="setCapWindow(30,this)">30 days</button>
+        <button class="debrief-btn debrief-btn-secondary capwin" data-days="60" onclick="setCapWindow(60,this)">60 days</button>
+        <button class="debrief-btn debrief-btn-secondary capwin" data-days="9999" onclick="setCapWindow(9999,this)">All time</button>
+      </div>
+      <div id="capContent"></div>
+    </div>
+  </div>
+
   <div class="grid-2 fade-up fade-up-4">
 
     <!-- Python Curriculum -->
@@ -1495,8 +1514,7 @@ function toggleDebrief(){
 }
 
 function renderDebrief(){
-  let log=null;
-  try{log=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+  let log=getDrillLastLog();
 
   const badge=document.getElementById('debriefBadge');
   const logView=document.getElementById('debriefLogView');
@@ -1536,11 +1554,115 @@ function renderDebrief(){
   actions.style.display='flex';
 }
 
+// ── CAPABILITY DELTA ──────────────────────────────────
+let capWindowDays=30;
+let capOpen=false;
+function toggleCap(){
+  capOpen=!capOpen;
+  document.getElementById('capPanel').classList.toggle('open',capOpen);
+  localStorage.setItem('v11_capOpen',capOpen?'1':'0');
+}
+function setCapWindow(days,btn){
+  capWindowDays=days;
+  document.querySelectorAll('.capwin').forEach(b=>b.classList.remove('debrief-btn-primary'));
+  if(btn)btn.classList.add('debrief-btn-primary');
+  renderCap();
+}
+function renderCap(){
+  const all=getAllCoveredTopics();
+  const badge=document.getElementById('capBadge');
+  const content=document.getElementById('capContent');
+
+  if(!all.length){
+    badge.textContent='no data yet';
+    content.innerHTML=`<div class="debrief-empty">No covered concepts logged yet. As you drill, concepts you apply unprompted show up here as capability gained.</div>`;
+    return;
+  }
+
+  const now=new Date();
+  const cutoff=new Date(now); cutoff.setDate(now.getDate()-capWindowDays);
+  const inWindow=t=>{
+    if(!t.firstSeen)return capWindowDays>=9999; // undated (legacy) only count under "all time"
+    const d=parseLD(t.firstSeen);
+    return d>=cutoff;
+  };
+
+  const confirmedAll=all.filter(t=>t.confirmed);
+  const newConfirmed=confirmedAll.filter(inWindow);
+  const newCovered=all.filter(t=>!t.confirmed&&inWindow(t));
+  const winLabel=capWindowDays>=9999?'all time':`${capWindowDays}d`;
+
+  badge.textContent=`${newConfirmed.length} mastered · ${winLabel}`;
+
+  // Condense verbose concept strings to a lead identifier (matches drill-engine display).
+  // CCP entries pipe-join several concepts; take the first, then strip explanatory tail.
+  const condense=s=>{
+    let v=String(s).split('|')[0];           // first concept if pipe-joined
+    v=v.split(/\s[—–:]\s/)[0];               // drop tail after em/en-dash or colon
+    v=v.split(':')[0];                        // drop tail after bare colon
+    v=v.trim();
+    return v.length>60?v.slice(0,57)+'…':v;
+  };
+
+  const chip=(t,kind)=>{
+    const date=t.firstSeen?parseLD(t.firstSeen).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—';
+    const col=kind==='confirmed'?'var(--green)':'var(--text-3)';
+    const mark=kind==='confirmed'?'✓ ':'';
+    const label=condense(t.topic);
+    const full=String(t.topic).replace(/"/g,'&quot;');
+    const src=t.source.startsWith('ccp')?'CCP':t.source.startsWith('M')?t.source:'PY';
+    return `<div style="display:flex;justify-content:space-between;gap:.5rem;font-family:var(--fm);font-size:11px;padding:.25rem 0;border-bottom:1px solid var(--border)" title="${full}">
+      <span style="color:${col};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${mark}${label}</span>
+      <span style="color:var(--text-4);white-space:nowrap">${src} · ${date}</span>
+    </div>`;
+  };
+
+  // Collapse entries that condense to the same label (verbose CCP strings often duplicate).
+  // Keep the earliest firstSeen and confirmed=true if any duplicate was confirmed.
+  const dedupe=arr=>{
+    const m={};
+    arr.forEach(t=>{
+      const k=condense(t.topic).toLowerCase();
+      if(!m[k]) m[k]={...t};
+      else{
+        if(t.confirmed) m[k].confirmed=true;
+        if(t.firstSeen&&(!m[k].firstSeen||t.firstSeen<m[k].firstSeen)) m[k].firstSeen=t.firstSeen;
+      }
+    });
+    return Object.values(m);
+  };
+
+  let html='';
+  // Headline
+  html+=`<div class="debrief-last-log" style="margin-bottom:.6rem">
+    <div class="dl-header">Capability gained — ${winLabel}</div>
+    <div class="dl-row"><span class="dl-label">Mastered (applied unprompted)</span><span class="dl-val" style="color:var(--green)">${newConfirmed.length}</span></div>
+    <div class="dl-row"><span class="dl-label">Newly covered (drilled)</span><span class="dl-val">${newCovered.length}</span></div>
+    <div class="dl-row"><span class="dl-label">Total confirmed (all time)</span><span class="dl-val">${confirmedAll.length}</span></div>
+  </div>`;
+
+  const confDisp=dedupe(newConfirmed).sort((a,b)=>(b.firstSeen||'').localeCompare(a.firstSeen||''));
+  const covDisp=dedupe(newCovered).sort((a,b)=>(b.firstSeen||'').localeCompare(a.firstSeen||''));
+
+  if(confDisp.length){
+    html+=`<div style="font-family:var(--fm);font-size:10px;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin:.4rem 0 .2rem">Mastered this window</div>`;
+    html+=confDisp.map(t=>chip(t,'confirmed')).join('');
+  }
+  if(covDisp.length){
+    html+=`<div style="font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase;margin:.6rem 0 .2rem">Covered, not yet applied unprompted</div>`;
+    html+=covDisp.slice(0,12).map(t=>chip(t,'covered')).join('');
+    if(covDisp.length>12)html+=`<div style="font-family:var(--fm);font-size:10px;color:var(--text-4);padding-top:.3rem">+${covDisp.length-12} more</div>`;
+  }
+  if(!confDisp.length&&!covDisp.length){
+    html+=`<div class="debrief-empty">Nothing new in this window. Widen it, or run a drill — confirmed concepts (applied without prompting) are the ones that count as real gain.</div>`;
+  }
+  content.innerHTML=html;
+}
+
 let debriefRunning=false;
 async function runDebrief(){
   if(debriefRunning)return;
-  let log=null;
-  try{log=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+  let log=getDrillLastLog();
   if(!log)return;
 
   debriefRunning=true;
@@ -1759,6 +1881,34 @@ function saveCCP()    {localStorage.setItem('v9d_ccp',JSON.stringify(ccp));}
 function savePyDone() {localStorage.setItem('v10_pyDone',JSON.stringify(pyDone));}
 function saveMission(){localStorage.setItem('v11_mission',JSON.stringify(missionDone));}
 
+// ── DRILL STORE BRIDGE (reads consolidated sankofa_drill_v1, falls back to legacy keys) ──
+function loadDrillRoot(){
+  try{const r=JSON.parse(localStorage.getItem('sankofa_drill_v1')||'null'); if(r)return r;}catch(e){}
+  // legacy fallback — assemble a root-shaped object from old keys
+  const root={python:null,ccp:null,registry:{},lastLog:null};
+  try{root.python=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
+  try{root.ccp=JSON.parse(localStorage.getItem('drill_engine_ccp_state')||'null');}catch(e){}
+  try{root.registry=JSON.parse(localStorage.getItem('drill_engine_modules')||'{}');}catch(e){}
+  try{root.lastLog=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+  return root;
+}
+function getDrillLastLog(){return loadDrillRoot().lastLog;}
+function getDrillPython(){return loadDrillRoot().python;}
+// Flatten every covered topic across python + ccp subdomains + completed registry into
+// a single list of {topic, firstSeen, confirmed, source}. Tolerates legacy string entries.
+function getAllCoveredTopics(){
+  const root=loadDrillRoot();
+  const out=[];
+  const norm=(e,src)=>{
+    if(e&&typeof e==='object'&&'topic' in e) out.push({topic:e.topic,firstSeen:e.firstSeen||null,confirmed:!!e.confirmed,source:src});
+    else if(e!=null) out.push({topic:String(e),firstSeen:null,confirmed:false,source:src});
+  };
+  (root.python?.covered||[]).forEach(e=>norm(e,'python'));
+  if(root.ccp?.covered) for(const sid in root.ccp.covered){(root.ccp.covered[sid]||[]).forEach(e=>norm(e,'ccp:'+sid));}
+  if(root.registry) for(const k in root.registry){(root.registry[k]?.coveredTopics||[]).forEach(e=>norm(e,k));}
+  return out;
+}
+
 // ── DATES ─────────────────────────────────────────────
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function parseLD(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
@@ -1885,8 +2035,7 @@ function renderPyModules(){
   document.getElementById('pyMeta').textContent=doneMods+' / 7 modules';
 
   // Read drill engine state for live stats
-  let deState=null;
-  try{deState=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
+  let deState=getDrillPython();
   const deSuffix=deState?.lastActivity
     ?` · last drilled ${deState.lastActivity===todayStr()?'today':parseLD(deState.lastActivity).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
     :'';
@@ -1921,8 +2070,7 @@ function renderPyModules(){
   }
 
   // Next drill from last log — show if available and module matches
-  let lastLog=null;
-  try{lastLog=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
+  let lastLog=getDrillLastLog();
   const nextPromptEl=document.getElementById('drillNextPrompt');
   if(lastLog?.nextDrill&&nextMod&&lastLog.module===`M${nextMod.num}`){
     nextPromptEl.style.display='block';
@@ -2155,6 +2303,7 @@ function exportData(){
     v9d_start:localStorage.getItem('v9d_start')||'',
     v10_pyDone:localStorage.getItem('v10_pyDone')||'{}',
     v11_mission:localStorage.getItem('v11_mission')||'{}',
+    sankofa_drill_v1:localStorage.getItem('sankofa_drill_v1')||'null',
     drill_engine_state:localStorage.getItem('drill_engine_state')||'null',
     drill_engine_last_log:localStorage.getItem('drill_engine_last_log')||'null',
   };
@@ -2178,6 +2327,7 @@ function importData(evt){
       if(d.v9d_start)localStorage.setItem('v9d_start',d.v9d_start);
       if(d.v10_pyDone)localStorage.setItem('v10_pyDone',d.v10_pyDone);
       if(d.v11_mission)localStorage.setItem('v11_mission',d.v11_mission);
+      if(d.sankofa_drill_v1&&d.sankofa_drill_v1!=='null')localStorage.setItem('sankofa_drill_v1',d.sankofa_drill_v1);
       if(d.drill_engine_state&&d.drill_engine_state!=='null')localStorage.setItem('drill_engine_state',d.drill_engine_state);
       if(d.drill_engine_last_log&&d.drill_engine_last_log!=='null')localStorage.setItem('drill_engine_last_log',d.drill_engine_last_log);
       load();renderAll();
@@ -2351,6 +2501,7 @@ function renderAll(){
   renderCodedBadge();renderTargets();renderPhaseBrief();
   renderPhaseBars();renderHeatmap();renderSessions();
   renderDebrief();
+  renderCap();
 }
 
 load();
@@ -2367,6 +2518,12 @@ if(localStorage.getItem('v11_debriefOpen')==='1'){
   debriefOpen=true;
   document.getElementById('debriefPanel').classList.add('open');
 }
+// Restore capability delta open state + default window highlight
+if(localStorage.getItem('v11_capOpen')==='1'){
+  capOpen=true;
+  document.getElementById('capPanel').classList.add('open');
+}
+(function(){const b=document.querySelector('.capwin[data-days="30"]');if(b)b.classList.add('debrief-btn-primary');})();
 renderAll();checkSetup();
 </script>
 </body>
