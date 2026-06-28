@@ -7,8 +7,8 @@ Current: M2 Functions — send_message() and get_response() wired up.
 
 Build log:
   v0.1 — M2: functions, basic API call, terminal loop
-  v0.2 — M3+M4: conversation history (list of dicts), .env loading
-  v0.3 — M5: error handling, response parsing, session file logging
+  v0.2 — M3+M4: conversation history (list of dicts), .env loading, session file logging
+  v0.3 — M5: error handling, response parsing
   v0.4 — M6: refactor into ClaudeShell class
   v1.0 — M7: async streaming, system prompt config, JSON export
 """
@@ -16,6 +16,8 @@ Build log:
 import os
 import anthropic
 from dotenv import load_dotenv  # pip install python-dotenv
+from datetime import date
+
 
 # ── M4: Load API key from .env ────────────────────────────
 # Create a .env file in this directory with: ANTHROPIC_API_KEY=sk-...
@@ -89,6 +91,15 @@ def print_history(history):
 
 # ── Main loop ─────────────────────────────────────────────
 
+
+def log_turn(user_input, response_text):
+    today = date.today()
+    with open("session_log.txt", "a") as f:
+        f.write(f"[{today}] You: {user_input}\n")
+        f.write(f"[{today}] Claude: {response_text}\n")
+        f.write("---\n")
+        
+        
 def run():
     """Run the Claude Shell conversation loop."""
     print("── Claude Shell v0.1 ──────────────────────────")
@@ -119,8 +130,9 @@ def run():
         # M5 TODO: wrap this in try/except for API errors
         response = send_message(client, history, user_input, system_prompt)
         print_response(response)
+        log_turn(user_input, response)
 
-        # M4 TODO: write session to file after each turn
+        # M4 TODO: session logging via log_turn()
         # M6 TODO: refactor this loop into ClaudeShell class
         # M7 TODO: replace send_message with async streaming version
 
