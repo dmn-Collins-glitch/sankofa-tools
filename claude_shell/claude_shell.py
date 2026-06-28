@@ -127,12 +127,18 @@ def run():
             print("Exiting.")
             break
 
-        # M5 TODO: wrap this in try/except for API errors
-        response = send_message(client, history, user_input, system_prompt)
-        print_response(response)
-        log_turn(user_input, response)
+        # M5: error handling
+        try:
+            response = send_message(client, history, user_input, system_prompt)
+            print_response(response)
+            log_turn(user_input, response)
+        except Exception as e:
+            print(f"Error: {e}")
+            continue
 
-        # M4 TODO: session logging via log_turn()
+
+
+        # M4: session logging via log_turn()
         # M6 TODO: refactor this loop into ClaudeShell class
         # M7 TODO: replace send_message with async streaming version
 
