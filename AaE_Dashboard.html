@@ -3,49 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OPS · Damon · Applied AI Accelerator</title>
+<title>Sankofa · Damon · Applied AI Accelerator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ── THEME TOKENS ─────────────────────────────────── */
 :root {
-  --fd:'Syne',sans-serif;
-  --fb:'Figtree',sans-serif;
-  --fm:'Share Tech Mono',monospace;
+  --fd:'Fraunces', serif;
+  --fb:'Inter', sans-serif;
+  --fm:'IBM Plex Mono', monospace;
 }
 
 [data-theme="dark"] {
-  --bg:        #080C0D;
-  --bg2:       #0D1416;
-  --bg3:       #111A1C;
-  --surface:   #141F22;
-  --surface2:  #1A282C;
-  --surface3:  #1F3035;
-  --border:    #1E3035;
-  --border-mid:#2A4048;
-  --border-hi: #3A5560;
-  --text:      #D4E8E8;
-  --text-2:    #8BBCBC;
-  --text-3:    #4E7A80;
-  --text-4:    #2E5560;
-  --teal:      #00D4C8;
-  --teal-dim:  #00897F;
-  --teal-glow: rgba(0,212,200,.12);
-  --teal-bg:   rgba(0,212,200,.06);
-  --amber:     #F5A623;
-  --amber-dim: #C47B0A;
-  --amber-bg:  rgba(245,166,35,.08);
-  --amber-glow:rgba(245,166,35,.15);
-  --coral:     #FF6B4A;
-  --coral-bg:  rgba(255,107,74,.08);
-  --purple:    #A78BFA;
-  --purple-bg: rgba(167,139,250,.08);
-  --green:     #34D399;
-  --green-dim: #10B981;
-  --green-bg:  rgba(52,211,153,.08);
-  --red:       #F87171;
-  --red-bg:    rgba(248,113,113,.08);
-  --scanline:  rgba(0,212,200,.025);
+  --bg:        #0E0B14;
+  --bg2:       #150F1D;
+  --bg3:       #1B1526;
+  --surface:   #1B1526;
+  --surface2:  #221A2F;
+  --surface3:  #2A2138;
+  --border:    #2A2138;
+  --border-mid:#382C4A;
+  --border-hi: #4E4460;
+  --text:      #EDE6E0;
+  --text-2:    #B8ACC4;
+  --text-3:    #7A6F8C;
+  --text-4:    #4E4460;
+  --teal:      #C9982E;
+  --teal-dim:  #9A7620;
+  --teal-glow: rgba(201,152,46,.12);
+  --teal-bg:   rgba(201,152,46,.06);
+  --amber:     #D98F3A;
+  --amber-dim: #AD701F;
+  --amber-bg:  rgba(217,143,58,.08);
+  --amber-glow:rgba(217,143,58,.15);
+  --coral:     #B5533C;
+  --coral-bg:  rgba(181,83,60,.08);
+  --purple:    #8B6FA8;
+  --purple-bg: rgba(139,111,168,.08);
+  --green:     #7A9683;
+  --green-dim: #5C7A68;
+  --green-bg:  rgba(122,150,131,.08);
+  --red:       #C05C4E;
+  --red-bg:    rgba(192,92,78,.08);
+  --scanline:  rgba(201,152,46,.02);
   --shadow:    0 0 0 1px var(--border), 0 4px 24px rgba(0,0,0,.4);
   --shadow-glow: 0 0 0 1px var(--border-mid), 0 0 20px var(--teal-glow);
 }
@@ -64,23 +64,23 @@
   --text-2:    #4A4845;
   --text-3:    #7A7773;
   --text-4:    #A8A49E;
-  --teal:      #0A7A70;
-  --teal-dim:  #0D5C63;
-  --teal-glow: rgba(10,122,112,.08);
-  --teal-bg:   rgba(10,122,112,.06);
-  --amber:     #C47B0A;
-  --amber-dim: #A86608;
-  --amber-bg:  rgba(196,123,10,.07);
-  --amber-glow:rgba(196,123,10,.12);
-  --coral:     #C04B2A;
-  --coral-bg:  rgba(192,75,42,.07);
-  --purple:    #5B3FA0;
-  --purple-bg: rgba(91,63,160,.07);
-  --green:     #2A6B3A;
-  --green-dim: #1E5229;
-  --green-bg:  rgba(42,107,58,.07);
-  --red:       #B83232;
-  --red-bg:    rgba(184,50,50,.07);
+  --teal:      #9A7620;
+  --teal-dim:  #7A5C18;
+  --teal-glow: rgba(154,118,32,.08);
+  --teal-bg:   rgba(154,118,32,.06);
+  --amber:     #AD701F;
+  --amber-dim: #8C5A18;
+  --amber-bg:  rgba(173,112,31,.07);
+  --amber-glow:rgba(173,112,31,.12);
+  --coral:     #8F4030;
+  --coral-bg:  rgba(143,64,48,.07);
+  --purple:    #5F4A78;
+  --purple-bg: rgba(95,74,120,.07);
+  --green:     #4A6354;
+  --green-dim: #384B40;
+  --green-bg:  rgba(74,99,84,.07);
+  --red:       #A84438;
+  --red-bg:    rgba(168,68,56,.07);
   --scanline:  transparent;
   --shadow:    0 1px 3px rgba(0,0,0,.06), 0 0 0 1px var(--border);
   --shadow-glow: 0 0 0 1px var(--border-mid), 0 2px 12px rgba(0,0,0,.08);
@@ -169,9 +169,7 @@ body{
   letter-spacing:.25em;text-transform:uppercase;
   color:var(--teal);
 }
-[data-theme="dark"] .hdr-brand::before{
-  content:'▶ ';font-size:8px;animation:pulse-ring 2s infinite;
-}
+.hdr-mark{width:20px;height:20px;flex-shrink:0;margin-right:.1em;vertical-align:-4px}
 .hdr-pills{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
 .pill{
   font-family:var(--fm);font-size:10px;
@@ -218,7 +216,8 @@ body{
 .debrief-title{font-family:var(--fm);font-size:11px;color:var(--teal);letter-spacing:.15em;text-transform:uppercase}
 .debrief-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:2px;background:var(--teal-bg);border:1px solid var(--teal-dim);color:var(--teal)}
 .debrief-chevron{font-family:var(--fm);font-size:10px;color:var(--text-3);transition:transform .2s}
-.debrief-panel.open .debrief-chevron{transform:rotate(90deg)}
+.debrief-panel .collapse-mark{width:15px;height:15px;color:var(--text-3);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.debrief-panel.open .collapse-mark{transform:rotate(180deg);color:var(--teal)}
 .debrief-body{display:none;padding:.85rem 1.25rem;flex-direction:column;gap:.75rem}
 .debrief-panel.open .debrief-body{display:flex}
 .debrief-last-log{
@@ -413,6 +412,8 @@ body{
 .mi-tag.cert{border-color:var(--amber-dim);color:var(--amber);background:var(--amber-bg)}
 .mi-tag.code{border-color:var(--teal-dim);color:var(--teal);background:var(--teal-bg)}
 .mi-tag.review{border-color:var(--green-dim);color:var(--green);background:var(--green-bg)}
+.mi-tag.def{border-color:#4E7A38;color:#4E7A38;background:rgba(78,122,56,.08)}
+[data-theme="dark"] .mi-tag.def{border-color:#7DB85A;color:#7DB85A;background:rgba(125,184,90,.08)}
 
 /* ── 2-COL GRID ───────────────────────────────────── */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
@@ -426,6 +427,26 @@ body{
   box-shadow:var(--shadow);
   overflow:hidden;
 }
+/* ── COLLAPSIBLE SECTIONS ─────────────────────────── */
+.collapse-mark{
+  width:15px;height:15px;flex-shrink:0;color:var(--gold);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.collapse-panel.open .collapse-mark{transform:rotate(180deg)}
+.collapse-head{cursor:pointer}
+.collapse-ledger{
+  font-family:var(--fm);font-size:10px;color:var(--text-4);
+  letter-spacing:.02em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  transition:opacity .15s;margin-left:.15rem;
+}
+.collapse-panel.open .collapse-ledger{display:none}
+.collapse-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1);
+}
+.collapse-panel.open .collapse-body{max-height:2400px}
+.hdr-grp-l{display:flex;align-items:center;gap:.5rem;min-width:0;overflow:hidden}
+.hdr-grp-r{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
 .panel-head{
   display:flex;align-items:center;justify-content:space-between;
   padding:.65rem 1rem;
@@ -652,46 +673,6 @@ body{
 .ti-val{font-family:var(--fm);font-size:22px;color:var(--text);line-height:1}
 .ti-target{font-family:var(--fm);font-size:9.5px;color:var(--text-4);margin-top:2px}
 
-/* ── HEATMAP ──────────────────────────────────────── */
-.hm-panel{
-  background:var(--surface);
-  border:1px solid var(--border-mid);
-  border-radius:4px;
-  padding:1rem 1.25rem;
-  margin-bottom:1rem;
-  overflow-x:auto;
-  box-shadow:var(--shadow);
-}
-.hm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
-.hm-title{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
-.hm-sub{font-family:var(--fm);font-size:10px;color:var(--text-4)}
-.hm-grid{display:grid;grid-template-rows:13px repeat(7,13px);grid-template-columns:20px repeat(24,13px);gap:2px;min-width:380px}
-.hm-wl{font-family:var(--fm);font-size:8px;color:var(--text-4);display:flex;align-items:center;justify-content:center}
-.hm-dl{font-family:var(--fm);font-size:8px;color:var(--text-4);display:flex;align-items:center}
-.hm-cell{
-  width:13px;height:13px;border-radius:2px;
-  background:var(--bg3);
-  position:relative;transition:transform .1s;cursor:default;
-}
-.hm-cell:hover{transform:scale(1.5);z-index:2}
-.hm-cell[data-tip]:hover::after{
-  content:attr(data-tip);
-  position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
-  background:var(--surface3);color:var(--text);
-  font-family:var(--fm);font-size:9px;padding:3px 7px;border-radius:2px;
-  white-space:nowrap;pointer-events:none;z-index:10;
-  border:1px solid var(--border-mid);
-}
-.l1{background:#1A4A4F}.l2{background:#1A7070}.l3{background:#009090}
-.l4{background:var(--teal);box-shadow:0 0 4px var(--teal-glow)}
-.coded{outline:1px solid var(--green-dim);outline-offset:1px}
-.future{background:transparent!important;border:1px dashed var(--border)}
-.istoday{outline:2px solid var(--amber)!important;outline-offset:1px;box-shadow:0 0 6px var(--amber-glow)}
-.hm-leg{display:flex;align-items:center;gap:.4rem;margin-top:.6rem;flex-wrap:wrap}
-.hm-leg span{font-family:var(--fm);font-size:9px;color:var(--text-4)}
-.hm-sw{width:10px;height:10px;border-radius:1px;flex-shrink:0}
-.hm-sep{width:1px;height:9px;background:var(--border-mid);margin:0 2px}
-
 /* ── SESSION LIST ─────────────────────────────────── */
 .sl-panel{
   background:var(--surface);
@@ -780,7 +761,8 @@ body{
 .pb2-right{display:flex;align-items:center;gap:.75rem}
 .pb2-wks{font-family:var(--fm);font-size:10px;color:var(--text-4)}
 .pb2-chevron{font-family:var(--fm);font-size:10px;color:var(--text-3);transition:transform .2s}
-.phase-brief.open .pb2-chevron{transform:rotate(90deg)}
+.phase-brief .collapse-mark{width:15px;height:15px;color:var(--text-3);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.phase-brief.open .collapse-mark{transform:rotate(180deg);color:var(--gold)}
 .pb2-body{display:none;padding:.85rem 1.1rem}
 .phase-brief.open .pb2-body{display:block}
 .pb2-cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.85rem}
@@ -909,35 +891,6 @@ body{
 .bk-btn:hover{background:var(--surface2);border-color:var(--border-hi)}
 .bk-msg{font-family:var(--fm);font-size:10px;color:var(--green);display:none;letter-spacing:.06em}
 .bk-file{display:none}
-/* ── GIT COMMIT PANEL ─────────────────────────────── */
-.git-panel{
-  background:var(--surface);border:1px solid var(--border);
-  border-left:3px solid var(--green);border-radius:3px;
-  padding:.75rem 1rem;margin-top:.75rem;
-}
-.git-head{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:.6rem;
-}
-.git-title{font-family:var(--fm);font-size:9.5px;color:var(--green);letter-spacing:.12em;text-transform:uppercase}
-.git-repo{font-family:var(--fm);font-size:9px;color:var(--text-4);letter-spacing:.04em;text-decoration:none}
-.git-repo:hover{color:var(--text-3)}
-.git-cmds{display:flex;flex-direction:column;gap:.35rem}
-.git-row{
-  display:flex;align-items:center;justify-content:space-between;gap:.5rem;
-  background:var(--bg3);border:1px solid var(--border);border-radius:2px;
-  padding:.35rem .6rem;
-}
-.git-cmd{font-family:var(--fm);font-size:11.5px;color:var(--text-2);flex:1}
-.git-cmd em{color:var(--text-4);font-style:normal}
-.git-copy{
-  font-family:var(--fm);font-size:9px;color:var(--text-4);
-  background:none;border:1px solid var(--border);border-radius:2px;
-  padding:1px 6px;cursor:pointer;letter-spacing:.06em;
-  transition:all .1s;white-space:nowrap;flex-shrink:0;
-}
-.git-copy:hover{color:var(--green);border-color:var(--green)}
-.git-note{font-family:var(--fm);font-size:9.5px;color:var(--text-4);margin-top:.5rem;letter-spacing:.03em;line-height:1.6}
 </style>
 </head>
 <body>
@@ -957,10 +910,10 @@ body{
   <!-- Header -->
   <div class="hdr fade-up">
     <div class="hdr-left">
-      <div class="hdr-brand">OPS · DAMON · APPLIED AI ACCELERATOR</div>
+      <div class="hdr-brand"><svg class="hdr-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.4" fill="currentColor"/></svg>SANKOFA · DAMON · APPLIED AI ACCELERATOR</div>
       <div class="hdr-pills">
         <span class="pill pill-phase" id="hdrPhase">PHASE —</span>
-        <span class="pill pill-week" id="hdrWeek">WK — / 24</span>
+        <span class="pill pill-week" id="hdrWeek">WK —</span>
       </div>
     </div>
     <div class="hdr-right">
@@ -1022,7 +975,7 @@ body{
         <span class="debrief-title">◎ Drill Debrief</span>
         <span class="debrief-badge" id="debriefBadge">No session yet</span>
       </div>
-      <span class="debrief-chevron">▶</span>
+      <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
     </div>
     <div class="debrief-body" id="debriefBody">
       <div id="debriefLogView"></div>
@@ -1034,33 +987,21 @@ body{
     </div>
   </div>
 
-  <!-- Capability Delta — what you can do now vs before -->
-  <div class="debrief-panel fade-up fade-up-3" id="capPanel" style="margin-top:.75rem">
-    <div class="debrief-head" onclick="toggleCap()">
-      <div class="debrief-head-left">
-        <span class="debrief-title">▲ Capability Delta</span>
-        <span class="debrief-badge" id="capBadge">—</span>
-      </div>
-      <span class="debrief-chevron">▶</span>
-    </div>
-    <div class="debrief-body" id="capBody">
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem">
-        <button class="debrief-btn debrief-btn-secondary capwin" data-days="30" onclick="setCapWindow(30,this)">30 days</button>
-        <button class="debrief-btn debrief-btn-secondary capwin" data-days="60" onclick="setCapWindow(60,this)">60 days</button>
-        <button class="debrief-btn debrief-btn-secondary capwin" data-days="9999" onclick="setCapWindow(9999,this)">All time</button>
-      </div>
-      <div id="capContent"></div>
-    </div>
-  </div>
-
   <div class="grid-2 fade-up fade-up-4">
 
     <!-- Python Curriculum -->
-    <div class="panel">
-      <div class="panel-head">
-        <span class="panel-title">Python Curriculum</span>
-        <span class="panel-meta" id="pyMeta">0 / 7 modules</span>
+    <div class="panel collapse-panel open" id="secPython">
+      <div class="panel-head collapse-head" onclick="toggleSec('secPython')">
+        <div class="hdr-grp-l">
+          <span class="panel-title">Python Curriculum</span>
+          <span class="collapse-ledger" id="pyLedger">—</span>
+        </div>
+        <div class="hdr-grp-r">
+          <span class="panel-meta" id="pyMeta">0 / 7 modules</span>
+          <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
+        </div>
       </div>
+      <div class="collapse-body">
       <div class="py-body">
         <div class="py-ring-row">
           <div class="py-ring">
@@ -1097,6 +1038,7 @@ body{
           <div class="drill-prompt-text" id="drillNextText"></div>
           <div class="drill-prompt-hint" id="drillNextHint"></div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -1189,7 +1131,7 @@ body{
         <div class="ctx" id="ctx-cert">
           <div class="ctx-row">
             <div><div class="ctx-lbl">Cert</div>
-              <select id="certWhich"><option>AWS CCP</option><option>AWS SAA</option><option>DL.AI: Evals</option><option>DL.AI: Agents</option><option>AWS AI Practitioner</option></select>
+              <select id="certWhich"><option>AWS CCP</option><option>AWS SAA</option><option>DL.AI: Evals</option><option>DL.AI: Agents</option><option>AWS AI Practitioner</option><option>Anthropic CCP</option></select>
             </div>
             <div><div class="ctx-lbl">Method</div>
               <select id="certMethod"><option>Mock exam</option><option>Video lesson</option><option>Reading / docs</option><option>Flashcards</option><option>Practice Qs</option></select>
@@ -1217,7 +1159,7 @@ body{
         <div class="ctx" id="ctx-project">
           <div class="ctx-row">
             <div><div class="ctx-lbl">Project</div>
-              <select id="projWhich"><option>Trading Framework (flagship)</option><option>Sekhem AI Tool</option><option>Claude Shell</option><option>EvalKit</option><option>ReviewLoop</option><option>AgentForge</option><option>CloudMind</option></select>
+              <select id="projWhich"><option>Trading Framework (flagship)</option><option>Sekhem AI Tool</option><option>Claude Shell</option><option>EvalKit / VerifAI</option><option>ReviewLoop</option><option>AgentForge</option><option>CloudMind</option></select>
             </div>
             <div><div class="ctx-lbl">Work type</div>
               <select id="projType"><option>Planning / design</option><option>Building a feature</option><option>Debugging</option><option>Testing / evals</option><option>Deploying</option><option>Polishing / README</option></select>
@@ -1256,12 +1198,20 @@ body{
   </div>
 
   <!-- This Week -->
-  <div class="week-panel fade-up fade-up-5">
-    <div class="week-head">
-      <span class="week-title">This Week</span>
-      <span class="week-meta" id="weekMeta">—</span>
+  <div class="week-panel collapse-panel open fade-up fade-up-5" id="secWeek">
+    <div class="week-head collapse-head" onclick="toggleSec('secWeek')">
+      <div class="hdr-grp-l">
+        <span class="week-title">This Week</span>
+        <span class="collapse-ledger" id="weekLedger">—</span>
+      </div>
+      <div class="hdr-grp-r">
+        <span class="week-meta" id="weekMeta">—</span>
+        <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
+      </div>
     </div>
+    <div class="collapse-body">
     <div class="targets-grid" id="targetsGrid"></div>
+    </div>
   </div>
 
   <!-- Phase Brief -->
@@ -1273,7 +1223,7 @@ body{
       </div>
       <div class="pb2-right">
         <span class="pb2-wks" id="pb2Wks">Wks 1–6</span>
-        <span class="pb2-chevron">▶</span>
+        <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
       </div>
     </div>
     <div class="pb2-body" id="pb2Body">
@@ -1291,74 +1241,39 @@ body{
     </div>
   </div>
 
-  <!-- Heatmap -->
-  <div class="hm-panel fade-up fade-up-6">
-    <div class="hm-head">
-      <span class="hm-title">24-Week Activity</span>
-      <span class="hm-sub" id="hmSub"></span>
-    </div>
-    <div class="hm-grid" id="hmGrid"></div>
-    <div class="hm-leg">
-      <span>Less</span>
-      <div class="hm-sw" style="background:var(--bg3);border:1px solid var(--border)"></div>
-      <div class="hm-sw l1"></div><div class="hm-sw l2"></div><div class="hm-sw l3"></div><div class="hm-sw l4"></div>
-      <span>More</span>
-      <div class="hm-sep"></div>
-      <div class="hm-sw coded" style="background:var(--bg3)"></div><span>coded</span>
-      <div class="hm-sep"></div>
-      <div class="hm-sw istoday" style="background:var(--bg3)"></div><span>today</span>
-    </div>
-  </div>
-
   <!-- Phase Bars -->
   <div class="pb-panel">
-    <div class="pb-head">24-Week Phase Progress</div>
+    <div class="pb-head">Phase Progress</div>
     <div class="pb-grid">
-      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#A78BFA;width:0%"></div></div><div class="pb-wks">Wks 1–6</div></div>
-      <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#00D4C8;width:0%"></div></div><div class="pb-wks">Wks 7–13</div></div>
-      <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#F5A623;width:0%"></div></div><div class="pb-wks">Wks 14–20</div></div>
-      <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#FF6B4A;width:0%"></div></div><div class="pb-wks">Wks 21–24</div></div>
+      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#8B6FA8;width:0%"></div></div><div class="pb-wks">Wks 1–6</div></div>
+      <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#C9982E;width:0%"></div></div><div class="pb-wks">Wks 7–13</div></div>
+      <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#D98F3A;width:0%"></div></div><div class="pb-wks">Wks 14–20</div></div>
+      <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#B5533C;width:0%"></div></div><div class="pb-wks">Wks 21–24</div></div>
     </div>
-  </div>
-
-  <!-- Git Commit -->
-  <div class="git-panel">
-    <div class="git-head">
-      <span class="git-title">⬡ Daily Commit</span>
-      <a class="git-repo" href="https://github.com/dmn-Collins-glitch/sankofa-tools" target="_blank">dmn-Collins-glitch/sankofa-tools ↗</a>
-    </div>
-    <div class="git-cmds">
-      <div class="git-row">
-        <span class="git-cmd">git add <em>&lt;filename&gt;</em></span>
-        <button class="git-copy" onclick="copyCmd(this,'git add ')">copy</button>
-      </div>
-      <div class="git-row">
-        <span class="git-cmd">git commit -m <em>"description"</em></span>
-        <button class="git-copy" onclick="copyCmd(this,'git commit -m &quot;&quot;')">copy</button>
-      </div>
-      <div class="git-row">
-        <span class="git-cmd">git push</span>
-        <button class="git-copy" onclick="copyCmd(this,'git push')">copy</button>
-      </div>
-    </div>
-    <div class="git-note">cd ~/dev/projects/sankofa-tools &nbsp;·&nbsp; run from repo directory &nbsp;·&nbsp; one commit = streak alive</div>
   </div>
 
   <!-- Session List -->
-  <div class="sl-panel">
-    <div class="sl-head">
-      <span class="sl-head-l">Recent Sessions</span>
+  <div class="sl-panel collapse-panel open" id="secSessions">
+    <div class="sl-head collapse-head" onclick="toggleSec('secSessions')">
+      <div class="hdr-grp-l">
+        <span class="sl-head-l">Recent Sessions</span>
+        <span class="collapse-ledger" id="slLedger">—</span>
+      </div>
       <div class="sl-head-r">
         <span class="sl-count" id="slCount"></span>
-        <span class="sl-toggle" id="slToggle" onclick="toggleSessions()" style="display:none">show all</span>
+        <span class="sl-toggle" id="slToggle" onclick="event.stopPropagation();toggleSessions()" style="display:none">show all</span>
+        <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
       </div>
     </div>
+    <div class="collapse-body">
     <div class="sl-list" id="slList"></div>
+    </div>
   </div>
 
   <!-- Footer Links -->
   <div class="footer-bar">
     <a class="fl-link" href="AaE_Plan.html"><div class="fl-dot" style="background:var(--teal)"></div>Plan</a>
+    <div class="fl-sep"></div>
     <div class="fl-sep"></div>
     <a class="fl-link" href="AaE_Plan.html#protocol"><div class="fl-dot" style="background:var(--purple)"></div>Protocol</a>
     <div class="fl-sep"></div>
@@ -1514,7 +1429,8 @@ function toggleDebrief(){
 }
 
 function renderDebrief(){
-  let log=getDrillLastLog();
+  let log=null;
+  try{log=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
 
   const badge=document.getElementById('debriefBadge');
   const logView=document.getElementById('debriefLogView');
@@ -1527,15 +1443,16 @@ function renderDebrief(){
     return;
   }
 
-  const isCCP = log.mode === 'ccp';
-  const moduleLabel = isCCP
+  const isCertDrill = log.mode === 'ccp' || log.mode === 'saa';
+  const certLabel = log.mode === 'saa' ? 'SAA' : 'CCP';
+  const moduleLabel = isCertDrill
     ? `${log.domain} · ${log.domainName}`
     : `${log.module} · ${log.moduleName}`;
-  const subLabel = isCCP ? `${log.subdomain} · ${log.subdomainName}` : null;
+  const subLabel = isCertDrill ? `${log.subdomain} · ${log.subdomainName}` : null;
 
   // Format date display
   const dayLabel=log.date===todayStr()?'TODAY':parseLD(log.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();
-  badge.textContent=`${isCCP?log.domain:log.module} · ${dayLabel}`;
+  badge.textContent=`${isCertDrill?log.domain:log.module} · ${dayLabel}`;
 
   const wsHtml=log.weakSpots?.length
     ?log.weakSpots.map(w=>`<span class="debrief-ws-chip">${w}</span>`).join('')
@@ -1554,115 +1471,11 @@ function renderDebrief(){
   actions.style.display='flex';
 }
 
-// ── CAPABILITY DELTA ──────────────────────────────────
-let capWindowDays=30;
-let capOpen=false;
-function toggleCap(){
-  capOpen=!capOpen;
-  document.getElementById('capPanel').classList.toggle('open',capOpen);
-  localStorage.setItem('v11_capOpen',capOpen?'1':'0');
-}
-function setCapWindow(days,btn){
-  capWindowDays=days;
-  document.querySelectorAll('.capwin').forEach(b=>b.classList.remove('debrief-btn-primary'));
-  if(btn)btn.classList.add('debrief-btn-primary');
-  renderCap();
-}
-function renderCap(){
-  const all=getAllCoveredTopics();
-  const badge=document.getElementById('capBadge');
-  const content=document.getElementById('capContent');
-
-  if(!all.length){
-    badge.textContent='no data yet';
-    content.innerHTML=`<div class="debrief-empty">No covered concepts logged yet. As you drill, concepts you apply unprompted show up here as capability gained.</div>`;
-    return;
-  }
-
-  const now=new Date();
-  const cutoff=new Date(now); cutoff.setDate(now.getDate()-capWindowDays);
-  const inWindow=t=>{
-    if(!t.firstSeen)return capWindowDays>=9999; // undated (legacy) only count under "all time"
-    const d=parseLD(t.firstSeen);
-    return d>=cutoff;
-  };
-
-  const confirmedAll=all.filter(t=>t.confirmed);
-  const newConfirmed=confirmedAll.filter(inWindow);
-  const newCovered=all.filter(t=>!t.confirmed&&inWindow(t));
-  const winLabel=capWindowDays>=9999?'all time':`${capWindowDays}d`;
-
-  badge.textContent=`${newConfirmed.length} mastered · ${winLabel}`;
-
-  // Condense verbose concept strings to a lead identifier (matches drill-engine display).
-  // CCP entries pipe-join several concepts; take the first, then strip explanatory tail.
-  const condense=s=>{
-    let v=String(s).split('|')[0];           // first concept if pipe-joined
-    v=v.split(/\s[—–:]\s/)[0];               // drop tail after em/en-dash or colon
-    v=v.split(':')[0];                        // drop tail after bare colon
-    v=v.trim();
-    return v.length>60?v.slice(0,57)+'…':v;
-  };
-
-  const chip=(t,kind)=>{
-    const date=t.firstSeen?parseLD(t.firstSeen).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—';
-    const col=kind==='confirmed'?'var(--green)':'var(--text-3)';
-    const mark=kind==='confirmed'?'✓ ':'';
-    const label=condense(t.topic);
-    const full=String(t.topic).replace(/"/g,'&quot;');
-    const src=t.source.startsWith('ccp')?'CCP':t.source.startsWith('M')?t.source:'PY';
-    return `<div style="display:flex;justify-content:space-between;gap:.5rem;font-family:var(--fm);font-size:11px;padding:.25rem 0;border-bottom:1px solid var(--border)" title="${full}">
-      <span style="color:${col};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${mark}${label}</span>
-      <span style="color:var(--text-4);white-space:nowrap">${src} · ${date}</span>
-    </div>`;
-  };
-
-  // Collapse entries that condense to the same label (verbose CCP strings often duplicate).
-  // Keep the earliest firstSeen and confirmed=true if any duplicate was confirmed.
-  const dedupe=arr=>{
-    const m={};
-    arr.forEach(t=>{
-      const k=condense(t.topic).toLowerCase();
-      if(!m[k]) m[k]={...t};
-      else{
-        if(t.confirmed) m[k].confirmed=true;
-        if(t.firstSeen&&(!m[k].firstSeen||t.firstSeen<m[k].firstSeen)) m[k].firstSeen=t.firstSeen;
-      }
-    });
-    return Object.values(m);
-  };
-
-  let html='';
-  // Headline
-  html+=`<div class="debrief-last-log" style="margin-bottom:.6rem">
-    <div class="dl-header">Capability gained — ${winLabel}</div>
-    <div class="dl-row"><span class="dl-label">Mastered (applied unprompted)</span><span class="dl-val" style="color:var(--green)">${newConfirmed.length}</span></div>
-    <div class="dl-row"><span class="dl-label">Newly covered (drilled)</span><span class="dl-val">${newCovered.length}</span></div>
-    <div class="dl-row"><span class="dl-label">Total confirmed (all time)</span><span class="dl-val">${confirmedAll.length}</span></div>
-  </div>`;
-
-  const confDisp=dedupe(newConfirmed).sort((a,b)=>(b.firstSeen||'').localeCompare(a.firstSeen||''));
-  const covDisp=dedupe(newCovered).sort((a,b)=>(b.firstSeen||'').localeCompare(a.firstSeen||''));
-
-  if(confDisp.length){
-    html+=`<div style="font-family:var(--fm);font-size:10px;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin:.4rem 0 .2rem">Mastered this window</div>`;
-    html+=confDisp.map(t=>chip(t,'confirmed')).join('');
-  }
-  if(covDisp.length){
-    html+=`<div style="font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase;margin:.6rem 0 .2rem">Covered, not yet applied unprompted</div>`;
-    html+=covDisp.slice(0,12).map(t=>chip(t,'covered')).join('');
-    if(covDisp.length>12)html+=`<div style="font-family:var(--fm);font-size:10px;color:var(--text-4);padding-top:.3rem">+${covDisp.length-12} more</div>`;
-  }
-  if(!confDisp.length&&!covDisp.length){
-    html+=`<div class="debrief-empty">Nothing new in this window. Widen it, or run a drill — confirmed concepts (applied without prompting) are the ones that count as real gain.</div>`;
-  }
-  content.innerHTML=html;
-}
-
 let debriefRunning=false;
 async function runDebrief(){
   if(debriefRunning)return;
-  let log=getDrillLastLog();
+  let log=null;
+  try{log=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
   if(!log)return;
 
   debriefRunning=true;
@@ -1674,8 +1487,28 @@ async function runDebrief(){
   out.innerHTML='<span class="debrief-cursor"></span>';
 
   const isCCP = log.mode === 'ccp';
+  const isSAA = log.mode === 'saa';
+  const isCertDrill = isCCP || isSAA;
 
-  const prompt = isCCP
+  const prompt = isSAA
+    ? `You are a concise AWS SAA-C03 exam coach. Damon just finished an SAA-C03 drill session. Give him a tight, honest debrief in 6-8 lines max.
+
+SESSION DATA:
+Domain: ${log.domain} · ${log.domainName}
+Subdomain: ${log.subdomain} · ${log.subdomainName}
+Drills completed: ${log.drills||0}
+Weak spots flagged: ${log.weakSpots?.length?log.weakSpots.join(', '):'None'}
+Next focus: ${log.nextFocus||'Not specified'}
+${log.nextQuestion?'Next question cued:\n'+log.nextQuestion:''}
+
+DEBRIEF FORMAT (follow exactly):
+1. One-line honest assessment of where he stands on this subdomain
+2. If weak spots: one sentence on each — the exact architecture decision the exam tests and the fastest fix
+3. One specific action before next session (concrete — specific subdomain/concept to review or practice scenario type)
+4. One line: what mastering this domain unlocks on the SAA-C03
+
+Be direct. No filler. Use plain text, no markdown headers.`
+    : isCCP
     ? `You are a concise AWS CCP exam coach. Damon just finished a CCP drill session. Give him a tight, honest debrief in 6-8 lines max.
 
 SESSION DATA:
@@ -1775,13 +1608,13 @@ function fmtDebrief(t){
 
 // ── CONSTANTS ─────────────────────────────────────────
 const PHASES = [
-  {num:1,wk:[1,6],   color:'#A78BFA',label:'Foundation',
+  {num:1,wk:[1,6],   color:'#8B6FA8',label:'Foundation',
    northStar:'Claude Shell is the forcing function — not the output. Every Python module unlocks a shell feature. CCP drilling is domain-targeted, not full-mock. Leave Phase 1 with the cert passed, the shell shipped, and <strong>every module understood through code you wrote and can explain.</strong>'},
-  {num:2,wk:[7,13],  color:'#00D4C8',label:'Eval Layer',
+  {num:2,wk:[7,13],  color:'#C9982E',label:'Eval Layer',
    northStar:'"How do you know if your AI is working?" — Phase 2 is your answer. Build the evals mindset AND the code to back it up. <strong>The HITL project here is what makes you non-generic.</strong>'},
-  {num:3,wk:[14,20], color:'#F5A623',label:'Agentic',
+  {num:3,wk:[14,20], color:'#D98F3A',label:'Agentic',
    northStar:'The jump from "I call the API" to "I run a reliable agentic pipeline in the cloud" is <strong>the threshold where freelance work becomes viable at real scope.</strong> AgentForge runs on LangGraph. Both projects must be deployed, not just local.'},
-  {num:4,wk:[21,24], color:'#FF6B4A',label:'Client Ready',
+  {num:4,wk:[21,24], color:'#B5533C',label:'Client Ready',
    northStar:'Stop building, start operating. The projects become a service menu. READMEs are case studies, not documentation. <strong>First client engagement or active pipeline closes by Week 24.</strong> Sekhem is the template — real client, real problem, real stakes.'}
 ];
 
@@ -1838,19 +1671,16 @@ const PHASE_MISSIONS = {
     ];
   })(),
   2:[
-    {text:'Study AWS SAA for at least 45 minutes',      hint:'Focus: VPC, EC2, S3, Lambda, IAM.',                  tag:'cert',   cat:'cert'},
-    {text:'Work on EvalKit or ReviewLoop project',      hint:'Even 30 minutes of building beats 0.',               tag:'code',   cat:'project'},
-    {text:'Run one Python drill or code exercise',      hint:'Keep the coding streak alive.',                      tag:'code',   cat:'drill'},
+    {text:'Run one AWS SAA-C03 domain drill',             hint:'Use the Drill Engine — SAA mode. One subdomain per session.',tag:'cert',   cat:'cert'},
+    {text:'Work on Sekhem AI or Cleaning Ops project',   hint:'Even 30 minutes of building beats 0.',               tag:'code',   cat:'project'},
   ],
   3:[
-    {text:'Build something on AgentForge or CloudMind', hint:'Must be deployed, not just local.',                  tag:'code',   cat:'project'},
-    {text:'Study DL.AI Agents or Bedrock labs',         hint:'Pair study with what you\'re building.',             tag:'cert',   cat:'cert'},
-    {text:'Review yesterday\'s code — improve one thing',hint:'Refactor, add error handling, or improve naming.',  tag:'review', cat:'review'},
+    {text:'Build something on AgentForge or CloudMind',  hint:'Must be deployed, not just local.',                  tag:'code',   cat:'project'},
+    {text:'Study DL.AI Agents or Bedrock labs',          hint:'Pair study with what you\'re building.',             tag:'cert',   cat:'cert'},
   ],
   4:[
-    {text:'Polish one project README with screenshots', hint:'One well-documented project beats five undocumented.',tag:'review', cat:'review'},
-    {text:'Reach out to one potential client or collaborator',hint:'Sekhem is the template — people in your circle with real AI problems.',tag:'review', cat:'review'},
-    {text:'Study for AWS AI Practitioner (AIF-C01)',    hint:'Final cert. Focus: foundation models, responsible AI.',tag:'cert',  cat:'cert'},
+    {text:'Polish one project README with screenshots',  hint:'One well-documented project beats five undocumented.',tag:'review', cat:'review'},
+    {text:'Study for AWS AI Practitioner (AIF-C01)',     hint:'Final cert. Focus: foundation models, responsible AI.',tag:'cert',  cat:'cert'},
   ],
 };
 
@@ -1881,34 +1711,6 @@ function saveCCP()    {localStorage.setItem('v9d_ccp',JSON.stringify(ccp));}
 function savePyDone() {localStorage.setItem('v10_pyDone',JSON.stringify(pyDone));}
 function saveMission(){localStorage.setItem('v11_mission',JSON.stringify(missionDone));}
 
-// ── DRILL STORE BRIDGE (reads consolidated sankofa_drill_v1, falls back to legacy keys) ──
-function loadDrillRoot(){
-  try{const r=JSON.parse(localStorage.getItem('sankofa_drill_v1')||'null'); if(r)return r;}catch(e){}
-  // legacy fallback — assemble a root-shaped object from old keys
-  const root={python:null,ccp:null,registry:{},lastLog:null};
-  try{root.python=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
-  try{root.ccp=JSON.parse(localStorage.getItem('drill_engine_ccp_state')||'null');}catch(e){}
-  try{root.registry=JSON.parse(localStorage.getItem('drill_engine_modules')||'{}');}catch(e){}
-  try{root.lastLog=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
-  return root;
-}
-function getDrillLastLog(){return loadDrillRoot().lastLog;}
-function getDrillPython(){return loadDrillRoot().python;}
-// Flatten every covered topic across python + ccp subdomains + completed registry into
-// a single list of {topic, firstSeen, confirmed, source}. Tolerates legacy string entries.
-function getAllCoveredTopics(){
-  const root=loadDrillRoot();
-  const out=[];
-  const norm=(e,src)=>{
-    if(e&&typeof e==='object'&&'topic' in e) out.push({topic:e.topic,firstSeen:e.firstSeen||null,confirmed:!!e.confirmed,source:src});
-    else if(e!=null) out.push({topic:String(e),firstSeen:null,confirmed:false,source:src});
-  };
-  (root.python?.covered||[]).forEach(e=>norm(e,'python'));
-  if(root.ccp?.covered) for(const sid in root.ccp.covered){(root.ccp.covered[sid]||[]).forEach(e=>norm(e,'ccp:'+sid));}
-  if(root.registry) for(const k in root.registry){(root.registry[k]?.coveredTopics||[]).forEach(e=>norm(e,k));}
-  return out;
-}
-
 // ── DATES ─────────────────────────────────────────────
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function parseLD(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
@@ -1916,19 +1718,15 @@ function localStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(
 function currWk(){
   if(!startStr)return 1;
   const diff=Math.floor((parseLD(todayStr())-parseLD(startStr))/86400000);
-  return Math.min(24,Math.max(1,Math.ceil((diff+1)/7)));
+  return Math.max(1,Math.ceil((diff+1)/7));
 }
 function wkOf(ds){
   if(!startStr)return 1;
   const diff=Math.floor((parseLD(ds)-parseLD(startStr))/86400000);
   if(diff<0)return 0;
-  return Math.min(24,Math.ceil((diff+1)/7));
+  return Math.ceil((diff+1)/7);
 }
-function dayI(ds){
-  if(!startStr)return -1;
-  return Math.floor((parseLD(ds)-parseLD(startStr))/86400000);
-}
-function getPhase(wk){return PHASES.find(p=>wk>=p.wk[0]&&wk<=p.wk[1])||PHASES[0];}
+function getPhase(wk){return PHASES.find(p=>wk>=p.wk[0]&&wk<=p.wk[1])||PHASES[PHASES.length-1];}
 
 // ── STREAK ────────────────────────────────────────────
 function calcStreak(filter){
@@ -1957,7 +1755,7 @@ function renderHeader(){
   pill.textContent=`PHASE ${ph.num} · ${ph.label.toUpperCase()}`;
   pill.style.borderColor=ph.color+'80';
   pill.style.color=ph.color;
-  document.getElementById('hdrWeek').textContent=startStr?`WK ${wk} / 24`:'WK — / 24';
+  document.getElementById('hdrWeek').textContent=startStr?`WK ${wk}`:'WK —';
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}).toUpperCase();
   if(new Date().getDay()===1)document.getElementById('monBanner').style.display='flex';
 }
@@ -2033,9 +1831,12 @@ function renderPyModules(){
   document.getElementById('pyRingLabel').textContent=pct+'%';
   document.getElementById('pyPct').textContent=pct+'%';
   document.getElementById('pyMeta').textContent=doneMods+' / 7 modules';
+  const pyLedgerEl=document.getElementById('pyLedger');
+  if(pyLedgerEl)pyLedgerEl.textContent=nextMod?`M${nextMod.num} · ${nextMod.name} — active`:'All modules complete';
 
   // Read drill engine state for live stats
-  let deState=getDrillPython();
+  let deState=null;
+  try{deState=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
   const deSuffix=deState?.lastActivity
     ?` · last drilled ${deState.lastActivity===todayStr()?'today':parseLD(deState.lastActivity).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
     :'';
@@ -2070,7 +1871,8 @@ function renderPyModules(){
   }
 
   // Next drill from last log — show if available and module matches
-  let lastLog=getDrillLastLog();
+  let lastLog=null;
+  try{lastLog=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
   const nextPromptEl=document.getElementById('drillNextPrompt');
   if(lastLog?.nextDrill&&nextMod&&lastLog.module===`M${nextMod.num}`){
     nextPromptEl.style.display='block';
@@ -2143,6 +1945,12 @@ function renderTargets(){
       <div class="ti-target">${def.unit}</div>
     </div>`;
   }).join('');
+  const weekLedgerEl=document.getElementById('weekLedger');
+  if(weekLedgerEl){
+    const total=Object.keys(tDef).length;
+    const hitCount=Object.entries(tDef).filter(([key,def])=>(counts[key]||0)>=def.target).length;
+    weekLedgerEl.textContent=`${hitCount}/${total} targets hit`;
+  }
 }
 
 function renderPhaseBars(){
@@ -2154,49 +1962,13 @@ function renderPhaseBars(){
   });
 }
 
-function renderHeatmap(){
-  const grid=document.getElementById('hmGrid');grid.innerHTML='';
-  const today=todayStr(),todayIdx=dayI(today);
-  const dayMap={},codeMap={};
-  sessions.forEach(s=>{
-    const i=dayI(s.date);
-    if(i>=0){dayMap[i]=(dayMap[i]||0)+1;if(isCodeSesh(s))codeMap[i]=true;}
-  });
-  const corner=document.createElement('div');corner.style.cssText='grid-column:1;grid-row:1';grid.appendChild(corner);
-  for(let w=1;w<=24;w++){
-    const l=document.createElement('div');l.className='hm-wl';l.style.cssText=`grid-column:${w+1};grid-row:1`;l.textContent=w;grid.appendChild(l);
-  }
-  const dn=['M','T','W','T','F','S','S'];
-  for(let d=0;d<7;d++){
-    const dl=document.createElement('div');dl.className='hm-dl';dl.style.cssText=`grid-column:1;grid-row:${d+2}`;grid.appendChild(dl);
-    for(let w=1;w<=24;w++){
-      const idx=(w-1)*7+d;
-      const cell=document.createElement('div');cell.className='hm-cell';cell.style.cssText=`grid-column:${w+1};grid-row:${d+2}`;
-      if(startStr&&todayIdx>=0&&idx>todayIdx){cell.classList.add('future');}
-      else{
-        const cnt=dayMap[idx]||0;
-        if(cnt===1)cell.classList.add('l1');else if(cnt===2)cell.classList.add('l2');else if(cnt===3)cell.classList.add('l3');else if(cnt>=4)cell.classList.add('l4');
-        if(codeMap[idx])cell.classList.add('coded');
-        if(startStr&&idx===todayIdx)cell.classList.add('istoday');
-        if(startStr){
-          const sd=parseLD(startStr);
-          const cd=new Date(sd.getFullYear(),sd.getMonth(),sd.getDate()+idx);
-          const ds=cd.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-          cell.setAttribute('data-tip',ds+(cnt?` · ${cnt} session${cnt>1?'s':''}`:'')+(codeMap[idx]?' · coded ✓':''));
-        }
-      }
-      grid.appendChild(cell);
-    }
-  }
-  const active=Object.values(dayMap).filter(v=>v>0).length,coded=Object.keys(codeMap).length;
-  document.getElementById('hmSub').textContent=active?`${active} ACTIVE · ${coded} CODED`:'';
-}
-
 function renderSessions(){
   const list=document.getElementById('slList');
   const toggle=document.getElementById('slToggle');
   const count=document.getElementById('slCount');
+  const slLedgerEl=document.getElementById('slLedger');
   count.textContent=sessions.length?`${sessions.length} TOTAL`:'';
+  if(slLedgerEl)slLedgerEl.textContent=sessions.length?`Last: ${sessions[0].note||sessions[0].category} — ${sessions[0].minutes} min`:'No sessions yet';
   if(!sessions.length){list.innerHTML='<div class="empty">NO SESSIONS YET — LOG YOUR FIRST ONE ABOVE</div>';toggle.style.display='none';return;}
   const vis=showAll?sessions:sessions.slice(0,7);
   toggle.style.display=sessions.length>7?'inline':'none';
@@ -2288,13 +2060,6 @@ function resetStart(){
 }
 
 // ── BACKUP ────────────────────────────────────────────
-function copyCmd(btn, cmd){
-  navigator.clipboard.writeText(cmd).then(()=>{
-    btn.textContent='✓';
-    setTimeout(()=>btn.textContent='copy',1500);
-  });
-}
-
 function exportData(){
   const payload={
     v:11,exported:new Date().toISOString(),
@@ -2303,7 +2068,6 @@ function exportData(){
     v9d_start:localStorage.getItem('v9d_start')||'',
     v10_pyDone:localStorage.getItem('v10_pyDone')||'{}',
     v11_mission:localStorage.getItem('v11_mission')||'{}',
-    sankofa_drill_v1:localStorage.getItem('sankofa_drill_v1')||'null',
     drill_engine_state:localStorage.getItem('drill_engine_state')||'null',
     drill_engine_last_log:localStorage.getItem('drill_engine_last_log')||'null',
   };
@@ -2327,7 +2091,6 @@ function importData(evt){
       if(d.v9d_start)localStorage.setItem('v9d_start',d.v9d_start);
       if(d.v10_pyDone)localStorage.setItem('v10_pyDone',d.v10_pyDone);
       if(d.v11_mission)localStorage.setItem('v11_mission',d.v11_mission);
-      if(d.sankofa_drill_v1&&d.sankofa_drill_v1!=='null')localStorage.setItem('sankofa_drill_v1',d.sankofa_drill_v1);
       if(d.drill_engine_state&&d.drill_engine_state!=='null')localStorage.setItem('drill_engine_state',d.drill_engine_state);
       if(d.drill_engine_last_log&&d.drill_engine_last_log!=='null')localStorage.setItem('drill_engine_last_log',d.drill_engine_last_log);
       load();renderAll();
@@ -2494,14 +2257,28 @@ function togglePhaseBrief(){
   localStorage.setItem('v11_phaseOpen', el.classList.contains('open')?'1':'0');
 }
 
+function toggleSec(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  localStorage.setItem('v13_sec_'+id, el.classList.contains('open')?'1':'0');
+}
+function restoreSecState(){
+  ['secPython','secWeek','secSessions'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const saved = localStorage.getItem('v13_sec_'+id);
+    if(saved===null) return; // leave markup default (open)
+    el.classList.toggle('open', saved==='1');
+  });
+}
+
 // ── MAIN ──────────────────────────────────────────────
 function renderAll(){
   renderHeader();renderNorthStar();renderStreak();
   renderMission();renderPyModules();renderCCP();
   renderCodedBadge();renderTargets();renderPhaseBrief();
-  renderPhaseBars();renderHeatmap();renderSessions();
+  renderPhaseBars();renderSessions();
   renderDebrief();
-  renderCap();
 }
 
 load();
@@ -2518,12 +2295,7 @@ if(localStorage.getItem('v11_debriefOpen')==='1'){
   debriefOpen=true;
   document.getElementById('debriefPanel').classList.add('open');
 }
-// Restore capability delta open state + default window highlight
-if(localStorage.getItem('v11_capOpen')==='1'){
-  capOpen=true;
-  document.getElementById('capPanel').classList.add('open');
-}
-(function(){const b=document.querySelector('.capwin[data-days="30"]');if(b)b.classList.add('debrief-btn-primary');})();
+restoreSecState();
 renderAll();checkSetup();
 </script>
 </body>
