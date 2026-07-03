@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Share+Tech+Mono&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080C0D;--bg2:#0D1416;--bg3:#111A1C;
-  --surface:#141F22;--surface2:#1A282C;
-  --border:#1E3035;--bm:#2A4048;--bh:#3A5560;
-  --text:#D4E8E8;--t2:#8BBCBC;--t3:#4E7A80;--t4:#2E5560;
-  --teal:#00D4C8;--td:#00897F;--tbg:rgba(0,212,200,.06);
-  --amber:#F5A623;--abg:rgba(245,166,35,.08);
-  --coral:#FF6B4A;--cbg:rgba(255,107,74,.08);
-  --green:#34D399;--gbg:rgba(52,211,153,.08);
-  --fd:'Syne',sans-serif;--fb:'Figtree',sans-serif;--fm:'Share Tech Mono',monospace;
+  --bg:#0E0B14;--bg2:#150F1D;--bg3:#1B1526;
+  --surface:#1B1526;--surface2:#221A2F;
+  --border:#2A2138;--bm:#382C4A;--bh:#4E4460;
+  --text:#EDE6E0;--t2:#B8ACC4;--t3:#7A6F8C;--t4:#4E4460;
+  --teal:#C9982E;--td:#9A7620;--tbg:rgba(201,152,46,.06);
+  --amber:#D98F3A;--abg:rgba(217,143,58,.08);
+  --coral:#B5533C;--cbg:rgba(181,83,60,.08);
+  --green:#7A9683;--gbg:rgba(122,150,131,.08);
+  --fd:'Fraunces', serif;--fb:'Inter', sans-serif;--fm:'IBM Plex Mono', monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;line-height:1.6;overflow:hidden;display:flex;flex-direction:column}
@@ -32,6 +32,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .pill-ws{background:var(--cbg);color:var(--coral);border-color:var(--coral);display:none}
 .pill-ws.on{display:inline}
 .pill-ccp{background:var(--abg);color:var(--amber);border-color:var(--amber)}
+.pill-saa{background:rgba(217,143,58,.12);color:#D98F3A;border-color:#AD701F}
 .pill-flag{background:var(--cbg);color:var(--coral);border-color:var(--coral)}
 
 /* CCP DOMAIN SELECTOR */
@@ -237,7 +238,8 @@ textarea#inp::placeholder{color:var(--t4);font-family:var(--fm);font-size:11px;l
       <div class="ss">Pick a mode — Python or CCP exam review.</div>
       <div class="sopts">
         <button class="sbtn" onclick="showPythonOpts()"><span>🐍</span><span>Python drill — Module sequence</span><span class="sarr">▶</span></button>
-        <button class="sbtn" onclick="showCCPSel()" style="border-color:rgba(245,166,35,.3)"><span style="color:var(--amber)">☁</span><span>CCP review — Domain drill</span><span class="sarr" style="color:var(--amber)">▶</span></button>
+        <button class="sbtn" onclick="showSAASel()" style="border-color:rgba(245,166,35,.3)"><span style="color:var(--amber)">☁</span><span>AWS SAA-C03 — Domain drill</span><span class="sarr" style="color:var(--amber)">▶</span></button>
+        <div style="display:flex;align-items:center;gap:.5rem;padding:.25rem 0"><span style="font-family:var(--fm);font-size:9.5px;padding:2px 9px;border-radius:2px;background:var(--gbg);color:var(--green);border:1px solid rgba(52,211,153,.3);letter-spacing:.06em">✓ CCP CERTIFIED — archived</span></div>
       </div>
     </div>
 
@@ -254,12 +256,20 @@ textarea#inp::placeholder{color:var(--t4);font-family:var(--fm);font-size:11px;l
       </div>
     </div>
 
-    <!-- CCP domain selector -->
+    <!-- CCP domain selector (archived) -->
     <div class="ccp-sel gone" id="ccpScreen">
       <div class="ccp-st">CCP Review — Select Domain</div>
       <div class="ccp-ss">Current score: <strong style="color:var(--amber)">769</strong> · Target: <strong style="color:var(--green)">850+</strong> · Flagged domains need the most work.</div>
       <div class="ccp-domains" id="ccpDomainList"></div>
       <button class="sbtn" onclick="backToMain()" style="border-color:var(--border);color:var(--t3);margin-top:.25rem;width:100%;max-width:420px"><span>←</span><span>Back</span></button>
+    </div>
+
+    <!-- SAA domain selector -->
+    <div class="ccp-sel gone" id="saaScreen">
+      <button class="ccp-back" onclick="backToMain()">← back</button>
+      <div class="ccp-st">AWS SAA-C03 — Select Domain</div>
+      <div class="ccp-ss">Solutions Architect Associate · Four domains · Scenario-based architecture design questions.</div>
+      <div class="ccp-domains" id="saaDomainList"></div>
     </div>
     <div class="thread" id="thread" style="display:none"></div>
     <div class="ibar" id="ibar" style="display:none">
@@ -383,117 +393,161 @@ const CCP_DOMAINS = [
   ]},
 ];
 
-// ══ CONSOLIDATED STORAGE CORE (v1) ══════════════════════
-// Single root key replacing drill_engine_state / _ccp_state / _modules / _last_log.
-// Covered topics are now objects: {topic, firstSeen, confirmed}.
-//  - firstSeen: ISO date the topic was first drilled (enables capability-delta)
-//  - confirmed: true once applied UNPROMPTED (mastery-through-use), via [CONFIRMED:] marker
-// de_api_key and v9d_start are NOT touched (shared / dashboard-owned).
-const DRILL_ROOT='sankofa_drill_v1';
-const OLD_KEYS={py:'drill_engine_state',ccp:'drill_engine_ccp_state',reg:'drill_engine_modules',log:'drill_engine_last_log'};
+// ── SAA DOMAIN DEFINITIONS ─────────────────────────────
+const SAA_DOMAINS = [
+  {num:1, name:'Design Secure Architectures', weight:30, flagged:false,
+   subdomains:[
+    {id:'1.1', name:'Secure access to AWS resources', concepts:[
+      'IAM roles for EC2/Lambda/cross-account vs IAM users — least privilege, no long-term credentials on services',
+      'SCP (Service Control Policies) — org-level deny guardrails, evaluated before IAM policies, cannot grant permissions',
+      'Permission boundaries — ceiling on max effective permissions an IAM entity can have',
+      'IAM Identity Center (SSO) — centralized workforce federation across multiple accounts',
+      'SAML 2.0 vs OIDC vs Cognito — enterprise IdP vs OpenID vs web/mobile app users',
+      'Resource-based policies — S3 bucket policy, cross-account access without assuming role',
+      'VPC endpoint policies — restrict service access to VPC traffic, additive to IAM',
+      'AWS Organizations OUs + SCPs — account isolation, consolidated billing, inheritance hierarchy'
+    ]},
+    {id:'1.2', name:'Secure workloads and applications', concepts:[
+      'Secrets Manager: auto-rotation, cross-service integration — vs SSM Parameter Store: cheaper, simpler, no auto-rotation',
+      'ACM (Certificate Manager): public certs free + auto-renewal, attach to ALB/CloudFront/API GW — private CA paid',
+      'Macie — ML-based PII/sensitive data detection and classification in S3',
+      'GuardDuty — ML threat detection on CloudTrail + VPC Flow Logs + DNS logs, agentless',
+      'Inspector — automated CVE scanning for EC2, Lambda code, ECR container images',
+      'Security Hub — aggregated findings from GuardDuty, Inspector, Macie, Config, Firewall Manager',
+      'Detective — graph-based investigation of security incidents using GuardDuty findings',
+      'WAF — L7 rules (SQL injection, XSS, rate limiting), attaches to CloudFront/ALB/API GW',
+      'Security Groups: stateful, instance-level, allow-only, return traffic auto-allowed',
+      'NACLs: stateless, subnet-level, allow+deny, numbered priority, return traffic needs explicit rule'
+    ]},
+    {id:'1.3', name:'Data security controls', concepts:[
+      'KMS customer managed keys — key policies, grants for temp access, envelope encryption pattern',
+      'AWS managed keys (aws/service) — auto-rotate yearly, cannot edit policy; customer managed — you control policy/rotation',
+      'CloudHSM — FIPS 140-2 Level 3, dedicated hardware, you own key material, use as KMS custom key store',
+      'S3 SSE-S3 (AWS manages, free) vs SSE-KMS (CloudTrail audit, CMK control, per-request cost) vs SSE-C (you provide key) vs DSSE-KMS (dual-layer)',
+      'S3 Block Public Access — 4 settings at bucket or account level, overrides bucket policies and ACLs',
+      'S3 Object Lock WORM: governance mode (bypass privilege exists) vs compliance mode (nobody overrides, not even root)',
+      'RDS encryption — must enable at creation; cannot encrypt existing unencrypted DB in-place; covers storage/snapshots/replicas',
+      'EBS encryption — encrypt at creation, or copy unencrypted snapshot → encrypt copy → restore',
+      'DynamoDB — always encrypted at rest by default (AES-256), optional KMS CMK for customer control'
+    ]},
+  ]},
+  {num:2, name:'Design Resilient Architectures', weight:26, flagged:false,
+   subdomains:[
+    {id:'2.1', name:'Scalable and loosely coupled architectures', concepts:[
+      'SQS standard: at-least-once, best-effort order, unlimited throughput — FIFO: exactly-once, strict order, 3000 msg/s with batching',
+      'SQS visibility timeout — message invisible while processing; expires → reappears for retry',
+      'SQS DLQ — after maxReceiveCount failures, move to DLQ; use for debugging poison-pill messages',
+      'SNS fan-out: one topic → filter policies → multiple SQS queues/Lambda — decoupled one-to-many',
+      'EventBridge — event bus with rules/targets, cross-account, Schedule (cron/rate) — vs SNS: push-only, no filtering logic',
+      'Step Functions Standard (1yr, exactly-once) vs Express (5min, at-least-once, cheaper for high volume)',
+      'API Gateway REST (WAF, caching, API keys, full features) vs HTTP API (70% cheaper, JWT, fewer features)',
+      'ALB (L7: path/host/header routing) vs NLB (L4: TCP/UDP, ultra-low latency, static IP) vs GLB (L3: inline inspection)',
+      'Auto Scaling: target tracking (simplest) vs step scaling vs scheduled — cooldown prevents thrash',
+      'Lambda reserved concurrency = guarantee + ceiling; provisioned concurrency = pre-warmed, no cold start'
+    ]},
+    {id:'2.2', name:'Highly available and fault-tolerant architectures', concepts:[
+      'Multi-AZ = HA (synchronous, hardware/AZ failure) vs Multi-Region = DR (asynchronous, full region failure)',
+      'RDS Multi-AZ: synchronous standby in different AZ, auto failover ~1-2min — standby NOT readable, pure failover',
+      'RDS Read Replicas: asynchronous, readable, cross-region capable — for read scaling not HA, manual failover',
+      'Aurora: 6 copies across 3 AZs, self-healing storage, writer + up to 15 readers, failover <30s',
+      'Aurora Global Database: primary + up to 5 secondaries, <1s RPO, <1min RTO for promotion',
+      'DynamoDB Global Tables: multi-region multi-active read/write, last-writer-wins conflict resolution',
+      'Route 53 routing: Failover (active/passive + health check), Latency, Geolocation, Weighted, Multi-Value',
+      'S3 CRR — requires versioning both buckets, async copy, for compliance/latency/backup across regions',
+      'ELB health checks — auto-route around unhealthy targets, integrates with Auto Scaling for replacement',
+      'AWS Backup — centralized policy-based backup, cross-account and cross-region vault copy'
+    ]},
+  ]},
+  {num:3, name:'Design High-Performing Architectures', weight:24, flagged:false,
+   subdomains:[
+    {id:'3.1', name:'Scalable storage solutions', concepts:[
+      'S3 performance: 3,500 PUT/5,500 GET per second per prefix — add random prefix to spread across partitions for high throughput',
+      'S3 multipart upload: required >5GB, recommended >100MB — parallel parts, resume on failure',
+      'S3 Transfer Acceleration — routes uploads through CloudFront edge, useful for cross-region uploads from distant locations',
+      'EBS gp3: baseline 3,000 IOPS + 125 MB/s, independently configurable up to 16K IOPS/1000 MB/s — default general purpose',
+      'EBS io2 Block Express: 256K IOPS, sub-ms latency, SAN-level for critical databases',
+      'EBS st1 (throughput HDD, sequential big data) vs sc1 (cold HDD, lowest cost, infrequent access)',
+      'EFS NFS shared across EC2, elastic scaling — throughput: bursting/provisioned/elastic modes',
+      'FSx for Lustre: HPC/ML, sub-ms latency, S3 integration — FSx for Windows: SMB/NTFS/Active Directory'
+    ]},
+    {id:'3.2', name:'Elastic compute solutions', concepts:[
+      'EC2 families: M (general), C (compute), R/X (memory), I/D (storage), P/G/Inf/Trn (accelerated/ML)',
+      'Placement groups: Cluster (same AZ same rack, HPC low latency) vs Spread (max 7/AZ, max fault tolerance) vs Partition (HDFS/Cassandra, isolated failure domains)',
+      'Graviton/Graviton2/Graviton3 — ARM, 40% better price-performance, available EC2/RDS/Lambda/ECS/ElastiCache',
+      'Lambda provisioned concurrency: pre-warmed instances eliminate cold start; reserved concurrency: limits max parallelism',
+      'ECS EC2 mode: you manage host instances, cheaper at scale — Fargate: serverless containers, no host management, pay per task',
+      'AWS Batch — managed compute for batch jobs, Spot-friendly for scale-out, integrates with ECS/EKS'
+    ]},
+    {id:'3.3', name:'High-performing database solutions', concepts:[
+      'DynamoDB GSI: different partition+sort key, own throughput, eventually consistent, create/delete anytime; LSI: same partition different sort, must create at table creation, strongly consistent',
+      'DAX — write-through in-memory cache, microsecond reads, reduces DynamoDB read CUs significantly',
+      'ElastiCache lazy loading: cache miss loads+caches from DB, stale data risk; write-through: write to cache+DB simultaneously, no stale data',
+      'Redis: persistence, replication, pub/sub, sorted sets, Multi-AZ failover — use when you need these features',
+      'Memcached: simple, multi-threaded, no persistence or replication — only when Redis features are not needed',
+      'Aurora Serverless v2: instant scaling, pay per ACU-hour, pause when idle — best for intermittent/unpredictable',
+      'Redshift: columnar MPP, RA3 nodes (separate compute/storage), Spectrum queries S3 without loading'
+    ]},
+    {id:'3.4', name:'Scalable network architectures', concepts:[
+      'CloudFront: cache behaviors by path pattern, origin groups (primary+failover), signed URLs (single file) vs signed cookies (multiple files)',
+      'Global Accelerator: static anycast IPs, TCP/UDP over AWS backbone to nearest healthy endpoint — not HTTP-only, differs from CloudFront',
+      'VPC peering: non-transitive (A↔B, B↔C ≠ A↔C), route tables required both sides, same or cross-region',
+      'Transit Gateway: hub-spoke, fully transitive routing, cross-account, cross-region peering — replaces complex peering meshes',
+      'AWS PrivateLink: expose service via ENI in consumer VPC — no internet/peering/NAT required',
+      'Direct Connect: dedicated fiber, consistent latency, cheaper egress at volume, LAG for redundancy',
+      'VPN vs Direct Connect: VPN = encrypted over internet, fast setup, variable latency; DX = private, consistent, high upfront'
+    ]},
+    {id:'3.5', name:'Data ingestion and transformation', concepts:[
+      'Kinesis Data Streams: real-time, shards (1MB/s write + 2MB/s read each), ordered within shard, retention 24hr-365d, replay capable',
+      'Kinesis Firehose: managed delivery (buffer 60s or 1MB), no consumer code, to S3/Redshift/OpenSearch — near-real-time not real-time',
+      'Kinesis Streams vs SQS: Streams = ordered, multiple consumers, replay; SQS = dequeue, one consumer per message, no ordering (standard)',
+      'AWS Glue: serverless ETL, Data Catalog (Hive metastore compatible), crawlers auto-discover schema',
+      'Athena: serverless SQL on S3, pay per TB scanned — Parquet/ORC + partitioning dramatically reduces scan cost',
+      'EMR: managed Hadoop/Spark, transient (per-job) vs persistent clusters, core+task node architecture'
+    ]},
+  ]},
+  {num:4, name:'Design Cost-Optimized Architectures', weight:20, flagged:false,
+   subdomains:[
+    {id:'4.1', name:'Cost-optimized storage', concepts:[
+      'S3 lifecycle: Standard→IA (min 30d, min 128KB)→Glacier Instant→Glacier Flexible→Deep Archive — cost decreases, retrieval time increases',
+      'S3 Intelligent-Tiering: auto-moves objects between tiers, small per-object monitoring fee — best for unknown access patterns',
+      'S3 One Zone-IA: 20% cheaper than Standard-IA, only 1 AZ — only for reproducible data (thumbnails, derivatives)',
+      'EBS: gp3 cheaper than gp2 at equivalent IOPS, delete unattached volumes, snapshots vs full AMI copies for cost',
+      'EFS IA tier — lifecycle policy auto-moves files, 92% cheaper than EFS Standard for infrequent access'
+    ]},
+    {id:'4.2', name:'Cost-optimized compute', concepts:[
+      'Spot Instances: up to 90% savings, 2-min warning — use for stateless, fault-tolerant, batch, CI/CD, ML training',
+      'Compute Savings Plans: most flexible (any family/region/OS/tenancy) — lower discount but maximum flexibility',
+      'EC2 Instance Savings Plans: specific family in region, higher discount; RI Standard: highest discount, specific everything, no exchange',
+      'Mixed Auto Scaling: On-Demand base + Spot scale-out, multiple instance types to reduce interruption risk',
+      'Graviton: 40% better price-performance, ARM-compatible workloads benefit without Spot risk',
+      'Lambda: right-size memory (more memory = faster = same/cheaper cost), use AWS Lambda Power Tuning',
+      'Trusted Advisor: idle EC2, underutilized EBS, unused EIPs, low-utilization ELB, RI optimization'
+    ]},
+    {id:'4.3', name:'Cost-optimized databases', concepts:[
+      'RDS Reserved Instances: 1/3 year, up to 69% savings — right-size before reserving',
+      'Aurora Serverless v2 vs provisioned: scales to zero, pay per ACU-hour — wins for intermittent/dev workloads',
+      'DynamoDB on-demand (pay per request, no planning) vs provisioned (cheaper, requires prediction, Reserved Capacity available)',
+      'Read replicas for cost: offload analytics to replica → smaller primary instance',
+      'ElastiCache Reserved Nodes — same RI logic as RDS for steady-state cache tiers'
+    ]},
+    {id:'4.4', name:'Cost-optimized network', concepts:[
+      'Data transfer: intra-AZ = free; inter-AZ = $0.01/GB each way; internet egress varies by region/volume',
+      'NAT Gateway: $0.045/hr + $0.045/GB — VPC Gateway Endpoints (S3 + DynamoDB) eliminate NAT GW cost entirely (free)',
+      'CloudFront reduces egress: edge cache misses only hit origin and incur origin egress cost',
+      'Direct Connect vs VPN: DX higher port cost, cheaper per GB at high volume (~1TB+/month breakeven)',
+      'Pattern: keep data in AWS network, use regional endpoints, minimize cross-region transfers'
+    ]},
+  ]},
+];
 
-function _emptyStore(){
-  return {schemaVersion:1, python:null, ccp:null, registry:{}, lastLog:null, migratedFrom:null};
-}
-function loadRoot(){
-  try{
-    const raw=localStorage.getItem(DRILL_ROOT);
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  return migrateOrInit();
-}
-function saveRoot(root){
-  try{localStorage.setItem(DRILL_ROOT,JSON.stringify(root));}
-  catch(e){console.error('drill store save failed',e);}
-}
-
-// Normalize a covered entry (string OR already-object) into the {topic,firstSeen,confirmed} shape.
-function _normTopic(entry,dateFallback){
-  if(entry&&typeof entry==='object'&&'topic' in entry){
-    return {topic:entry.topic, firstSeen:entry.firstSeen||dateFallback, confirmed:!!entry.confirmed};
-  }
-  return {topic:String(entry), firstSeen:dateFallback, confirmed:false};
-}
-
-// One-time migration. Reads the 4 legacy keys, folds them in, LEAVES THEM INTACT as fallback.
-function migrateOrInit(){
-  const root=_emptyStore();
-  const today=todayStrDE();
-  let found=false;
-  // Python branch
-  try{
-    const oldPy=JSON.parse(localStorage.getItem(OLD_KEYS.py)||'null');
-    if(oldPy){
-      found=true;
-      root.python={
-        currentModule:oldPy.currentModule||1,
-        moduleName:oldPy.moduleName||'',
-        covered:(oldPy.covered||[]).map(t=>_normTopic(t,today)),
-        allWeakSpots:oldPy.allWeakSpots||[],
-        stillTo:oldPy.stillTo||[],
-        totalSessions:oldPy.totalSessions||0,
-        totalDrills:oldPy.totalDrills||0,
-        lastActivity:oldPy.lastActivity||today
-      };
-    }
-  }catch(e){}
-  // CCP branch — covered is keyed by subdomain id
-  try{
-    const oldCcp=JSON.parse(localStorage.getItem(OLD_KEYS.ccp)||'null');
-    if(oldCcp){
-      found=true;
-      const cov={};
-      if(oldCcp.covered) for(const sid in oldCcp.covered){
-        cov[sid]=(oldCcp.covered[sid]||[]).map(t=>_normTopic(t,today));
-      }
-      root.ccp={
-        currentDomain:oldCcp.currentDomain||2,
-        currentSubIdx:oldCcp.currentSubIdx||0,
-        covered:cov,
-        allWeakSpots:oldCcp.allWeakSpots||[],
-        totalSessions:oldCcp.totalSessions||0,
-        totalDrills:oldCcp.totalDrills||0,
-        lastActivity:oldCcp.lastActivity||today
-      };
-    }
-  }catch(e){}
-  // Registry branch — completed module snapshots
-  try{
-    const oldReg=JSON.parse(localStorage.getItem(OLD_KEYS.reg)||'null');
-    if(oldReg&&Object.keys(oldReg).length){
-      found=true;
-      for(const k in oldReg){
-        const m=oldReg[k];
-        root.registry[k]={...m, coveredTopics:(m.coveredTopics||[]).map(t=>_normTopic(t,m.completedDate||today))};
-      }
-    }
-  }catch(e){}
-  // Last log — carried verbatim
-  try{
-    const oldLog=JSON.parse(localStorage.getItem(OLD_KEYS.log)||'null');
-    if(oldLog){found=true; root.lastLog=oldLog;}
-  }catch(e){}
-
-  root.migratedFrom=found?today:null;
-  saveRoot(root);
-  return root;
-}
-
-// Helpers to extract a plain list of topic strings (back-compat for code that wants strings)
-function topicStrings(coveredArr){return (coveredArr||[]).map(t=>t.topic);}
 
 // ── CCP STATE MANAGEMENT ────────────────────────────────
-// loadCCPState/saveCCPState now delegate to the consolidated root.
-// Returned object keeps the legacy shape callers expect, but `covered[sid]`
-// holds {topic,firstSeen,confirmed} objects. Call sites that need strings use topicStrings().
 function loadCCPState(){
-  const root=loadRoot();
-  return root.ccp;
+  try{return JSON.parse(localStorage.getItem('drill_engine_ccp_state')||'null');}
+  catch(e){return null;}
 }
 function saveCCPState(state){
-  const root=loadRoot();
-  root.ccp=state;
-  saveRoot(root);
+  localStorage.setItem('drill_engine_ccp_state',JSON.stringify(state));
 }
 function getCurrDomain(){
   const state=loadCCPState();
@@ -510,19 +564,41 @@ function getCurrSub(){
   return d.subdomains[Math.min(idx,d.subdomains.length-1)];
 }
 function loadState(){
-  const root=loadRoot();
-  return root.python;
+  try{return JSON.parse(localStorage.getItem('drill_engine_state')||'null');}
+  catch(e){return null;}
 }
 function saveState(state){
-  const root=loadRoot();
-  root.python=state;
-  saveRoot(root);
+  localStorage.setItem('drill_engine_state',JSON.stringify(state));
 }
 function getCurrMod(){
   const state=loadState();
   const num=state?.currentModule||1;
   return MODULES[Math.min(num,MODULES.length)-1];
 }
+
+// ── SAA STATE MANAGEMENT ────────────────────────────────
+function loadSAAState(){
+  try{return JSON.parse(localStorage.getItem('drill_engine_saa_state')||'null');}
+  catch(e){return null;}
+}
+function saveSAAState(state){
+  localStorage.setItem('drill_engine_saa_state',JSON.stringify(state));
+}
+function getCurrSAADomain(){
+  const state=loadSAAState();
+  const num=state?.currentDomain||1;
+  return SAA_DOMAINS.find(d=>d.num===num)||SAA_DOMAINS[0];
+}
+function getCurrSAASubIdx(){
+  const state=loadSAAState();
+  return state?.currentSubIdx||0;
+}
+function getCurrSAASub(){
+  const d=getCurrSAADomain();
+  const idx=getCurrSAASubIdx();
+  return d.subdomains[Math.min(idx,d.subdomains.length-1)];
+}
+
 function todayStrDE(){
   const d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -530,13 +606,11 @@ function todayStrDE(){
 
 // ── MODULE REGISTRY (interleave) ──────────────────────
 function loadRegistry(){
-  const root=loadRoot();
-  return root.registry||{};
+  try{return JSON.parse(localStorage.getItem('drill_engine_modules')||'{}');}
+  catch(e){return{};}
 }
 function saveRegistry(reg){
-  const root=loadRoot();
-  root.registry=reg;
-  saveRoot(root);
+  localStorage.setItem('drill_engine_modules',JSON.stringify(reg));
 }
 
 function buildInterleaveSection(){
@@ -562,22 +636,19 @@ function completeModule(){
   const covTopics=state.covered||[];
   const ws=state.allWeakSpots||[];
   const reviewCount=existing?existing.reviewCount:0;
-  const topicStr=t=>(t&&typeof t==='object'&&'topic' in t)?t.topic:String(t);
-  const confirmedCount=covTopics.filter(t=>t&&typeof t==='object'&&t.confirmed).length;
 
   // Build snapshot preview
   const covHtml=covTopics.length
-    ?covTopics.slice(-6).map(c=>`<div>· ${topicStr(c).split(/\s[—|]\s/)[0]}</div>`).join('')
+    ?covTopics.slice(-6).map(c=>`<div>· ${c.split(/\s[—|]\s/)[0]}</div>`).join('')
     :'<div style="color:var(--t4)">No covered topics logged yet</div>';
   const wsHtml=ws.length
     ?`<div class="mod-snap-ws">Weak spots (${ws.length}): ${ws.slice(0,5).join(', ')}${ws.length>5?' …':''}</div>`
     :'<div style="color:var(--green);font-size:10px">No weak spots flagged ✓</div>';
-  const confHtml=confirmedCount?`<div style="color:var(--green);font-size:10px;margin-top:2px">✓ ${confirmedCount} confirmed (applied unprompted)</div>`:'';
 
   document.getElementById('modSnapContent').innerHTML=
     `<strong style="color:var(--text)">${key} · ${mod.name}</strong><br>`+
     `<span style="color:var(--t3);font-size:10px">Sessions: ${state.totalSessions||0} · Drills: ${state.totalDrills||0} · ${existing?'Previously registered — will update':'First registration'}</span>`+
-    `<div style="margin:.5rem 0 .25rem">${covHtml}</div>${wsHtml}${confHtml}`;
+    `<div style="margin:.5rem 0 .25rem">${covHtml}</div>${wsHtml}`;
 
   document.getElementById('modOverlay').style.display='flex';
 }
@@ -628,29 +699,27 @@ function confirmCompleteModule(){
 let currentMode = 'python';
 
 function buildSystem(){
-  return currentMode === 'ccp' ? buildCCPSystem() : buildPythonSystem();
+  if(currentMode === 'saa') return buildSAASystem();
+  if(currentMode === 'ccp') return buildCCPSystem();
+  return buildPythonSystem();
 }
 
 function buildPythonSystem(){
   const state=loadState();
   const mod=getCurrMod();
-  const coveredRaw=state?.covered?.length?state.covered:mod.defaultCovered;
+  const covered=state?.covered?.length?state.covered:mod.defaultCovered;
   const stillTo=state?.stillTo?.length?state.stillTo:mod.defaultStillTo;
   const seqStr=MODULES.map(m=>`M${m.num} ${m.name}${m.num===mod.num?' (CURRENT)':''}`).join(' → ');
 
-  // covered entries may be {topic,confirmed} objects (saved) or strings (defaults)
-  const asObj=e=>(e&&typeof e==='object'&&'topic' in e)?e:{topic:String(e),confirmed:false};
-  const covObjs=coveredRaw.map(asObj);
+  // Condense concept labels — strip explanatory text after colon/dash to save tokens
   const condense=c=>c.split(/\s[—:–]\s/)[0].trim();
-  const confirmedShort=covObjs.filter(o=>o.confirmed).map(o=>condense(o.topic));
-  const coveredShort=covObjs.filter(o=>!o.confirmed).map(o=>condense(o.topic));
+  const covShort=covered.map(condense);
   const stillShort=stillTo.map(condense);
   const seqShort=MODULES.map(m=>`M${m.num}${m.num===mod.num?'*':''}`).join('→');
 
   return `Drill coach for Damon. Direct, no fluff.
 CONTEXT: Applied AI accelerator. Python beginner. M${mod.num}: ${mod.name}. IDE: Cursor/Mac, python3, ~/dev/drills/${mod.file}. Seq: ${seqShort}
-COVERED (drilled, not yet applied unprompted): ${coveredShort.length?coveredShort.join(' | '):'none yet'}
-CONFIRMED (applied unprompted — do NOT re-teach; may use as building blocks): ${confirmedShort.length?confirmedShort.join(' | '):'none yet'}
+COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
 REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → suggest M'+(mod.num+1)}${buildInterleaveSection()}
 
 COMPOUND DRILLING: Where 2-3 remaining concepts interact naturally, combine them into one snippet that exercises both. This maximizes concepts tested per exchange. Single-concept drills only when a concept must stand alone (e.g. first exposure to a type).
@@ -663,7 +732,6 @@ RULES: Predict first always. Before confirming correct, verify the answer intern
 
 WEAK: [WEAK: <concept ≤5 words>] — one per response, genuine struggles only.
 CLEAR: [CLEAR: <exact concept>] — if you incorrectly flagged a weak spot and the user demonstrates they had it right, emit this to remove it from the record.
-CONFIRMED: [CONFIRMED: <exact concept>] — emit ONLY when he uses a concept correctly WITHOUT the drill prompting it (applied/spontaneous recall in service of a different task), not merely answering a drill about it. This is the mastery-through-use signal. One per response max.
 
 END SESSION log format exactly:
 ---LOG---
@@ -680,24 +748,19 @@ function buildCCPSystem(){
   const domain=getCurrDomain();
   const sub=getCurrSub();
   const ccpState=loadCCPState();
-  const coveredRaw=ccpState?.covered?.[sub.id]||[];
-  const asObj=e=>(e&&typeof e==='object'&&'topic' in e)?e:{topic:String(e),confirmed:false};
-  const covObjs=coveredRaw.map(asObj);
-  const coveredTopics=covObjs.map(o=>o.topic);
-  const stillTo=sub.concepts.filter(c=>!coveredTopics.includes(c));
+  const covered=ccpState?.covered?.[sub.id]||[];
+  const stillTo=sub.concepts.filter(c=>!covered.includes(c));
   const flaggedDomains=CCP_DOMAINS.filter(d=>d.flagged).map(d=>`D${d.num} ${d.name} (${d.weight}%)`).join(', ');
 
   // Condense concepts to identifiers — strip explanatory text to save tokens
   const condense=c=>c.split(/\s[—:–]\s/)[0].split(':')[0].trim();
-  const confirmedShort=covObjs.filter(o=>o.confirmed).map(o=>condense(o.topic));
-  const coveredShort=covObjs.filter(o=>!o.confirmed).map(o=>condense(o.topic));
+  const covShort=covered.map(condense);
   const stillShort=stillTo.map(condense);
 
   return `CCP drill coach for Damon. Direct, exam-focused, no fluff.
-CONTEXT: CLF-C02. Target 850+. Flagged: ${flaggedDomains}.
+CONTEXT: CLF-C02. Score 769→850+. Flagged: ${flaggedDomains}.
 FOCUS: D${domain.num} ${domain.name} (${domain.weight}%)${domain.flagged?' ⚠ NEEDS IMPROVEMENT':''} / ${sub.id} ${sub.name}
-COVERED (drilled, not yet applied unprompted): ${coveredShort.length?coveredShort.join(' | '):'none yet'}
-CONFIRMED (recalled unprompted — do NOT re-teach): ${confirmedShort.length?confirmedShort.join(' | '):'none yet'}
+COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
 REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → next subdomain'}
 
 COMPOUND DRILLING: The exam tests concepts in combination. Where 2-3 remaining concepts interact naturally (e.g. shared responsibility + encryption, pricing model + use case, IAM deny + policy type), build one MCQ that requires understanding of both. Single-concept questions only for first exposure to a concept or when isolation is pedagogically necessary. Compound questions = more exam-realistic + more coverage per token.
@@ -711,7 +774,49 @@ PRIORITY DISTINCTIONS: shared responsibility gray areas (RDS/EC2 OS patching), e
 
 WEAK: [WEAK: <concept ≤5 words>] — one per response, genuine struggles only.
 CLEAR: [CLEAR: <exact concept>] — if you incorrectly flagged a weak spot and the user demonstrates they had it right, emit this to remove it from the record.
-CONFIRMED: [CONFIRMED: <exact concept>] — emit ONLY when he recalls/applies a concept correctly WITHOUT the question prompting it (e.g. references it accurately while reasoning about a different question), not merely answering an MCQ about it. Mastery-through-use signal. One per response max.
+
+END SESSION log format exactly:
+---LOG---
+DOMAIN: D${domain.num} · ${domain.name}
+SUBDOMAIN: ${sub.id} · ${sub.name}
+DRILLS: <n>
+COVERED: <concepts>
+WEAK SPOTS: <list or None>
+NEXT QUESTION: <exact question to open next session>
+NEXT FOCUS: <one line>
+---END---`;
+}
+
+// ── SAA SYSTEM PROMPT ─────────────────────────────────
+function buildSAASystem(){
+  const domain=getCurrSAADomain();
+  const sub=getCurrSAASub();
+  const saaState=loadSAAState();
+  const covered=saaState?.covered?.[sub.id]||[];
+  const stillTo=sub.concepts.filter(c=>!covered.includes(c));
+  const flaggedDomains=SAA_DOMAINS.filter(d=>d.flagged).map(d=>`D${d.num} ${d.name} (${d.weight}%)`).join(', ')||'none flagged';
+
+  const condense=c=>c.split(/\s[—:–]\s/)[0].split(':')[0].trim();
+  const covShort=covered.map(condense);
+  const stillShort=stillTo.map(condense);
+
+  return `SAA-C03 drill coach for Damon. CCP certified. Targeting SAA-C03 Solutions Architect Associate. Direct, exam-focused, no fluff.
+CONTEXT: SAA-C03. ${flaggedDomains!=='none flagged'?`Flagged: ${flaggedDomains}.`:'All domains active.'}
+FOCUS: D${domain.num} ${domain.name} (${domain.weight}%) / ${sub.id} ${sub.name}${domain.flagged?' ⚠ PRIORITIZE':''}
+COVERED: ${covShort.length?covShort.join(' | '):'none yet'}
+REMAINING: ${stillShort.length?stillShort.join(' | '):'all done → next subdomain'}
+
+COMPOUND DRILLING: SAA questions are scenario-based and test multiple services in combination. Build scenarios that require understanding service tradeoffs and when to use which architecture pattern. Single-concept questions only for first-time exposure to a concept.
+
+FORMAT:
+[DRILL] on its own line before every question.
+Scenario-based MCQ preferred (A/B/C/D, plausible distractors based on common SAA pitfalls). Ask for answer + brief reasoning. Wait. Confirm or correct: 2-3 lines explaining why right is right and why key distractors fail. Next question immediately.
+
+RULES: Before confirming correct, verify internally — never fire "Correct." before checking. Correct→"Correct." + one reinforcement line + next. Wrong→explain right answer + distractor failure + next. Responses ≤8 lines unless complex architecture scenario requires more. No intros or summaries.
+KEY PITFALL DISTINCTIONS TO TEST: Multi-AZ standby not readable vs Read Replicas, Kinesis Streams vs Firehose vs SQS decoupling, VPC peering non-transitive vs Transit Gateway, PrivateLink vs VPC endpoint types, gp3 vs io2 selection criteria, Savings Plans types (Compute vs EC2 Instance), NAT Gateway cost vs Gateway Endpoints, CloudFront vs Global Accelerator use cases.
+
+WEAK: [WEAK: <concept ≤5 words>] — genuine struggles only, one per response.
+CLEAR: [CLEAR: <exact concept>] — remove incorrectly flagged weak spots.
 
 END SESSION log format exactly:
 ---LOG---
@@ -727,14 +832,22 @@ NEXT FOCUS: <one line>
 
 // ── HISTORY ───────────────────────────────────────────
 const HIST_CAP=10;
-let hist=[],weakSpots=[],drills=0,confirmedThisSession=[];
+let hist=[],weakSpots=[],drills=0;
 function trimHist(){if(hist.length>HIST_CAP)hist=hist.slice(hist.length-HIST_CAP);}
 
 // ── HEADER ────────────────────────────────────────────
 function updateHeader(){
   const modPill=document.getElementById('modPill');
   const toggle=document.getElementById('modeToggle');
-  if(currentMode==='ccp'){
+  if(currentMode==='saa'){
+    const domain=getCurrSAADomain();
+    const sub=getCurrSAASub();
+    modPill.textContent=`D${domain.num} · ${sub.id} ${sub.name}`;
+    modPill.className=`pill pill-saa`;
+    toggle.textContent='SAA';
+    toggle.style.color='var(--amber)';
+    toggle.style.borderColor='rgba(245,166,35,.4)';
+  } else if(currentMode==='ccp'){
     const domain=getCurrDomain();
     const sub=getCurrSub();
     modPill.textContent=`D${domain.num} · ${sub.id} ${sub.name}`;
@@ -755,7 +868,7 @@ function updateHeader(){
   const startStr=localStorage.getItem('v9d_start')||'';
   if(startStr){
     const diff=Math.floor((new Date()-new Date(startStr))/(7*24*3600*1000));
-    const wk=Math.min(24,Math.max(1,diff+1));
+    const wk=Math.max(1,diff+1);
     document.getElementById('weekPill').textContent=`Week ${wk}`;
   }
 }
@@ -765,6 +878,7 @@ function backToMain(){
   document.getElementById('startScreen').classList.remove('gone');
   document.getElementById('pyScreen').classList.add('gone');
   document.getElementById('ccpScreen').classList.add('gone');
+  document.getElementById('saaScreen').classList.add('gone');
 }
 
 function showPythonOpts(){
@@ -819,6 +933,48 @@ function startCCPDomain(domainNum){
   call(`Start a CCP drill session for Domain ${domain.num}: ${domain.name}, Subdomain ${sub.id}: ${sub.name}. This domain is ${domain.flagged?'flagged as Needs Improvement — be rigorous':'currently passing'}. In one line, note the focus. Then go straight into the first drill question.`);
 }
 
+function showSAASel(){
+  currentMode='saa';
+  document.getElementById('startScreen').classList.add('gone');
+  document.getElementById('saaScreen').classList.remove('gone');
+  renderSAADomains();
+  updateHeader();
+}
+
+function renderSAADomains(){
+  const list=document.getElementById('saaDomainList');
+  const saaState=loadSAAState();
+  list.innerHTML=SAA_DOMAINS.map(d=>{
+    const subCount=d.subdomains.length;
+    const drilled=saaState?.covered?.[d.subdomains[0]?.id]?.length>0;
+    const badge=d.flagged
+      ?'<span class="dcrd-flag">NEEDS WORK</span>'
+      :`<span class="dcrd-ok">${drilled?'IN PROGRESS':'ACTIVE'}</span>`;
+    return `<div class="dcrd${d.flagged?' flagged':''}" onclick="startSAADomain(${d.num})">
+      <div class="dcrd-num">D${d.num}</div>
+      <div class="dcrd-body">
+        <div class="dcrd-name">${d.name}</div>
+        <div class="dcrd-meta">${d.weight}% of exam · ${subCount} subdomains ${badge}</div>
+      </div>
+      <div class="dcrd-arr">▶</div>
+    </div>`;
+  }).join('');
+}
+
+function startSAADomain(domainNum){
+  currentMode='saa';
+  const state=loadSAAState()||{};
+  state.currentDomain=domainNum;
+  state.currentSubIdx=0;
+  saveSAAState(state);
+  updateHeader();
+  go();
+  const domain=getCurrSAADomain();
+  const sub=getCurrSAASub();
+  addU(`Start SAA drill — D${domain.num} ${domain.name} / ${sub.id} ${sub.name}`);
+  call(`Start an SAA-C03 drill session for Domain ${domain.num}: ${domain.name}, Subdomain ${sub.id}: ${sub.name}. In one line, state the key focus area for this subdomain. Then go straight into the first scenario question.`);
+}
+
 function startFresh(){
   currentMode='python';
   const mod=getCurrMod();
@@ -845,8 +1001,12 @@ function go(){
   document.getElementById('startScreen').classList.add('gone');
   document.getElementById('pyScreen').classList.add('gone');
   document.getElementById('ccpScreen').classList.add('gone');
+  document.getElementById('saaScreen').classList.add('gone');
   document.getElementById('thread').style.display='flex';
   document.getElementById('ibar').style.display='flex';
+  // Show/hide Complete Module button — Python only
+  const cmBtn=document.getElementById('bcomplete');
+  if(cmBtn) cmBtn.style.display=(currentMode==='python')?'':'none';
 }
 function focus(){setTimeout(()=>document.getElementById('inp').focus(),80)}
 
@@ -882,10 +1042,6 @@ function finalizeA(el, fullText){
   const clears=[...fullText.matchAll(/\[CLEAR:\s*([^\]]+)\]/gi)];
   clears.forEach(m=>removeWS(m[1].trim()));
 
-  // CONFIRMED extraction — coach emits [CONFIRMED: concept] on applied/unprompted recall
-  const confs=[...fullText.matchAll(/\[CONFIRMED:\s*([^\]]+)\]/gi)];
-  confs.forEach(m=>{const c=m[1].trim(); if(!confirmedThisSession.includes(c))confirmedThisSession.push(c);});
-
   // Drill counter — count [DRILL] markers Claude outputs
   const drillMarkers=(fullText.match(/\[DRILL\]/gi)||[]).length;
   if(drillMarkers>0){drills+=drillMarkers;document.getElementById('dc').textContent=drills;}
@@ -908,34 +1064,6 @@ function finalizeA(el, fullText){
   scrollThread();
 }
 
-// Merge newly-covered topic strings into an existing covered-object array.
-// Preserves firstSeen + confirmed on existing entries; stamps new ones with today.
-// Applies any concepts confirmed this session (fuzzy, case-insensitive match).
-function mergeCovered(existingArr, newTopicStrings, confirmedList){
-  const today=todayStrDE();
-  const byKey={};
-  (existingArr||[]).forEach(e=>{
-    const o=(e&&typeof e==='object'&&'topic' in e)?{topic:e.topic,firstSeen:e.firstSeen||today,confirmed:!!e.confirmed}:{topic:String(e),firstSeen:today,confirmed:false};
-    byKey[o.topic.toLowerCase()]=o;
-  });
-  (newTopicStrings||[]).forEach(t=>{
-    const k=t.toLowerCase();
-    if(!byKey[k]) byKey[k]={topic:t,firstSeen:today,confirmed:false};
-  });
-  // apply confirmations
-  (confirmedList||[]).forEach(c=>{
-    const k=c.toLowerCase();
-    if(byKey[k]){byKey[k].confirmed=true;}
-    else{
-      // confirmed a concept not yet in covered — add it, confirmed
-      const hit=Object.keys(byKey).find(kk=>kk.includes(k)||k.includes(kk));
-      if(hit) byKey[hit].confirmed=true;
-      else byKey[k]={topic:c,firstSeen:today,confirmed:true};
-    }
-  });
-  return Object.values(byKey);
-}
-
 function saveSessionLog(rawLog){
   const getField=(label)=>{const m=rawLog.match(new RegExp(label+':\\s*([^\\n]+)'));return m?m[1].trim():''};
   const covBlock=rawLog.match(/COVERED:([\s\S]+?)(?=WEAK SPOTS:|---END---|$)/);
@@ -943,7 +1071,36 @@ function saveSessionLog(rawLog){
   const wsBlock=rawLog.match(/WEAK SPOTS:([\s\S]+?)(?=NEXT |---END---|$)/);
   const wsFromLog=wsBlock?wsBlock[1].split('\n').map(l=>l.replace(/^[-•*]\s*/,'')).filter(l=>l.trim()&&l.trim().toLowerCase()!=='none'):[];
 
-  if(currentMode==='ccp'){
+  if(currentMode==='saa'){
+    const domain=getCurrSAADomain();
+    const sub=getCurrSAASub();
+    const log={
+      date:todayStrDE(),
+      mode:'saa',
+      domain:`D${domain.num}`,
+      domainName:domain.name,
+      subdomain:sub.id,
+      subdomainName:sub.name,
+      drills:drills,
+      weakSpots:[...new Set([...weakSpots,...wsFromLog])],
+      nextQuestion:getField('NEXT QUESTION'),
+      nextFocus:getField('NEXT FOCUS'),
+      raw:rawLog
+    };
+    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
+    const state=loadSAAState()||{};
+    state.currentDomain=domain.num;
+    state.totalSessions=(state.totalSessions||0)+1;
+    state.totalDrills=(state.totalDrills||0)+drills;
+    state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
+    state.lastActivity=todayStrDE();
+    if(covered.length){
+      if(!state.covered) state.covered={};
+      const existing=state.covered[sub.id]||[];
+      state.covered[sub.id]=[...new Set([...existing,...covered])];
+    }
+    saveSAAState(state);
+  } else if(currentMode==='ccp'){
     const domain=getCurrDomain();
     const sub=getCurrSub();
     const log={
@@ -955,23 +1112,24 @@ function saveSessionLog(rawLog){
       subdomainName:sub.name,
       drills:drills,
       weakSpots:[...new Set([...weakSpots,...wsFromLog])],
-      confirmed:[...confirmedThisSession],
       nextQuestion:getField('NEXT QUESTION'),
       nextFocus:getField('NEXT FOCUS'),
       raw:rawLog
     };
+    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
+    // Update CCP cumulative state
     const state=loadCCPState()||{};
     state.currentDomain=domain.num;
     state.totalSessions=(state.totalSessions||0)+1;
     state.totalDrills=(state.totalDrills||0)+drills;
     state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
     state.lastActivity=todayStrDE();
-    if(!state.covered) state.covered={};
-    if(covered.length||confirmedThisSession.length){
-      state.covered[sub.id]=mergeCovered(state.covered[sub.id], covered, confirmedThisSession);
+    if(covered.length){
+      if(!state.covered) state.covered={};
+      const existing=state.covered[sub.id]||[];
+      state.covered[sub.id]=[...new Set([...existing,...covered])];
     }
     saveCCPState(state);
-    const root=loadRoot(); root.lastLog=log; saveRoot(root);
   } else {
     const mod=getCurrMod();
     const log={
@@ -981,11 +1139,11 @@ function saveSessionLog(rawLog){
       moduleName:mod.name,
       drills:drills,
       weakSpots:[...new Set([...weakSpots,...wsFromLog])],
-      confirmed:[...confirmedThisSession],
       nextDrill:getField('NEXT DRILL'),
       nextFocus:getField('NEXT FOCUS'),
       raw:rawLog
     };
+    localStorage.setItem('drill_engine_last_log',JSON.stringify(log));
     const state=loadState()||{};
     state.currentModule=mod.num;
     state.moduleName=mod.name;
@@ -993,11 +1151,11 @@ function saveSessionLog(rawLog){
     state.totalDrills=(state.totalDrills||0)+drills;
     state.allWeakSpots=[...new Set([...(state.allWeakSpots||[]),...log.weakSpots])];
     state.lastActivity=todayStrDE();
-    if(covered.length||confirmedThisSession.length){
-      state.covered=mergeCovered(state.covered, covered, confirmedThisSession);
+    if(covered.length){
+      const existing=state.covered||[];
+      state.covered=[...new Set([...existing,...covered])];
     }
     saveState(state);
-    const root=loadRoot(); root.lastLog=log; saveRoot(root);
   }
 }
 
@@ -1007,8 +1165,8 @@ function addWS(concept){
   const e=document.getElementById('wsEmpty');if(e)e.remove();
   const item=document.createElement('div');
   item.className='ws-item';
-  const mod=getCurrMod();
-  item.innerHTML=`<span class="ws-mod">M${mod.num}</span>${concept}`;
+  const wsLabel = currentMode==='saa' ? `D${getCurrSAADomain().num}` : currentMode==='ccp' ? `D${getCurrDomain().num}` : `M${getCurrMod().num}`;
+  item.innerHTML=`<span class="ws-mod">${wsLabel}</span>${concept}`;
   document.getElementById('wsList').appendChild(item);
   const p=document.getElementById('wsPill');
   p.textContent=`${weakSpots.length} weak spot${weakSpots.length!==1?'s':''}`;
@@ -1028,11 +1186,11 @@ function removeWS(concept){
     list.innerHTML='<div class="ws-empty" id="wsEmpty">None flagged yet</div>';
     document.getElementById('wsPill').classList.remove('on');
   } else {
-    const mod=getCurrMod();
+    const wsLabel = currentMode==='saa' ? `D${getCurrSAADomain().num}` : currentMode==='ccp' ? `D${getCurrDomain().num}` : `M${getCurrMod().num}`;
     weakSpots.forEach(w=>{
       const item=document.createElement('div');
       item.className='ws-item';
-      item.innerHTML=`<span class="ws-mod">M${mod.num}</span>${w}`;
+      item.innerHTML=`<span class="ws-mod">${wsLabel}</span>${w}`;
       list.appendChild(item);
     });
     const p=document.getElementById('wsPill');
@@ -1163,9 +1321,9 @@ function send(){
 }
 
 function endSession(){
-  if(currentMode==='ccp'){
+  if(currentMode==='saa'||currentMode==='ccp'){
     addU('End session — generate log entry');
-    call('End this session. Generate the session log in the exact format specified. List all weak spots identified this session. Then one line: what to hit first next session.');
+    call('End this session. Generate the session log in the exact format specified. List all weak spots identified this session. State one specific concept or subdomain to hit first next session.');
   } else {
     addU('End session — generate log entry');
     call('End this session. Generate the session log in the exact format specified. List all weak spots identified this session. Then one line of encouragement.');
@@ -1175,7 +1333,7 @@ function endSession(){
 function switchMode(){
   // Only works from main screen — prevents mid-session mode switch
   backToMain();
-  hist=[];weakSpots=[];drills=0;confirmedThisSession=[];
+  hist=[];weakSpots=[];drills=0;
   document.getElementById('dc').textContent='0';
   document.getElementById('wc').textContent='0';
   document.getElementById('wsList').innerHTML='<div class="ws-empty" id="wsEmpty">None flagged yet</div>';
