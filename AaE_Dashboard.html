@@ -912,7 +912,7 @@ body{
     <div class="hdr-left">
       <div class="hdr-brand"><svg class="hdr-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.4" fill="currentColor"/></svg>SANKOFA · DAMON · APPLIED AI ACCELERATOR</div>
       <div class="hdr-pills">
-        <span class="pill pill-phase" id="hdrPhase">PHASE —</span>
+        <span class="pill pill-phase" id="hdrPhase" onclick="cyclePhaseOverride()" style="cursor:pointer" title="Milestone-driven, not week-locked — click to set the current phase manually">PHASE —</span>
         <span class="pill pill-week" id="hdrWeek">WK —</span>
       </div>
     </div>
@@ -1222,7 +1222,7 @@ body{
         <span class="pb2-title" id="pb2Title"><strong>Phase 1</strong> · Foundation</span>
       </div>
       <div class="pb2-right">
-        <span class="pb2-wks" id="pb2Wks">Wks 1–6</span>
+        <span class="pb2-wks" id="pb2Wks"></span>
         <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
       </div>
     </div>
@@ -1245,10 +1245,10 @@ body{
   <div class="pb-panel">
     <div class="pb-head">Phase Progress</div>
     <div class="pb-grid">
-      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#8B6FA8;width:0%"></div></div><div class="pb-wks">Wks 1–6</div></div>
-      <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#C9982E;width:0%"></div></div><div class="pb-wks">Wks 7–13</div></div>
-      <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#D98F3A;width:0%"></div></div><div class="pb-wks">Wks 14–20</div></div>
-      <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#B5533C;width:0%"></div></div><div class="pb-wks">Wks 21–24</div></div>
+      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#8B6FA8;width:0%"></div></div><div class="pb-wks">Python + CCP</div></div>
+      <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#C9982E;width:0%"></div></div><div class="pb-wks">SAA + EvalKit + ReviewLoop</div></div>
+      <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#D98F3A;width:0%"></div></div><div class="pb-wks">AgentForge + CloudMind</div></div>
+      <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#B5533C;width:0%"></div></div><div class="pb-wks">Portfolio + first client</div></div>
     </div>
   </div>
 
@@ -1615,7 +1615,7 @@ const PHASES = [
   {num:3,wk:[14,20], color:'#D98F3A',label:'Agentic',
    northStar:'The jump from "I call the API" to "I run a reliable agentic pipeline in the cloud" is <strong>the threshold where freelance work becomes viable at real scope.</strong> AgentForge runs on LangGraph. Both projects must be deployed, not just local.'},
   {num:4,wk:[21,24], color:'#B5533C',label:'Client Ready',
-   northStar:'Stop building, start operating. The projects become a service menu. READMEs are case studies, not documentation. <strong>First client engagement or active pipeline closes by Week 24.</strong> Sekhem is the template — real client, real problem, real stakes.'}
+   northStar:'Stop building, start operating. The projects become a service menu. READMEs are case studies, not documentation. <strong>First client engagement or active pipeline before this phase closes.</strong> Sekhem is the template — real client, real problem, real stakes.'}
 ];
 
 const PY_MODULES = [
@@ -1693,13 +1693,24 @@ const WEEK_TARGETS = {
 
 // ── STATE ─────────────────────────────────────────────
 let sessions=[], ccp=[], startStr='', selCat='', showAll=false;
-let pyDone={}, missionDone={};
+let pyDone={}, missionDone={}, phaseOverride=null;
 
 function load(){
   try{sessions=JSON.parse(localStorage.getItem('v9d_sessions')||'[]');}catch(e){sessions=[];}
   try{ccp=JSON.parse(localStorage.getItem('v9d_ccp')||'[]');}catch(e){ccp=[];}
   try{pyDone=JSON.parse(localStorage.getItem('v10_pyDone')||'{}');}catch(e){pyDone={};}
   try{missionDone=JSON.parse(localStorage.getItem('v11_mission')||'{}');}catch(e){missionDone={};}
+  // Milestone-driven phase, not week-locked: a manual override takes precedence
+  // over the calendar-derived phase everywhere in the dashboard. First-run default
+  // below reflects the actual milestone state as of this fix (Python + CCP closed,
+  // SAA/EvalKit/ReviewLoop not started = Phase 2), not the calendar week count.
+  const rawOverride=localStorage.getItem('v11_phaseOverride');
+  if(rawOverride===null){
+    phaseOverride=2;
+    localStorage.setItem('v11_phaseOverride','2');
+  } else {
+    phaseOverride=rawOverride===''?null:parseInt(rawOverride);
+  }
   startStr=localStorage.getItem('v9d_start')||'';
   // Load theme
   const t=localStorage.getItem('v11_theme')||'dark';
@@ -1728,6 +1739,22 @@ function wkOf(ds){
 }
 function getPhase(wk){return PHASES.find(p=>wk>=p.wk[0]&&wk<=p.wk[1])||PHASES[PHASES.length-1];}
 
+// Milestone-driven phase resolution: manual override wins everywhere a phase
+// is read for rendering. Calendar week is still shown (WK N pill) for reference,
+// but it no longer decides which phase's content, mission, or targets display.
+function getCurrentPhase(){
+  if(phaseOverride)return PHASES.find(p=>p.num===phaseOverride)||getPhase(currWk());
+  return getPhase(currWk());
+}
+
+function cyclePhaseOverride(){
+  const order=[1,2,3,4];
+  const idx=order.indexOf(phaseOverride);
+  phaseOverride=order[(idx+1)%order.length];
+  localStorage.setItem('v11_phaseOverride',String(phaseOverride));
+  renderAll();
+}
+
 // ── STREAK ────────────────────────────────────────────
 function calcStreak(filter){
   const days=new Set(sessions.filter(s=>!filter||filter(s)).map(s=>s.date));
@@ -1750,9 +1777,10 @@ function toggleTheme(){
 
 // ── RENDERS ───────────────────────────────────────────
 function renderHeader(){
-  const wk=currWk(),ph=getPhase(wk);
+  const wk=currWk(),calcPh=getPhase(wk),ph=getCurrentPhase();
   const pill=document.getElementById('hdrPhase');
-  pill.textContent=`PHASE ${ph.num} · ${ph.label.toUpperCase()}`;
+  const manual=phaseOverride&&phaseOverride!==calcPh.num;
+  pill.innerHTML=`PHASE ${ph.num} · ${ph.label.toUpperCase()}${manual?' <span style="opacity:.55;font-size:9px">(manual)</span>':''}`;
   pill.style.borderColor=ph.color+'80';
   pill.style.color=ph.color;
   document.getElementById('hdrWeek').textContent=startStr?`WK ${wk}`:'WK —';
@@ -1761,7 +1789,7 @@ function renderHeader(){
 }
 
 function renderNorthStar(){
-  const ph=getPhase(currWk());
+  const ph=getCurrentPhase();
   document.getElementById('northStarText').innerHTML=startStr
     ?ph.northStar
     :'Set your start date to see the current phase directive.';
@@ -1790,7 +1818,7 @@ function renderStreak(){
 }
 
 function renderMission(){
-  const ph=getPhase(currWk());
+  const ph=getCurrentPhase();
   const items=PHASE_MISSIONS[ph.num]||PHASE_MISSIONS[1];
   const today=todayStr();
   const mKey=today; // mission resets daily if not manually done
@@ -1921,7 +1949,7 @@ function renderCodedBadge(){
 }
 
 function renderTargets(){
-  const wk=currWk(),ph=getPhase(wk);
+  const wk=currWk(),ph=getCurrentPhase();
   const phNum=ph.num;
   const tDef=WEEK_TARGETS[phNum]||WEEK_TARGETS[1];
   const wkSessions=sessions.filter(s=>wkOf(s.date)===wk);
@@ -1954,11 +1982,11 @@ function renderTargets(){
 }
 
 function renderPhaseBars(){
-  const wk=currWk();
-  [{id:'pb1',r:[1,6]},{id:'pb2',r:[7,13]},{id:'pb3',r:[14,20]},{id:'pb4',r:[21,24]}].forEach(c=>{
-    const[s,e]=c.r;
-    const pct=wk<s?0:wk>e?100:Math.round(((wk-s)/(e-s+1))*100);
-    document.getElementById(c.id).style.width=pct+'%';
+  // Milestone-driven: earlier phases full, current phase in progress, later empty.
+  const curNum=getCurrentPhase().num;
+  ['pb1','pb2','pb3','pb4'].forEach((id,i)=>{
+    const n=i+1;
+    document.getElementById(id).style.width=(n<curNum?100:n===curNum?50:0)+'%';
   });
 }
 
@@ -2127,7 +2155,7 @@ const PHASE_DETAIL = {
   },
   2:{
     wkRange:[7,13],
-    cert:['AWS SAA-C03 study — weeks 7–12','Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing','DL.AI: Evaluating & Debugging GenAI — week 10','SAA exam target: week 12–13'],
+    cert:['AWS SAA-C03 study — begins once Phase 1 closes','Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing','DL.AI: Evaluating & Debugging GenAI — paired with the EvalKit build','SAA exam: once mocks are consistently passing, not before'],
     code:['Python intermediate: requests, JSON, async basics, classes','Build EvalKit — automated LLM output scoring','Build ReviewLoop — HITL annotation interface','APIs: Anthropic, basic REST patterns'],
     milestones:[
       {label:'SAA-C03 pass',type:'cert'},{label:'DL.AI Evals',type:'cert'},
@@ -2145,7 +2173,7 @@ const PHASE_DETAIL = {
   },
   3:{
     wkRange:[14,20],
-    cert:['DL.AI: Agentic AI Systems — week 14–15','AWS Bedrock hands-on labs (concurrent)','Begin AWS AI Practitioner prep — week 18'],
+    cert:['DL.AI: Agentic AI Systems — paired with the AgentForge build','AWS Bedrock hands-on labs (concurrent)','Begin AWS AI Practitioner prep once CloudMind\'s core deploy is stable'],
     code:['Tool use, function calling, multi-step agents','Build AgentForge — agentic research assistant','Build CloudMind — full-stack deployed on AWS','Docker basics, Lambda, S3, basic CI/CD'],
     milestones:[
       {label:'DL.AI Agents',type:'cert'},{label:'AgentForge',type:'proj'},
@@ -2163,8 +2191,8 @@ const PHASE_DETAIL = {
   },
   4:{
     wkRange:[21,24],
-    cert:['AWS AI Practitioner (AIF-C01) — exam week 21','Claude Certified Architect (CCA-F) — target week 17–18 in Phase 3'],
-    code:['Polish all project READMEs as case studies — not just docs','GitHub profile — pinned projects with clear "what I built and why" narrative','LinkedIn optimized for inbound: Applied AI Practitioner — evaluation, HITL, agentic systems','Define service offerings + rough pricing tiers (audit, build, consult)','First client engagement or signed project before week 24 closes'],
+    cert:['AWS AI Practitioner (AIF-C01) — once CloudMind ships and service tiers are drafted','Claude Certified Architect (CCA-F) — pursue during Phase 3 if available'],
+    code:['Polish all project READMEs as case studies — not just docs','GitHub profile — pinned projects with clear "what I built and why" narrative','LinkedIn optimized for inbound: Applied AI Practitioner — evaluation, HITL, agentic systems','Define service offerings + rough pricing tiers (audit, build, consult)','First client engagement or signed project before this phase closes'],
     milestones:[
       {label:'AWS AI Practitioner',type:'cert'},{label:'Portfolio live',type:'skill'},
       {label:'First client engaged',type:'project'},{label:'Services defined',type:'skill'},
@@ -2178,11 +2206,12 @@ const PHASE_DETAIL = {
   }
 };
 
+const PHASE_MILESTONE_LABEL = {1:'Python M1–M7 + Claude Shell v1.0 + CCP',2:'SAA-C03 + EvalKit + ReviewLoop',3:'AgentForge + CloudMind (deployed)',4:'Portfolio live + first client engaged'};
 let pb2SelectedWk = null;
 
 function renderPhaseBrief(){
   const wk = currWk();
-  const ph = getPhase(wk);
+  const ph = getCurrentPhase();
   const detail = PHASE_DETAIL[ph.num];
 
   // Header
@@ -2192,13 +2221,13 @@ function renderPhaseBrief(){
   numEl.style.color = ph.color;
   numEl.style.background = ph.color + '15';
   document.getElementById('pb2Title').innerHTML = `<strong>Phase ${ph.num}</strong> · ${ph.label}`;
-  document.getElementById('pb2Wks').textContent = `Wks ${detail.wkRange[0]}–${detail.wkRange[1]}`;
+  document.getElementById('pb2Wks').textContent = PHASE_MILESTONE_LABEL[ph.num]||'';
 
   // Week nav buttons
   const nav = document.getElementById('pb2WeekNav');
   const weeks = Object.keys(detail.weeks).map(Number);
   nav.innerHTML = weeks.map(w =>
-    `<button class="pb2-wk-btn${w===wk?' current':''}" onclick="selectPhaseBriefWk(${w},event)">Wk ${w}</button>`
+    `<button class="pb2-wk-btn${w===wk?' current':''}" onclick="selectPhaseBriefWk(${w},event)">Step ${w}</button>`
   ).join('');
 
   // Default selected week = current
@@ -2228,7 +2257,7 @@ function renderPhaseBriefWeek(detail){
   const wd = document.getElementById('pb2WeekDetail');
   if(!items){wd.style.display='none';return;}
   wd.style.display = 'block';
-  document.getElementById('pb2WdTitle').textContent = `WEEK ${pb2SelectedWk} — FOCUS`;
+  document.getElementById('pb2WdTitle').textContent = `STEP ${pb2SelectedWk} — FOCUS`;
   document.getElementById('pb2WdItems').innerHTML = items.map(i=>
     `<div class="pb2-wd-item">${i}</div>`
   ).join('');
@@ -2241,7 +2270,7 @@ function renderPhaseBriefWeek(detail){
 function selectPhaseBriefWk(wk, e){
   e.stopPropagation();
   pb2SelectedWk = wk;
-  const ph = getPhase(currWk());
+  const ph = getCurrentPhase();
   renderPhaseBriefWeek(PHASE_DETAIL[ph.num]);
 }
 
