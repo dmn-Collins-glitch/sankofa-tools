@@ -1,10 +1,11 @@
 """
 run_protocol.py — Sankofa Tools
-SNKF Protocol Runner v0.1
+SNKF Protocol Runner v0.2
 
 Runs the weekly ecosystem scan or monthly plan review from the terminal.
-Walks through each checkpoint interactively, collects your notes,
-classifies signal, and prints a formatted dashboard log entry at the end.
+v0.2: the weekly scan is AI-assisted — ClaudeShell.ask_with_search() fetches
+and summarizes each source, suggests a signal level, and you review/override
+before it's logged. Monthly review stays fully manual (the judgment layer).
 
 Usage:
     python3 run_protocol.py          # prompts you to choose scan or review
@@ -12,11 +13,18 @@ Usage:
     python3 run_protocol.py --review # monthly plan review
 
 v0.1 — no API calls, pure CLI workflow
-v0.2 — AI-assist layer: signal classification suggestions via Claude Shell
+v0.2 — AI-assist layer: ClaudeShell.ask_with_search() fetches + summarizes
+       each weekly checkpoint, suggests a signal (g/y/r/n), human reviews
+       and can override before logging — HITL by design, not autopilot
 """
 
 import sys
+import os
 import datetime
+
+# claude_shell.py lives in a sibling directory: sankofa-tools/claude_shell/
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "claude_shell"))
+from claude_shell import ClaudeShell
 
 
 # ── Config ────────────────────────────────────────────────
@@ -95,6 +103,54 @@ MONTHLY_CHECKPOINTS = [
 ]
 
 
+# ── M6/v0.2: AI-assist config ─────────────────────────────
+
+SCAN_SYSTEM_PROMPT = (
+    "You are running the Sankofa Weekly Intelligence Scan for Damon Collins, "
+    "an independent applied AI practitioner building toward freelance work in "
+    "AI/ML, with HITL (human-in-the-loop) and evaluation engineering as his "
+    "core specialization. For each source you're asked to search, find "
+    "genuinely new developments from roughly the past 7 days — skip anything "
+    "older or generic. Summarize in 3-5 concise sentences, prioritizing "
+    "items relevant to applied AI engineering, HITL, evals, agentic systems, "
+    "or AWS AI/ML tooling. Classify the urgency of what you found using this "
+    "scale: g=green (note it, no plan change), y=yellow (worth discussing, "
+    "may need a plan adjustment), r=red (act now — e.g. a cert retiring, a "
+    "tool obsoleting a planned project), n=none (nothing new or relevant "
+    "found). End your response with exactly one line in this format: "
+    "'SIGNAL: <code>' using one of g, y, r, n."
+)
+
+
+def build_query(checkpoint):
+    """Turn a checkpoint's label/hint into a search query for ask_with_search()."""
+    return (
+        f"{checkpoint['label']}. {checkpoint['hint']}. "
+        f"Focus on the most recent developments from the last week."
+    )
+
+
+def parse_signal(text):
+    """
+    Extract the trailing 'SIGNAL: <code>' line the AI is instructed to
+    include. Tolerant of markdown emphasis (**SIGNAL: g**) and full words
+    (SIGNAL: green) — takes the first character of whatever follows the
+    colon. Returns (code, display_text) with the signal line stripped out
+    of display_text so it isn't shown twice.
+    """
+    code = "n"
+    cleaned_lines = []
+    for line in text.strip().split("\n"):
+        stripped = line.strip().strip("*").strip()
+        if stripped.upper().startswith("SIGNAL:"):
+            raw = stripped.split(":", 1)[1].strip().lower()
+            if raw and raw[0] in SIGNAL_LEVELS:
+                code = raw[0]
+            continue  # drop this line from what gets displayed/logged
+        cleaned_lines.append(line)
+    return code, "\n".join(cleaned_lines).strip()
+
+
 # ── Utilities ─────────────────────────────────────────────
 
 def hr(char="─", width=50):
@@ -129,49 +185,102 @@ def ask_signal():
 
 def run_weekly_scan():
     hr("═")
-    print("  SNKF PROTOCOL — Weekly Ecosystem Scan")
+    print("  SNKF PROTOCOL — Weekly Ecosystem Scan (v0.2 — AI-assisted)")
     print(f"  {today()}")
     hr("═")
 
+    shell = ClaudeShell(system_prompt=SCAN_SYSTEM_PROMPT)
     results = []
+    all_citations = []
     overall_signal = "n"
     signal_priority = ["n", "g", "y", "r"]  # highest index wins
 
-    for i, cp in enumerate(WEEKLY_CHECKPOINTS, 1):
+    # signal_log is a wrap-up, not a search target — handled separately below
+    scan_checkpoints = [cp for cp in WEEKLY_CHECKPOINTS if cp["id"] != "signal_log"]
+
+    for i, cp in enumerate(scan_checkpoints, 1):
         print()
         hr()
-        print(f"  [{i}/{len(WEEKLY_CHECKPOINTS)}] {cp['label']}")
+        print(f"  [{i}/{len(scan_checkpoints)}] {cp['label']}")
         print(f"  ↳ {cp['hint']}")
         hr()
-        note = prompt("What did you find? (press Enter to skip)")
-        if not note:
-            results.append({"checkpoint": cp["label"], "note": "(skipped)", "signal": "n"})
+        print("  Searching...")
+
+        query = build_query(cp)
+        summary, citations, error = shell.ask_with_search(query)
+
+        if error:
+            # Degrade gracefully — fall back to v0.1's manual entry for
+            # just this source rather than aborting the whole scan.
+            print(f"  [Search failed: {error}]")
+            note = prompt("Falling back to manual entry. What did you find? (Enter to skip)")
+            if not note:
+                results.append({"checkpoint": cp["label"], "note": "(skipped)", "signal": "n"})
+                continue
+            code, label, desc = ask_signal()
+            results.append({"checkpoint": cp["label"], "note": note, "signal": label})
+            if signal_priority.index(code) > signal_priority.index(overall_signal):
+                overall_signal = code
             continue
 
-        code, label, desc = ask_signal()
-        results.append({"checkpoint": cp["label"], "note": note, "signal": label})
+        code, display_text = parse_signal(summary)
+        signal_label, signal_desc = SIGNAL_LEVELS[code]
 
-        # Track highest signal across all checkpoints
-        if signal_priority.index(code) > signal_priority.index(overall_signal):
-            overall_signal = code
+        print()
+        print(f"  {display_text}")
+        if citations:
+            print()
+            print("  Sources:")
+            for c in citations[:5]:
+                print(f"    - {c['title']}: {c['url']}")
 
-    # Build dashboard log entry
-    _print_scan_log(results, overall_signal)
+        print()
+        print(f"  AI-suggested signal: {signal_label.upper()} — {signal_desc}")
+        override = prompt("Accept? (Enter to accept, or type g/y/r/n to override)").lower()
+        final_code = override if override in SIGNAL_LEVELS else code
+        final_label = SIGNAL_LEVELS[final_code][0]
+
+        extra = prompt("Anything to add? (Enter to skip)")
+        full_note = display_text if not extra else f"{display_text}\n    Your note: {extra}"
+
+        results.append({"checkpoint": cp["label"], "note": full_note, "signal": final_label})
+        all_citations.extend(citations)
+
+        if signal_priority.index(final_code) > signal_priority.index(overall_signal):
+            overall_signal = final_code
+
+    # Signal log wrap-up — synthesized from what got flagged above,
+    # since you're no longer manually reading every source yourself.
+    flagged = [r for r in results if r["signal"] != "none"]
+    print()
+    hr()
+    print(f"  Signal log — {len(flagged)} source(s) flagged this week")
+    hr()
+    for r in flagged:
+        print(f"    [{r['signal']}] {r['checkpoint']}")
+    wrap_note = prompt("Anything else to log for this week? (Enter to skip)")
+    results.append({
+        "checkpoint": "Signal log",
+        "note": wrap_note or f"{len(flagged)} source(s) flagged this week",
+        "signal": "none",
+    })
+
+    _print_scan_log(results, overall_signal, all_citations)
 
 
-def _print_scan_log(results, overall_signal):
+def _print_scan_log(results, overall_signal, all_citations=None):
     signal_label, signal_desc = SIGNAL_LEVELS[overall_signal]
 
     # Compress non-empty notes into a scan note string
     flagged = [r for r in results if r["note"] != "(skipped)" and r["signal"] != "none"]
-    scan_note_parts = [r["note"][:60] for r in flagged[:3]]  # cap at 3 for dashboard field
+    scan_note_parts = [r["note"][:60].replace("\n", " ") for r in flagged[:3]]  # cap at 3 for dashboard field
     scan_note = " · ".join(scan_note_parts) if scan_note_parts else "No flags this week"
 
     print()
     hr("═")
     print("  DASHBOARD LOG ENTRY — copy and paste into AaE_Dashboard.html")
     hr("═")
-    print(f"  Category  : Scan")
+    print(f"  Category  : Scan (AI-assisted)")
     print(f"  Signal    : {signal_label.upper()} — {signal_desc}")
     print(f"  Scan note : {scan_note}")
     print(f"  Minutes   : 20")
@@ -180,6 +289,18 @@ def _print_scan_log(results, overall_signal):
     for r in results:
         if r["note"] != "(skipped)":
             print(f"    [{r['signal']:8s}] {r['checkpoint']}: {r['note']}")
+    if all_citations:
+        # Dedup by url in case the same source got cited across checkpoints
+        seen = set()
+        unique = []
+        for c in all_citations:
+            if c["url"] not in seen:
+                seen.add(c["url"])
+                unique.append(c)
+        print()
+        print("  Sources cited this scan:")
+        for c in unique:
+            print(f"    - {c['title']}: {c['url']}")
     hr("═")
     print()
 
@@ -246,7 +367,7 @@ def main():
     else:
         print()
         hr("═")
-        print("  SNKF Protocol Runner v0.1")
+        print("  SNKF Protocol Runner v0.2")
         hr("═")
         print()
         print("  [1] Weekly Ecosystem Scan  (~20 min)")
