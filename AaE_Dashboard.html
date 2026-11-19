@@ -919,6 +919,7 @@ body{
     <div class="hdr-right">
       <div class="hdr-date" id="hdrDate">—</div>
       <button class="drill-btn" onclick="openDrillEngine()">Drill Engine</button>
+      <button class="drill-btn" onclick="window.open('AaE_Drill_Engine_v2.html','_blank')">Drills v2</button>
       <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">◑</button>
     </div>
   </div>
@@ -1891,9 +1892,9 @@ function renderPyModules(){
   if(nextMod){
     widget.style.display='block';
     document.getElementById('idrillChallenge').textContent=nextMod.prompt;
-    document.getElementById('idrillHint').textContent='Hint: '+nextMod.hint;
+    document.getElementById('idrillHint').textContent=nextMod.hint;
     // Only init if not already running
-    if(!idrillActive) idrillInit(nextMod);
+    if(!idrillActive){idrillMod=nextMod;idrillActive=true;document.getElementById('idrillIbar').style.display='flex';}
   } else {
     widget.style.display='none';
   }
