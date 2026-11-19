@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drill Engine v2 · Sankofa</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0B14;--s:#1B1526;--s2:#221A2F;--b:#382C4A;--t:#EDE6E0;--t2:#B8ACC4;--t3:#7A6F8C;--g:#C9982E;--ok:#7A9683;--bad:#C05C4E;--fm:'IBM Plex Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font:14px/1.6 Inter,sans-serif;min-height:100vh}
+.w{max-width:860px;margin:0 auto;padding:1.2rem 1rem 4rem}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;padding-bottom:.8rem;border-bottom:1px solid var(--b)}
+.br{font:11px var(--fm);letter-spacing:.22em;color:var(--g);text-transform:uppercase}
+select,button,textarea{font:12px var(--fm);color:var(--t);background:var(--s2);border:1px solid var(--b);border-radius:3px;padding:.35rem .7rem}
+button{cursor:pointer;letter-spacing:.05em}button:hover{border-color:var(--g)}
+.pri{background:var(--g);color:#0E0B14;border-color:var(--g);font-weight:500}
+.pips{display:flex;gap:.3rem;flex-wrap:wrap;margin:1rem 0}
+.pip{width:30px;height:26px;padding:0;font-size:11px}
+.pip.on{border-color:var(--g);color:var(--g)}.pip.ok{background:var(--ok);color:#0E0B14;border-color:var(--ok)}.pip.lock{opacity:.3;cursor:not-allowed}
+.card{background:var(--s);border:1px solid var(--b);border-radius:4px;padding:1.1rem 1.25rem}
+.tag{font:10px var(--fm);color:var(--g);letter-spacing:.12em;text-transform:uppercase}
+h2{font:700 20px Fraunces,serif;margin:.2rem 0 .5rem}
+.p{color:var(--t2);margin-bottom:.8rem}
+textarea{width:100%;min-height:220px;resize:vertical;line-height:1.5;tab-size:4;background:#150F1D}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.7rem 0}
+pre{font:12px/1.55 var(--fm);white-space:pre-wrap;background:#150F1D;border:1px solid var(--b);border-left:2px solid var(--b);border-radius:3px;padding:.7rem .85rem;margin-top:.6rem;display:none}
+pre.show{display:block}pre.ok{border-left-color:var(--ok)}pre.bad{border-left-color:var(--bad)}pre.ai{border-left-color:var(--g);color:var(--t2)}
+.m{font:11px var(--fm);color:var(--t3);margin-top:.4rem}
+.chips{display:flex;gap:.35rem;flex-wrap:wrap;margin:-.2rem 0 .7rem}.chip{font:10px var(--fm);padding:1px 7px;border:1px solid var(--b);border-radius:2px;color:var(--t3)}.chip.w{color:var(--bad);border-color:var(--bad)}
+</style></head><body><div class="w">
+<header><span class="br">▶ Drill Engine v2 · Python chain</span>
+<span><select id="mod" title="Model for Ask Claude"><option value="claude-haiku-5-5">haiku (cheap)</option><option value="claude-sonnet-4-6">sonnet</option></select>
+<button onclick="resetAll()">reset</button></span></header>
+<div class="pips" id="pips"></div>
+<div class="card"><div class="tag" id="tag"></div><h2 id="ti"></h2><div class="p" id="pr"></div><div class="chips" id="chips"></div>
+<textarea id="ta" spellcheck="false"></textarea>
+<div class="row"><button class="pri" id="run" onclick="run()">Run checks ⌘↵</button><button onclick="hint()">Hint (free)</button><button onclick="ask()">Ask Claude</button><button onclick="nxt()" id="nx" style="display:none">Next →</button></div>
+<pre id="out"></pre><pre id="ai" class="ai"></pre><div class="m" id="mt"></div></div>
+<div class="m" style="margin-top:1rem">Each drill runs your earlier solutions as its foundation. Checks run locally in your browser (Pyodide) — zero tokens. Claude is called only when you click Ask Claude.</div>
+</div>
+<script>
+const D=[
+{m:1,t:'Format a header',p:'Write header(name, age) returning e.g. "Damon (32) — Applied AI Engineer". Age may arrive as int or str.',s:'def header(name, age):\n    pass\n',h:['f-string: f"{name} ({age}) — ..."','An f-string formats ints and strs alike — no conversion needed.'],
+x:'assert header("Damon",32)=="Damon (32) — Applied AI Engineer"\nassert header("Ana","7")=="Ana (7) — Applied AI Engineer"'},
+{m:2,t:'Clean input',p:'clean(text, lower=True): strip whitespace; lowercase only when lower is True.',s:'def clean(text, lower=True):\n    pass\n',h:['text.strip() and text.lower() return new strings.','Default argument value goes in the def line.'],
+x:'assert clean("  Hi There ")=="hi there"\nassert clean("  Hi ",lower=False)=="Hi"'},
+{m:3,t:'Parse turns',p:'parse_turns(lines): turn "role: content" lines into [{"role":..,"content":..}]. Skip blank lines. Split on the FIRST colon only; strip both parts.',s:'def parse_turns(lines):\n    pass\n',h:['line.split(":", 1) splits once.','Use clean() from drill 2 — it is already loaded.'],
+x:'t=parse_turns(["user: hi","","assistant: a: b"])\nassert t==[{"role":"user","content":"hi"},{"role":"assistant","content":"a: b"}],t'},
+{m:3,t:'Count roles',p:'count_roles(turns) → dict of role → how many turns. Empty list gives {}.',s:'def count_roles(turns):\n    pass\n',h:['Loop; counts.get(role, 0) + 1.','Each turn is a dict — read turn["role"].'],
+x:'assert count_roles(parse_turns(["user: a","user: b","assistant: c"]))=={"user":2,"assistant":1}\nassert count_roles([])=={}'},
+{m:4,t:'Persist a log',p:'save_log(turns, path) writes JSON. load_log(path) reads it back, or returns [] if the file does not exist.',s:'import json, os\n\ndef save_log(turns, path):\n    pass\n\ndef load_log(path):\n    pass\n',h:['with open(path, "w") as f: json.dump(...)','os.path.exists(path) guards the read.'],
+x:'p="/tmp/de_t.json"\nos.path.exists(p) and os.remove(p)\nassert load_log(p)==[],"missing file -> []"\ntt=parse_turns(["user: x"]); save_log(tt,p); assert load_log(p)==tt'},
+{m:4,t:'.env + masking',p:'load_env(path) → dict from KEY=VALUE lines (skip blanks and # comments; value may contain =). mask(key) → first 4 chars + "***".',s:'def load_env(path):\n    pass\n\ndef mask(key):\n    pass\n',h:['line.split("=", 1) — again, once.','key[:4] + "***"'],
+x:'open("/tmp/e.env","w").write("# c\\nA=1\\n\\nKEY=sk-ant-abc=\\n")\ne=load_env("/tmp/e.env")\nassert e=={"A":"1","KEY":"sk-ant-abc="},e\nassert mask("sk-ant-secret")=="sk-a***"'},
+{m:5,t:'Read an API response',p:'extract_text(resp): join the "text" of every block with type "text" using "\\n", skipping other block types. If resp has an "error" key, raise ValueError with its message.',s:'def extract_text(resp):\n    pass\n',h:['resp["content"] is a list of dicts.','Check "error" in resp before reading content.'],
+x:'r={"content":[{"type":"text","text":"a"},{"type":"tool_use"},{"type":"text","text":"b"}]}\nassert extract_text(r)=="a\\nb"\ntry:\n    extract_text({"error":{"message":"bad"}})\n    assert False,"should raise"\nexcept ValueError as e:\n    assert "bad" in str(e)'},
+{m:5,t:'Safe call + rollback',p:'safe_ask(history, user_input, api) → (text, None) or (None, error). Append the user turn, call api(history) → resp dict, append the assistant turn on success. On ANY exception remove the user turn so history never dangles.',s:'def safe_ask(history, user_input, api):\n    pass\n',h:['try/except Exception as e around the api call and extract_text.','history.pop() in the except branch.'],
+x:'h=[]\nok=lambda hh:{"content":[{"type":"text","text":"hey"}]}\ndef boom(hh): raise RuntimeError("down")\nassert safe_ask(h,"yo",ok)==("hey",None) and len(h)==2\nr=safe_ask(h,"x",boom)\nassert r[0] is None and "down" in r[1] and len(h)==2,"rollback"'},
+{m:6,t:'Session class',p:'class Session: __init__(self, api) sets self.api and self.history = []. ask(text) delegates to safe_ask and returns its tuple. summary() → "N turns".',s:'class Session:\n    pass\n',h:['self.history is the list you pass to safe_ask.','summary: f"{len(self.history)} turns"'],
+x:'s=Session(lambda hh:{"content":[{"type":"text","text":"ok"}]})\nassert s.ask("a")==("ok",None) and s.summary()=="2 turns"'},
+{m:6,t:'Persistent session',p:'class PersistentSession(Session): __init__(self, api, path=None). save() writes history with save_log; load() restores it with load_log; counts() returns count_roles(self.history).',s:'class PersistentSession(Session):\n    pass\n',h:['super().__init__(api) then self.path = path.','Reuse drills 4 and 5 — do not rewrite them.'],
+x:'p="/tmp/ps.json"\nmk=lambda hh:{"content":[{"type":"text","text":"ok"}]}\ns=PersistentSession(mk,p); s.ask("a"); s.save()\ns2=PersistentSession(None,p); s2.load()\nassert s2.history==s.history and s2.counts()=={"user":1,"assistant":1}'},
+{m:7,t:'Concurrent asks',p:'async ask_many(api, prompts): run api(prompt) for all prompts concurrently (api is an async function). Return results in prompt order.',s:'import asyncio\n\nasync def ask_many(api, prompts):\n    pass\n',h:['asyncio.gather(*[api(p) for p in prompts])','gather preserves order.'],
+x:'import time\nasync def api(p):\n    await asyncio.sleep(0.1); return p.upper()\nt0=time.time(); r=await ask_many(api,["a","b","c","d"])\nassert r==["A","B","C","D"],r\nassert time.time()-t0<0.3,"not concurrent"'},
+{m:7,t:'Streaming turn (capstone)',p:'async run_turn(session, prompt, agen, on_chunk=None): append the user turn, iterate the async generator agen, call on_chunk(chunk) for each, then append the joined assistant text and return it. If streaming raises, roll back the user turn and return None.',s:'async def run_turn(session, prompt, agen, on_chunk=None):\n    pass\n',h:['async for chunk in agen: ...','Same try/except + history.pop() pattern as drill 8.'],
+x:'async def gen():\n    for c in ["he","llo"]:\n        await asyncio.sleep(0.01); yield c\nasync def bad():\n    yield "x"\n    raise RuntimeError("cut")\nseen=[]; s=PersistentSession(None)\nr=await run_turn(s,"hi",gen(),seen.append)\nassert r=="hello" and seen==["he","llo"],r\nassert s.history[-2:]==[{"role":"user","content":"hi"},{"role":"assistant","content":"hello"}]\nn=len(s.history)\nassert await run_turn(s,"again",bad(),seen.append) is None and len(s.history)==n,"rollback"'}
+];
+const MN=['','Variables & Types','Functions','Lists, Dicts, Loops','Files & .env','APIs + JSON','Classes (light)','Async basics'];
+const $=i=>document.getElementById(i),K='de2';
+let st,cur=0,hi=0;
+const TAGS=[['f-strings','str/int formatting'],['default args','str methods'],['split(maxsplit)','list of dicts'],['dict counting','.get()'],['json file I/O','os.path'],['env parsing','slicing'],['nested data','raise ValueError'],['try/except','rollback'],['class init','delegation'],['inheritance','super()'],['asyncio.gather','concurrency'],['async generators','async for']];
+const weak=()=>Object.keys(st.tag).filter(k=>{const t=st.tag[k];return t.f>=2&&t.f>t.p});
+const chips=()=>{$('chips').innerHTML=TAGS[cur].map(c=>`<span class="chip ${weak().includes(c)?'w':''}">${c}</span>`).join('')};
+
+st=JSON.parse(localStorage.getItem(K)||'{"solved":{},"att":{},"draft":{}}');st.tag=st.tag||{};
+const save=()=>localStorage.setItem(K,JSON.stringify(st));
+const nSolved=()=>Object.keys(st.solved).length;
+function show(i){
+  if(i>nSolved())return;cur=i;hi=0;const d=D[i];
+  $('tag').textContent=`Drill ${i+1}/${D.length} · M${d.m} ${MN[d.m]}`;$('ti').textContent=d.t;$('pr').textContent=d.p;chips();
+  $('ta').value=st.draft[i]??st.solved[i]??d.s;
+  ['out','ai'].forEach(x=>{$(x).className=x=='ai'?'ai':'';$(x).textContent=''});$('nx').style.display=st.solved[i]!=null&&i<D.length-1?'':'none';
+  $('mt').textContent=st.att[i]?`${st.att[i]} run(s) on this drill`:'';
+  $('pips').innerHTML=D.map((_,j)=>`<button class="pip ${st.solved[j]!=null?'ok':''} ${j==i?'on':''} ${j>nSolved()?'lock':''}" onclick="show(${j})">${j+1}</button>`).join('');
+}
+const nxt=()=>show(cur+1);
+$('ta').addEventListener('input',e=>{st.draft[cur]=e.target.value;save()});
+$('ta').addEventListener('keydown',e=>{
+  if(e.key=='Tab'){e.preventDefault();document.execCommand('insertText',false,'    ')}
+  if(e.key=='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();run()}});
+function hint(){const h=D[cur].h;const o=$('out');o.className='show';o.textContent='Hint '+(hi%h.length+1)+': '+h[hi%h.length];hi++}
+let pyP;const getPy=()=>pyP||(pyP=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';s.onload=()=>loadPyodide().then(res,rej);s.onerror=()=>rej(new Error('Python runtime failed to load (offline?)'));document.head.appendChild(s)}));
+async function run(){
+  const d=D[cur],o=$('out'),code=$('ta').value;o.className='show';o.textContent='Running…';$('run').disabled=true;
+  st.att[cur]=(st.att[cur]||0)+1;let log=[],pass=false;
+  try{
+    const py=await getPy();py.setStdout({batched:s=>log.push(s)});py.setStderr({batched:s=>log.push(s)});
+    const pre='import asyncio\n'+D.slice(0,cur).map((_,j)=>st.solved[j]).join('\n');
+    await py.runPythonAsync(pre+'\n'+code+'\n'+d.x,{globals:py.globals.get('dict')()});pass=true;
+  }catch(e){log.push(String(e.message).trim().split('\n').slice(-4).join('\n'))}
+  $('run').disabled=false;
+  TAGS[cur].forEach(c=>{const t=st.tag[c]=st.tag[c]||{f:0,p:0};pass?t.p++:t.f++});
+  if(pass){st.solved[cur]=code;delete st.draft[cur];log.push('✓ all checks passed');sync()}
+  o.className='show '+(pass?'ok':'bad');o.textContent=log.join('\n');save();show2(pass)}
+function show2(pass){chips();$('mt').textContent=`${st.att[cur]} run(s) · ${nSolved()}/${D.length} solved`+(weak().length?' · weak: '+weak().join(', '):'');
+  if(pass){$('nx').style.display=cur<D.length-1?'':'none';$('pips').children[cur].className='pip ok on'}}
+function sync(){ // feeds the Dashboard's Drill Debrief panel
+  const d=D[cur],n=D[cur+1],t=new Date(),ds=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+  const wk=weak();
+  localStorage.setItem('drill_engine_last_log',JSON.stringify({date:ds,mode:'python',module:'M'+d.m,moduleName:MN[d.m],drills:nSolved(),weakSpots:wk,nextDrill:n?n.t+': '+n.p:'Chain complete',nextFocus:n?'M'+n.m+' · '+n.t:'Review weak drills',raw:''}));
+  try{const s=JSON.parse(localStorage.getItem('drill_engine_state')||'{}');s.lastActivity=ds;localStorage.setItem('drill_engine_state',JSON.stringify(s))}catch(e){}}
+async function ask(){
+  const key=localStorage.getItem('de_api_key'),a=$('ai'),d=D[cur];a.className='ai show';
+  if(!key){a.textContent='No API key — set one in the original Drill Engine (KEY button).';return}
+  a.textContent='Thinking…';
+  const body={model:$('mod').value,max_tokens:350,system:'Terse Python coach. The learner is a beginner. Never write the full solution. Max 5 lines: name the bug or concept, give one nudge.',
+    messages:[{role:'user',content:`Drill: ${d.p}\n\nMy code:\n${$('ta').value}\n\nLast result:\n${$('out').textContent||'not run yet'}`}]};
+  try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+    const j=await r.json();if(!r.ok)throw new Error(j.error?.message||r.status);
+    a.textContent=j.content.map(c=>c.text||'').join('');$('mt').textContent=`Claude: ${j.usage.input_tokens} in / ${j.usage.output_tokens} out tokens`}
+  catch(e){a.textContent='Error: '+e.message}}
+function resetAll(){if(confirm('Clear all v2 drill progress?')){localStorage.removeItem(K);st={solved:{},att:{},draft:{},tag:{}};show(0)}}
+show(Math.min(nSolved(),D.length-1));
+</script></body></html>
