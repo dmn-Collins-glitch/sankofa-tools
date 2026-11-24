@@ -919,7 +919,6 @@ body{
     <div class="hdr-right">
       <div class="hdr-date" id="hdrDate">—</div>
       <button class="drill-btn" onclick="openDrillEngine()">Drill Engine</button>
-      <button class="drill-btn" onclick="window.open('AaE_Drill_Engine_v2.html','_blank')">Drills v2</button>
       <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">◑</button>
     </div>
   </div>
@@ -1375,7 +1374,7 @@ async function idrillCall(sys, userMsg){
     const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,stream:true,system:sys||idrillSys(),messages:idrillHist})
+      body:JSON.stringify({model:(localStorage.getItem('de_model')||'claude-sonnet-4-6'),max_tokens:600,stream:true,system:sys||idrillSys(),messages:idrillHist})
     });
     idrillUnthink();
     if(!r.ok){const err=await r.json();idrillAddMsg(`⚠ API error — ${err.error?.message||'check key'}`,false);idrillRunning=false;if(btn)btn.disabled=false;return;}
@@ -1554,7 +1553,7 @@ Be direct. No filler. Use plain text, no markdown headers.`;
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:(localStorage.getItem('de_model')||'claude-sonnet-4-6'),
         max_tokens:400,
         stream:true,
         messages:[{role:'user',content:prompt}]

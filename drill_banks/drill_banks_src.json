@@ -1,0 +1,878 @@
+{
+ "w0": {
+  "name": "Week 0 · Functions & Variables",
+  "drills": [
+   {
+    "t": "Greeting function",
+    "m": "M2",
+    "tags": [
+     "def",
+     "return"
+    ],
+    "p": "Write greet(name) that returns \"hello, NAME\" (lowercase hello, comma, space).",
+    "s": "def greet(name):\n    pass\n",
+    "x": "assert greet(\"Damon\")==\"hello, Damon\"\nassert greet(\"\")==\"hello, \"",
+    "r": "def greet(name):\n    return f\"hello, {name}\"\n",
+    "h": [
+     "Use return, not print.",
+     "f\"hello, {name}\""
+    ]
+   },
+   {
+    "t": "Clean a name",
+    "m": "M2",
+    "tags": [
+     "str methods",
+     "chaining"
+    ],
+    "p": "Write clean_name(raw): strip whitespace and title-case it. \"  ada lovelace \" becomes \"Ada Lovelace\".",
+    "s": "def clean_name(raw):\n    pass\n",
+    "x": "assert clean_name(\"  ada lovelace \")==\"Ada Lovelace\"\nassert clean_name(\"GRACE hopper\")==\"Grace Hopper\"",
+    "r": "def clean_name(raw):\n    return raw.strip().title()\n",
+    "h": [
+     ".strip() then .title()",
+     "Methods chain: raw.strip().title()"
+    ]
+   },
+   {
+    "t": "Greet cleanly",
+    "m": "M2",
+    "tags": [
+     "composition",
+     "return"
+    ],
+    "p": "Write greet_clean(raw) returning greet() applied to clean_name(raw). Your two earlier solutions are already loaded.",
+    "s": "def greet_clean(raw):\n    pass\n",
+    "x": "assert greet_clean(\"  ada lovelace \")==\"hello, Ada Lovelace\"",
+    "r": "def greet_clean(raw):\n    return greet(clean_name(raw))\n",
+    "h": [
+     "Call one function inside the other.",
+     "greet(clean_name(raw))"
+    ]
+   },
+   {
+    "t": "Split the bill",
+    "m": "M1",
+    "tags": [
+     "int/float",
+     "f-string format"
+    ],
+    "p": "Write split_bill(total, people) returning each share to 2 decimals as a string with a dollar sign, e.g. split_bill(100, 3) gives \"$33.33\".",
+    "s": "def split_bill(total, people):\n    pass\n",
+    "x": "assert split_bill(100,3)==\"$33.33\"\nassert split_bill(50,2)==\"$25.00\"",
+    "r": "def split_bill(total, people):\n    return f\"${total/people:.2f}\"\n",
+    "h": [
+     "The format spec :.2f gives two decimals.",
+     "f\"${share:.2f}\""
+    ]
+   },
+   {
+    "t": "Tip calculator",
+    "m": "M2",
+    "tags": [
+     "default args",
+     "math"
+    ],
+    "p": "Write tip(total, pct=15) returning the tip amount as a number. tip(200) is 30.0; tip(80, 20) is 16.0.",
+    "s": "def tip(total, pct=15):\n    pass\n",
+    "x": "assert tip(200)==30.0\nassert tip(80,20)==16.0",
+    "r": "def tip(total, pct=15):\n    return total * pct / 100\n",
+    "h": [
+     "Percent means divide by 100.",
+     "return total * pct / 100"
+    ]
+   },
+   {
+    "t": "Bill with tip (capstone)",
+    "m": "M2",
+    "tags": [
+     "composition",
+     "f-string format"
+    ],
+    "p": "Write bill_total(total, people, pct=15) returning the per-person share INCLUDING tip, formatted by split_bill. bill_total(100, 4, 20) gives \"$30.00\".",
+    "s": "def bill_total(total, people, pct=15):\n    pass\n",
+    "x": "assert bill_total(100,4,20)==\"$30.00\"\nassert bill_total(100,2)==\"$57.50\"",
+    "r": "def bill_total(total, people, pct=15):\n    return split_bill(total + tip(total, pct), people)\n",
+    "h": [
+     "Add tip(total, pct) to total first.",
+     "split_bill(total + tip(total, pct), people)"
+    ]
+   }
+  ]
+ },
+ "w1": {
+  "name": "Week 1 · Conditionals",
+  "drills": [
+   {
+    "t": "Grade bands",
+    "m": "M2",
+    "tags": [
+     "if/elif/else",
+     "comparison"
+    ],
+    "p": "Write grade(score): 90 and up is \"A\", 80-89 \"B\", 70-79 \"C\", below 70 \"F\".",
+    "s": "def grade(score):\n    pass\n",
+    "x": "assert [grade(s) for s in (95,90,89,80,79,70,69,0)]==list(\"AABBCCFF\")",
+    "r": "def grade(score):\n    if score>=90: return \"A\"\n    elif score>=80: return \"B\"\n    elif score>=70: return \"C\"\n    return \"F\"\n",
+    "h": [
+     "Check from the highest band down.",
+     "elif keeps it flat"
+    ]
+   },
+   {
+    "t": "Even or odd",
+    "m": "M1",
+    "tags": [
+     "modulo",
+     "bool"
+    ],
+    "p": "Write is_even(n) returning True or False.",
+    "s": "def is_even(n):\n    pass\n",
+    "x": "assert is_even(4) is True and is_even(7) is False and is_even(0) is True",
+    "r": "def is_even(n):\n    return n % 2 == 0\n",
+    "h": [
+     "% gives the remainder.",
+     "return n % 2 == 0"
+    ]
+   },
+   {
+    "t": "Leap year",
+    "m": "M2",
+    "tags": [
+     "and/or",
+     "comparison"
+    ],
+    "p": "Write is_leap(year): divisible by 4, except centuries, unless divisible by 400.",
+    "s": "def is_leap(year):\n    pass\n",
+    "x": "assert is_leap(2024) and is_leap(2000) and not is_leap(1900) and not is_leap(2023)",
+    "r": "def is_leap(year):\n    return (year%4==0 and year%100!=0) or year%400==0\n",
+    "h": [
+     "Three conditions combined.",
+     "(y%4==0 and y%100!=0) or y%400==0"
+    ]
+   },
+   {
+    "t": "File type",
+    "m": "M2",
+    "tags": [
+     "str methods",
+     "if/elif/else"
+    ],
+    "p": "Write media_type(filename): .gif .png .jpg .jpeg give \"image\"; .pdf gives \"application\"; .txt gives \"text\"; anything else \"unknown\". Case-insensitive.",
+    "s": "def media_type(filename):\n    pass\n",
+    "x": "assert media_type(\"A.PNG\")==\"image\" and media_type(\"b.jpeg\")==\"image\"\nassert media_type(\"c.pdf\")==\"application\" and media_type(\"d.txt\")==\"text\" and media_type(\"e.zip\")==\"unknown\"",
+    "r": "def media_type(filename):\n    f=filename.lower()\n    if f.endswith((\".gif\",\".png\",\".jpg\",\".jpeg\")): return \"image\"\n    if f.endswith(\".pdf\"): return \"application\"\n    if f.endswith(\".txt\"): return \"text\"\n    return \"unknown\"\n",
+    "h": [
+     "endswith accepts a tuple of endings.",
+     "Lowercase first."
+    ]
+   },
+   {
+    "t": "Meal time",
+    "m": "M3",
+    "tags": [
+     "float math",
+     "if/elif/else"
+    ],
+    "p": "Write meal(hhmm) for text like \"7:30\": 7 to 8 gives \"breakfast\", 12 to 13 \"lunch\", 18 to 19 \"dinner\", else \"\". Ends inclusive.",
+    "s": "def meal(hhmm):\n    pass\n",
+    "x": "assert meal(\"7:30\")==\"breakfast\" and meal(\"8:00\")==\"breakfast\" and meal(\"12:30\")==\"lunch\" and meal(\"18:59\")==\"dinner\" and meal(\"9:00\")==\"\"",
+    "r": "def meal(hhmm):\n    h,m=hhmm.split(\":\"); t=int(h)+int(m)/60\n    if 7<=t<=8: return \"breakfast\"\n    if 12<=t<=13: return \"lunch\"\n    if 18<=t<=19: return \"dinner\"\n    return \"\"\n",
+    "h": [
+     "Convert to hours: h + m/60.",
+     "Compare against ranges."
+    ]
+   },
+   {
+    "t": "Report card (capstone)",
+    "m": "M3",
+    "tags": [
+     "composition",
+     "dict"
+    ],
+    "p": "Write report(name, score) returning {\"name\": cleaned name, \"grade\": letter, \"passed\": bool}. Passed means not \"F\". Use clean_name from Week 0 and grade.",
+    "s": "def report(name, score):\n    pass\n",
+    "x": "assert report(\"  ada \",85)=={\"name\":\"Ada\",\"grade\":\"B\",\"passed\":True}\nassert report(\"bo\",40)[\"passed\"] is False",
+    "r": "def report(name, score):\n    g=grade(score)\n    return {\"name\":clean_name(name),\"grade\":g,\"passed\":g!=\"F\"}\n",
+    "h": [
+     "Build the dict from earlier functions.",
+     "\"passed\": letter != \"F\""
+    ]
+   }
+  ]
+ },
+ "w2": {
+  "name": "Week 2 · Loops",
+  "drills": [
+   {
+    "t": "Count up",
+    "m": "M3",
+    "tags": [
+     "for loop",
+     "range"
+    ],
+    "p": "Write count_to(n) returning a list [1, 2, ..., n]. count_to(0) is [].",
+    "s": "def count_to(n):\n    pass\n",
+    "x": "assert count_to(3)==[1,2,3] and count_to(0)==[]",
+    "r": "def count_to(n):\n    return list(range(1,n+1))\n",
+    "h": [
+     "range(1, n+1)",
+     "list(range(...))"
+    ]
+   },
+   {
+    "t": "Sum of evens",
+    "m": "M3",
+    "tags": [
+     "for loop",
+     "accumulator",
+     "modulo"
+    ],
+    "p": "Write sum_evens(nums) returning the sum of the even numbers. Reuse is_even from Week 1.",
+    "s": "def sum_evens(nums):\n    pass\n",
+    "x": "assert sum_evens([1,2,3,4])==6 and sum_evens([])==0 and sum_evens([1,3])==0",
+    "r": "def sum_evens(nums):\n    total=0\n    for n in nums:\n        if is_even(n): total+=n\n    return total\n",
+    "h": [
+     "Start total at 0, add inside the loop.",
+     "if is_even(n): total += n"
+    ]
+   },
+   {
+    "t": "FIX THE BUG: off by one",
+    "m": "M3",
+    "tags": [
+     "range",
+     "off-by-one",
+     "debugging"
+    ],
+    "p": "This should return the squares of 1..n but misses n. Fix it. count_squares(3) must be [1, 4, 9].",
+    "s": "def count_squares(n):\n    return [i*i for i in range(1, n)]\n",
+    "x": "assert count_squares(3)==[1,4,9] and count_squares(0)==[] and count_squares(1)==[1]",
+    "r": "def count_squares(n):\n    return [i*i for i in range(1, n+1)]\n",
+    "h": [
+     "range stops BEFORE its end value.",
+     "Change n to n+1."
+    ],
+    "kind": "fix"
+   },
+   {
+    "t": "First repeat",
+    "m": "M3",
+    "tags": [
+     "while loop",
+     "set",
+     "early return"
+    ],
+    "p": "Write first_repeat(items) returning the first item that appears a second time, or None if all are unique.",
+    "s": "def first_repeat(items):\n    pass\n",
+    "x": "assert first_repeat([1,2,3,2,1])==2 and first_repeat(\"abca\")==\"a\" and first_repeat([1,2,3]) is None",
+    "r": "def first_repeat(items):\n    seen=set()\n    for i in items:\n        if i in seen: return i\n        seen.add(i)\n    return None\n",
+    "h": [
+     "Keep a set of items already seen.",
+     "Return as soon as you find one in the set."
+    ]
+   },
+   {
+    "t": "Word counts",
+    "m": "M3",
+    "tags": [
+     "dict counting",
+     "str.split",
+     "loop"
+    ],
+    "p": "Write word_counts(text) returning a dict of lowercase word to count. Split on whitespace.",
+    "s": "def word_counts(text):\n    pass\n",
+    "x": "assert word_counts(\"a B b a a\")=={\"a\":3,\"b\":2} and word_counts(\"\")=={}",
+    "r": "def word_counts(text):\n    c={}\n    for w in text.lower().split():\n        c[w]=c.get(w,0)+1\n    return c\n",
+    "h": [
+     "counts.get(w, 0) + 1",
+     "text.lower().split()"
+    ]
+   },
+   {
+    "t": "Top words (capstone)",
+    "m": "M3",
+    "tags": [
+     "composition",
+     "sorting",
+     "dict"
+    ],
+    "p": "Write top_words(text, n=3) returning a list of the n most common words, most frequent first, ties broken alphabetically. Use word_counts.",
+    "s": "def top_words(text, n=3):\n    pass\n",
+    "x": "assert top_words(\"b a b c a b\",2)==[\"b\",\"a\"] and top_words(\"x y\")==[\"x\",\"y\"]",
+    "r": "def top_words(text, n=3):\n    c=word_counts(text)\n    return sorted(c,key=lambda w:(-c[w],w))[:n]\n",
+    "h": [
+     "sorted(counts, key=lambda w: (-counts[w], w))",
+     "Slice the first n."
+    ]
+   }
+  ]
+ },
+ "w3": {
+  "name": "Week 3 · Exceptions",
+  "drills": [
+   {
+    "t": "Safe int",
+    "m": "M5",
+    "tags": [
+     "try/except",
+     "ValueError"
+    ],
+    "p": "Write to_int(text, default=0): return int(text), or default if it is not a valid integer.",
+    "s": "def to_int(text, default=0):\n    pass\n",
+    "x": "assert to_int(\"42\")==42 and to_int(\"x\")==0 and to_int(\"\",7)==7 and to_int(\" 5 \")==5",
+    "r": "def to_int(text, default=0):\n    try:\n        return int(text)\n    except ValueError:\n        return default\n",
+    "h": [
+     "int(\"x\") raises ValueError.",
+     "try: return int(text) / except ValueError: return default"
+    ]
+   },
+   {
+    "t": "FIX THE BUG: too-broad except",
+    "m": "M5",
+    "tags": [
+     "try/except",
+     "bare except",
+     "debugging"
+    ],
+    "p": "ratio(a, b) should return a/b, or None when b is zero. It currently hides EVERY error, so ratio(\"x\", 2) quietly returns None instead of raising TypeError. Fix it so only the zero case returns None.",
+    "s": "def ratio(a, b):\n    try:\n        return a / b\n    except Exception:\n        return None\n",
+    "x": "assert ratio(6,3)==2 and ratio(1,0) is None\ntry:\n    ratio(\"x\",2); assert False,\"should raise\"\nexcept TypeError: pass",
+    "r": "def ratio(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n",
+    "h": [
+     "Catch only the error you expect.",
+     "except ZeroDivisionError:"
+    ],
+    "kind": "fix"
+   },
+   {
+    "t": "Validate age",
+    "m": "M5",
+    "tags": [
+     "raise",
+     "custom message",
+     "ValueError"
+    ],
+    "p": "Write check_age(age): return age if 0 <= age <= 130, otherwise raise ValueError with the message \"age out of range\".",
+    "s": "def check_age(age):\n    pass\n",
+    "x": "assert check_age(30)==30\ntry:\n    check_age(-1); assert False\nexcept ValueError as e: assert str(e)==\"age out of range\"",
+    "r": "def check_age(age):\n    if not 0<=age<=130: raise ValueError(\"age out of range\")\n    return age\n",
+    "h": [
+     "raise ValueError(\"...\")",
+     "Check the range with a chained comparison."
+    ]
+   },
+   {
+    "t": "Parse a row",
+    "m": "M5",
+    "tags": [
+     "try/except",
+     "dict",
+     "composition"
+    ],
+    "p": "Write parse_row(line) for \"name,age\": return {\"name\": clean name, \"age\": validated int}, or None if the row is malformed or the age is out of range. Reuse clean_name and check_age.",
+    "s": "def parse_row(line):\n    pass\n",
+    "x": "assert parse_row(\" ada ,36\")=={\"name\":\"Ada\",\"age\":36}\nassert parse_row(\"bo,xx\") is None and parse_row(\"bo\") is None and parse_row(\"bo,200\") is None",
+    "r": "def parse_row(line):\n    try:\n        name,age=line.split(\",\")\n        return {\"name\":clean_name(name),\"age\":check_age(int(age))}\n    except ValueError:\n        return None\n",
+    "h": [
+     "Split on the comma first.",
+     "Wrap the whole thing in try/except ValueError (a bad unpack raises ValueError too)."
+    ]
+   },
+   {
+    "t": "Load many rows (capstone)",
+    "m": "M5",
+    "tags": [
+     "loop",
+     "try/except",
+     "composition"
+    ],
+    "p": "Write load_rows(lines) returning (good_rows, bad_count): the parsed rows, and how many lines failed to parse. Reuse parse_row.",
+    "s": "def load_rows(lines):\n    pass\n",
+    "x": "g,b=load_rows([\"ada,36\",\"bad\",\"bo,41\",\"x,999\"])\nassert [r[\"name\"] for r in g]==[\"Ada\",\"Bo\"] and b==2",
+    "r": "def load_rows(lines):\n    good=[];bad=0\n    for l in lines:\n        r=parse_row(l)\n        if r is None: bad+=1\n        else: good.append(r)\n    return good,bad\n",
+    "h": [
+     "Loop, call parse_row, branch on None.",
+     "Count failures as you go."
+    ]
+   }
+  ]
+ },
+ "w4": {
+  "name": "Week 4 · Libraries",
+  "drills": [
+   {
+    "t": "Seeded dice",
+    "m": "M5",
+    "tags": [
+     "random",
+     "seed",
+     "import"
+    ],
+    "p": "Write roll(sides, seed=None) returning a random int from 1 to sides inclusive. When seed is given, call random.seed(seed) first so results repeat. Import what you need at the top.",
+    "s": "import random\n\ndef roll(sides, seed=None):\n    pass\n",
+    "x": "assert roll(6,seed=7)==roll(6,seed=7)\nassert all(1<=roll(6) <=6 for _ in range(200))\nassert {roll(2) for _ in range(100)}=={1,2}",
+    "r": "import random\n\ndef roll(sides, seed=None):\n    if seed is not None: random.seed(seed)\n    return random.randint(1,sides)\n",
+    "h": [
+     "random.randint(1, sides) includes both ends.",
+     "if seed is not None: random.seed(seed)"
+    ]
+   },
+   {
+    "t": "Pick a winner",
+    "m": "M5",
+    "tags": [
+     "random.choice",
+     "random.sample",
+     "import"
+    ],
+    "p": "Write draw(names, k=1, seed=None): return k DISTINCT names chosen at random as a list. Same seed means same result. Raise ValueError if k is more than the number of names.",
+    "s": "import random\n\ndef draw(names, k=1, seed=None):\n    pass\n",
+    "x": "assert draw(list(\"abcde\"),3,seed=1)==draw(list(\"abcde\"),3,seed=1)\nassert len(set(draw(list(\"abcde\"),5)))==5\ntry:\n    draw([\"a\"],2); assert False\nexcept ValueError: pass",
+    "r": "import random\n\ndef draw(names, k=1, seed=None):\n    if k>len(names): raise ValueError(\"k too large\")\n    if seed is not None: random.seed(seed)\n    return random.sample(list(names),k)\n",
+    "h": [
+     "random.sample picks without repeats.",
+     "Check k against len(names) first."
+    ]
+   },
+   {
+    "t": "FIX THE BUG: shuffling in place",
+    "m": "M5",
+    "tags": [
+     "random.shuffle",
+     "mutation",
+     "debugging"
+    ],
+    "p": "shuffled(items) should return a NEW shuffled list and leave the input alone. It returns None instead. Fix it without changing what it promises.",
+    "s": "import random\n\ndef shuffled(items):\n    return random.shuffle(items)\n",
+    "x": "a=[1,2,3,4,5]\nr=shuffled(a)\nassert a==[1,2,3,4,5],\"input mutated\"\nassert sorted(r)==[1,2,3,4,5]",
+    "r": "import random\n\ndef shuffled(items):\n    items=list(items)\n    random.shuffle(items)\n    return items\n",
+    "h": [
+     "random.shuffle changes the list and returns None.",
+     "Copy first: items = list(items)"
+    ],
+    "kind": "fix"
+   },
+   {
+    "t": "Weighted pick",
+    "m": "M5",
+    "tags": [
+     "random.choices",
+     "weights",
+     "seed"
+    ],
+    "p": "Write weighted_pick(options, weights, seed=None): return ONE option chosen at random, where weights says how likely each is. Seed first when a seed is given.",
+    "s": "import random\n\ndef weighted_pick(options, weights, seed=None):\n    pass\n",
+    "x": "assert all(weighted_pick([\"a\",\"b\"],[100,0],seed=s)==\"a\" for s in range(25))\nassert weighted_pick([\"a\",\"b\",\"c\"],[0,0,7])==\"c\"\nassert weighted_pick(list(\"abc\"),[1,1,1],seed=4)==weighted_pick(list(\"abc\"),[1,1,1],seed=4)",
+    "r": "import random\n\ndef weighted_pick(options, weights, seed=None):\n    if seed is not None:\n        random.seed(seed)\n    return random.choices(options, weights=weights, k=1)[0]\n",
+    "h": [
+     "random.choices returns a LIST, even when k is 1.",
+     "random.choices(options, weights=weights, k=1)[0]"
+    ]
+   },
+   {
+    "t": "Summary stats",
+    "m": "M5",
+    "tags": [
+     "statistics",
+     "import",
+     "dict"
+    ],
+    "p": "Write summarize(nums) returning {\"mean\": ..., \"median\": ..., \"n\": ...}. Use the statistics module. Mean and median rounded to 2 places. Empty input raises ValueError.",
+    "s": "import statistics\n\ndef summarize(nums):\n    pass\n",
+    "x": "assert summarize([1,2,3,10])=={\"mean\":4.0,\"median\":2.5,\"n\":4}\ntry:\n    summarize([]); assert False\nexcept ValueError: pass",
+    "r": "import statistics\n\ndef summarize(nums):\n    if not nums: raise ValueError(\"empty\")\n    return {\"mean\":round(statistics.mean(nums),2),\"median\":round(statistics.median(nums),2),\"n\":len(nums)}\n",
+    "h": [
+     "statistics.mean and statistics.median.",
+     "round(x, 2)"
+    ]
+   },
+   {
+    "t": "Command-line args",
+    "m": "M4",
+    "tags": [
+     "sys.argv",
+     "sys.exit",
+     "slicing"
+    ],
+    "p": "Write parse_args(argv): argv is a list like [\"prog.py\", \"3\", \"x\"]. Return the list of args after the program name. If there are none, raise SystemExit with the message \"usage: prog N\". (Takes argv as a parameter so it is testable.)",
+    "s": "import sys\n\ndef parse_args(argv):\n    pass\n",
+    "x": "assert parse_args([\"p\",\"3\",\"x\"])==[\"3\",\"x\"]\ntry:\n    parse_args([\"p\"]); assert False\nexcept SystemExit as e: assert \"usage\" in str(e)",
+    "r": "import sys\n\ndef parse_args(argv):\n    a=argv[1:]\n    if not a: raise SystemExit(\"usage: prog N\")\n    return a\n",
+    "h": [
+     "argv[1:] slices off the program name.",
+     "raise SystemExit(\"usage: prog N\")"
+    ]
+   },
+   {
+    "t": "Read an API response",
+    "m": "M5",
+    "tags": [
+     "dict/list nesting",
+     "raise ValueError",
+     "slicing"
+    ],
+    "p": "An API returns a dict like {\"data\": [{\"title\": ...}, ...]}. Write titles(response, limit=3): the first limit titles as a list. If the response has an \"error\" key, raise ValueError with its message.",
+    "s": "def titles(response, limit=3):\n    pass\n",
+    "x": "r={\"data\":[{\"title\":\"Sunrise\",\"id\":1},{\"title\":\"Harbor\",\"id\":2},{\"title\":\"Orchard\",\"id\":3},{\"title\":\"Meadow\",\"id\":4}]}\nassert titles(r)==[\"Sunrise\",\"Harbor\",\"Orchard\"]\nassert titles(r,limit=1)==[\"Sunrise\"] and titles({\"data\":[]})==[]\ntry:\n    titles({\"error\":\"bad request\"}); assert False,\"should raise\"\nexcept ValueError as e:\n    assert \"bad\" in str(e)",
+    "r": "def titles(response, limit=3):\n    if \"error\" in response:\n        raise ValueError(response[\"error\"])\n    return [item[\"title\"] for item in response[\"data\"]][:limit]\n",
+    "h": [
+     "Check for \"error\" before touching response[\"data\"].",
+     "A list comprehension, then [:limit] slices it."
+    ]
+   },
+   {
+    "t": "Safe fetch",
+    "m": "M5",
+    "tags": [
+     "try/except",
+     "specific exceptions",
+     "composition"
+    ],
+    "p": "safe_titles(fetch, query): fetch(query) returns (status, payload). If status is not 200, or fetch raises ConnectionError, return []. Otherwise return titles(payload). Catch only ConnectionError.",
+    "s": "def safe_titles(fetch, query):\n    pass\n",
+    "x": "ok=lambda q:(200,{\"data\":[{\"title\":q+\"1\"},{\"title\":q+\"2\"}]})\nbad=lambda q:(500,{\"error\":\"down\"})\ndef boom(q): raise ConnectionError(\"offline\")\nassert safe_titles(ok,\"x\")==[\"x1\",\"x2\"]\nassert safe_titles(bad,\"x\")==[] and safe_titles(boom,\"x\")==[]\ndef broken(q): raise KeyError(\"oops\")\ntry:\n    safe_titles(broken,\"x\"); assert False,\"too broad: KeyError was swallowed\"\nexcept KeyError:\n    pass",
+    "r": "def safe_titles(fetch, query):\n    try:\n        status, payload = fetch(query)\n    except ConnectionError:\n        return []\n    if status != 200:\n        return []\n    return titles(payload)\n",
+    "h": [
+     "Unpack the tuple: status, payload = fetch(query).",
+     "Only the fetch call goes inside the try block."
+    ]
+   },
+   {
+    "t": "Dice CLI (capstone)",
+    "m": "M5",
+    "tags": [
+     "composition",
+     "sys.argv",
+     "random",
+     "statistics"
+    ],
+    "p": "Write dice_report(argv, seed=0): argv is [\"prog\", SIDES, COUNT]. Seed ONCE before rolling, roll that many dice, and return summarize() of the results. Bad or missing numbers raise SystemExit with a usage message. Reuse parse_args and summarize.",
+    "s": "def dice_report(argv, seed=0):\n    pass\n",
+    "x": "r=dice_report([\"p\",\"6\",\"50\"],seed=3)\nassert r[\"n\"]==50 and 1<=r[\"mean\"]<=6\nassert dice_report([\"p\",\"6\",\"50\"],seed=3)==r\nfor bad in ([\"p\"],[\"p\",\"x\",\"5\"],[\"p\",\"6\",\"y\"]):\n    try:\n        dice_report(bad); assert False\n    except SystemExit: pass",
+    "r": "import random\n\ndef dice_report(argv, seed=0):\n    a=parse_args(argv)\n    try:\n        sides,count=int(a[0]),int(a[1])\n    except (ValueError,IndexError):\n        raise SystemExit(\"usage: prog SIDES COUNT\")\n    random.seed(seed)\n    return summarize([random.randint(1,sides) for _ in range(count)])\n",
+    "h": [
+     "Convert with int, catch ValueError and exit.",
+     "random.seed(seed) once, then random.randint in a loop."
+    ]
+   }
+  ]
+ },
+ "w5": {
+  "name": "Week 5 · Unit Tests",
+  "drills": [
+   {
+    "t": "Write the assert",
+    "m": "M2",
+    "tags": [
+     "assert",
+     "testing"
+    ],
+    "p": "A function square(n) is already loaded for you in the check. Write run_checks() that returns True if square(3)==9, square(-2)==4 and square(0)==0, and False otherwise. Use assert inside try/except AssertionError.",
+    "s": "def run_checks():\n    pass\n",
+    "x": "def square(n): return n*n\nassert run_checks() is True\ndef square(n): return n+n\nassert run_checks() is False",
+    "r": "def run_checks():\n    try:\n        assert square(3)==9\n        assert square(-2)==4\n        assert square(0)==0\n    except AssertionError:\n        return False\n    return True\n",
+    "h": [
+     "assert condition raises AssertionError when false.",
+     "Catch it and return False; return True at the end."
+    ]
+   },
+   {
+    "t": "Test a clean function",
+    "m": "M2",
+    "tags": [
+     "assert",
+     "edge cases"
+    ],
+    "p": "Write check_clean_name() that raises AssertionError (use assert) if clean_name from Week 0 mishandles: normal input, extra spaces, all caps, or the empty string (clean_name(\"\") must be \"\"). Return True if all pass.",
+    "s": "def check_clean_name():\n    pass\n",
+    "x": "assert check_clean_name() is True",
+    "r": "def check_clean_name():\n    assert clean_name(\"ada lovelace\")==\"Ada Lovelace\"\n    assert clean_name(\"  ada  \")==\"Ada\"\n    assert clean_name(\"ADA\")==\"Ada\"\n    assert clean_name(\"\")==\"\"\n    return True\n",
+    "h": [
+     "One assert per case.",
+     "Edge cases are the point: empty, spaces, case."
+    ]
+   },
+   {
+    "t": "FIX THE BUG: test that cannot fail",
+    "m": "M2",
+    "tags": [
+     "assert",
+     "testing",
+     "debugging"
+    ],
+    "p": "is_even_ok() is meant to verify is_even, but it can never fail: assert on a non-empty tuple is always true. Fix it so it really fails when is_even is wrong.",
+    "s": "def is_even_ok():\n    assert (is_even(4)==True, \"4 should be even\")\n    assert (is_even(7)==False, \"7 should be odd\")\n    return True\n",
+    "x": "assert is_even_ok() is True\n_old=is_even\nis_even=lambda n: True\ntry:\n    is_even_ok(); assert False,\"test passed on broken code\"\nexcept AssertionError as e:\n    assert \"test passed\" not in str(e)\nfinally:\n    is_even=_old",
+    "r": "def is_even_ok():\n    assert is_even(4)==True, \"4 should be even\"\n    assert is_even(7)==False, \"7 should be odd\"\n    return True\n",
+    "h": [
+     "assert (cond, msg) tests the tuple, not the condition.",
+     "Write: assert cond, msg"
+    ],
+    "kind": "fix"
+   },
+   {
+    "t": "Table-driven tests",
+    "m": "M3",
+    "tags": [
+     "loop",
+     "tuples",
+     "testing"
+    ],
+    "p": "Write run_table(fn, cases) where cases is a list of (input, expected). Return a list of the cases that FAILED as (input, expected, got), in order. A function that raises counts as failed with got set to the exception class name.",
+    "s": "def run_table(fn, cases):\n    pass\n",
+    "x": "assert run_table(abs,[(-1,1),(2,2)])==[]\nassert run_table(abs,[(-1,2)])==[(-1,2,1)]\nassert run_table(int,[(\"x\",0)])==[(\"x\",0,\"ValueError\")]",
+    "r": "def run_table(fn, cases):\n    failed=[]\n    for inp,exp in cases:\n        try:\n            got=fn(inp)\n        except Exception as e:\n            got=type(e).__name__\n        if got!=exp: failed.append((inp,exp,got))\n    return failed\n",
+    "h": [
+     "Loop over cases; call fn(inp) inside try/except.",
+     "Append (inp, expected, got) when got != expected."
+    ]
+   },
+   {
+    "t": "Test your own grader (capstone)",
+    "m": "M3",
+    "tags": [
+     "composition",
+     "testing",
+     "edge cases"
+    ],
+    "p": "Use run_table to test grade() from Week 1. Write audit_grade() returning the failed cases for these boundary inputs: 100->A, 90->A, 89->B, 80->B, 79->C, 70->C, 69->F, 0->F. Your earlier grade() is correct, so this should return an empty list.",
+    "s": "def audit_grade():\n    pass\n",
+    "x": "assert audit_grade()==[]",
+    "r": "def audit_grade():\n    cases=[(100,\"A\"),(90,\"A\"),(89,\"B\"),(80,\"B\"),(79,\"C\"),(70,\"C\"),(69,\"F\"),(0,\"F\")]\n    return run_table(grade,cases)\n",
+    "h": [
+     "Build the cases list, call run_table(grade, cases).",
+     "Boundaries are where off-by-one bugs live."
+    ]
+   }
+  ]
+ },
+ "w6": {
+  "name": "Week 6 · File I/O",
+  "drills": [
+   {
+    "t": "Append and read names",
+    "m": "M4",
+    "tags": [
+     "open/with",
+     "append mode",
+     "sorted"
+    ],
+    "p": "add_name(path, name) appends name plus a newline to the file. read_names(path) returns the names as a sorted list with the newlines stripped.",
+    "s": "def add_name(path, name):\n    pass\n\ndef read_names(path):\n    pass\n",
+    "x": "import os\np=\"/tmp/de_names.txt\"\nos.path.exists(p) and os.remove(p)\nadd_name(p,\"Ron\"); add_name(p,\"Harry\"); add_name(p,\"Hermione\")\nassert read_names(p)==[\"Harry\",\"Hermione\",\"Ron\"]\nassert open(p).read()==\"Ron\\nHarry\\nHermione\\n\"",
+    "r": "def add_name(path, name):\n    with open(path, \"a\") as file:\n        file.write(f\"{name}\\n\")\n\ndef read_names(path):\n    names = []\n    with open(path) as file:\n        for line in file:\n            names.append(line.rstrip())\n    return sorted(names)\n",
+    "h": [
+     "Mode \"a\" appends; write() adds no newline for you.",
+     "line.rstrip() removes the trailing newline."
+    ]
+   },
+   {
+    "t": "FIX THE BUG: the vanishing log",
+    "m": "M4",
+    "tags": [
+     "open modes",
+     "debugging"
+    ],
+    "p": "log_line should ADD a line each call, but the earlier lines vanish. Fix it.",
+    "s": "def log_line(path, text):\n    with open(path, \"w\") as f:\n        f.write(text + \"\\n\")\n",
+    "x": "import os\np=\"/tmp/de_log.txt\"\nos.path.exists(p) and os.remove(p)\nlog_line(p,\"first\"); log_line(p,\"second\")\nassert open(p).read()==\"first\\nsecond\\n\",\"earlier lines were lost\"",
+    "r": "def log_line(path, text):\n    with open(path, \"a\") as f:\n        f.write(text + \"\\n\")\n",
+    "h": [
+     "\"w\" recreates the file every time it opens.",
+     "Change the mode to \"a\"."
+    ],
+    "kind": "fix"
+   },
+   {
+    "t": "Read a CSV safely",
+    "m": "M4",
+    "tags": [
+     "csv.DictReader",
+     "quoted commas"
+    ],
+    "p": "load_students(path) reads a CSV with header name,home and returns a list of dicts. A home may contain a comma inside quotes, so do not split on commas yourself.",
+    "s": "import csv\n\ndef load_students(path):\n    pass\n",
+    "x": "p=\"/tmp/de_students.csv\"\nopen(p,\"w\").write('name,home\\nHarry,\"Number Four, Privet Drive\"\\nRon,The Burrow\\n')\nr=load_students(p)\nassert r==[{\"name\":\"Harry\",\"home\":\"Number Four, Privet Drive\"},{\"name\":\"Ron\",\"home\":\"The Burrow\"}],r",
+    "r": "import csv\n\ndef load_students(path):\n    with open(path) as file:\n        return list(csv.DictReader(file))\n",
+    "h": [
+     "csv.DictReader(file) yields one dict per row.",
+     "Wrap it in list(...) before the file closes."
+    ]
+   },
+   {
+    "t": "Sort with a key",
+    "m": "M3",
+    "tags": [
+     "sorted key",
+     "lambda",
+     "dict"
+    ],
+    "p": "sort_students(students, key=\"name\", reverse=False) returns a NEW list sorted by that dict key. Do not change the original list.",
+    "s": "def sort_students(students, key=\"name\", reverse=False):\n    pass\n",
+    "x": "st=[{\"name\":\"Ron\",\"home\":\"Burrow\"},{\"name\":\"Harry\",\"home\":\"Privet\"},{\"name\":\"Draco\",\"home\":\"Manor\"}]\nassert [s[\"name\"] for s in sort_students(st)]==[\"Draco\",\"Harry\",\"Ron\"]\nassert [s[\"name\"] for s in sort_students(st,key=\"home\")]==[\"Ron\",\"Draco\",\"Harry\"]\nassert [s[\"name\"] for s in sort_students(st,reverse=True)]==[\"Ron\",\"Harry\",\"Draco\"]\nassert [s[\"name\"] for s in st]==[\"Ron\",\"Harry\",\"Draco\"],\"original was changed\"",
+    "r": "def sort_students(students, key=\"name\", reverse=False):\n    return sorted(students, key=lambda s: s[key], reverse=reverse)\n",
+    "h": [
+     "sorted() returns a new list; .sort() changes in place.",
+     "key=lambda s: s[key]"
+    ]
+   },
+   {
+    "t": "Write a CSV row",
+    "m": "M4",
+    "tags": [
+     "csv.DictWriter",
+     "append mode",
+     "os.path"
+    ],
+    "p": "save_student(path, name, home) appends one row. If the file is missing or empty, write the header name,home first. Quoting of commas must be automatic.",
+    "s": "import csv, os\n\ndef save_student(path, name, home):\n    pass\n",
+    "x": "p=\"/tmp/de_s2.csv\"\nos.path.exists(p) and os.remove(p)\nsave_student(p,\"Harry\",\"Number Four, Privet Drive\"); save_student(p,\"Ron\",\"The Burrow\")\nassert open(p).readline().strip()==\"name,home\"\nassert load_students(p)==[{\"name\":\"Harry\",\"home\":\"Number Four, Privet Drive\"},{\"name\":\"Ron\",\"home\":\"The Burrow\"}]",
+    "r": "import csv, os\n\ndef save_student(path, name, home):\n    is_new = not os.path.exists(path) or os.path.getsize(path) == 0\n    with open(path, \"a\", newline=\"\") as file:\n        writer = csv.DictWriter(file, fieldnames=[\"name\", \"home\"])\n        if is_new:\n            writer.writeheader()\n        writer.writerow({\"name\": name, \"home\": home})\n",
+    "h": [
+     "Decide is_new BEFORE opening in append mode.",
+     "writer.writeheader() then writer.writerow({...})."
+    ]
+   },
+   {
+    "t": "Roster lines (capstone)",
+    "m": "M4",
+    "tags": [
+     "composition",
+     "f-string format"
+    ],
+    "p": "roster_lines(path) returns \"NAME is from HOME\" strings for every student in the CSV, sorted by name. Reuse load_students and sort_students.",
+    "s": "def roster_lines(path):\n    pass\n",
+    "x": "p=\"/tmp/de_roster.csv\"\nopen(p,\"w\").write('name,home\\nRon,The Burrow\\nHarry,\"Number Four, Privet Drive\"\\n')\nassert roster_lines(p)==[\"Harry is from Number Four, Privet Drive\",\"Ron is from The Burrow\"]",
+    "r": "def roster_lines(path):\n    return [f\"{s['name']} is from {s['home']}\" for s in sort_students(load_students(path))]\n",
+    "h": [
+     "Quotes inside an f-string must differ from the outer ones.",
+     "Compose: sort_students(load_students(path))."
+    ]
+   }
+  ]
+ },
+ "w7": {
+  "name": "Week 7 · Regular Expressions",
+  "drills": [
+   {
+    "t": "Validate an .edu email",
+    "m": "M5",
+    "tags": [
+     "re.search",
+     "anchors ^ $",
+     "IGNORECASE"
+    ],
+    "p": "valid_edu(email) returns True only for word characters, one @, word characters, then a literal .edu, with nothing before or after. Ignore case.",
+    "s": "import re\n\ndef valid_edu(email):\n    pass\n",
+    "x": "assert valid_edu(\"malan@harvard.edu\") is True and valid_edu(\"MALAN@HARVARD.EDU\") is True\nfor bad in (\"malan@@@harvard.edu\",\"my email is malan@harvard.edu.\",\"@harvard.edu\",\"malan@harvard.com\",\"malan@.edu\"):\n    assert valid_edu(bad) is False, bad",
+    "r": "import re\n\ndef valid_edu(email):\n    return re.search(r\"^\\w+@\\w+\\.edu$\", email, re.IGNORECASE) is not None\n",
+    "h": [
+     "^ and $ pin the match to the whole string.",
+     "The dot before edu needs a backslash."
+    ]
+   },
+   {
+    "t": "FIX THE BUG: the unescaped dot",
+    "m": "M5",
+    "tags": [
+     "escaping",
+     "regex debugging"
+    ],
+    "p": "is_edu_domain accepts \"harvard?edu\". Fix the pattern so only a literal dot works.",
+    "s": "import re\n\ndef is_edu_domain(domain):\n    return re.search(r\"^\\w+.edu$\", domain) is not None\n",
+    "x": "assert is_edu_domain(\"harvard.edu\") is True\nassert is_edu_domain(\"harvard?edu\") is False and is_edu_domain(\"harvardxedu\") is False",
+    "r": "import re\n\ndef is_edu_domain(domain):\n    return re.search(r\"^\\w+\\.edu$\", domain) is not None\n",
+    "h": [
+     "In a pattern, a bare dot means ANY character.",
+     "Escape it with a backslash."
+    ],
+    "kind": "fix"
+   },
+   {
+    "t": "Optional subdomain",
+    "m": "M5",
+    "tags": [
+     "groups",
+     "? optional",
+     "* repeat"
+    ],
+    "p": "valid_edu_sub(email): like valid_edu, but the username may contain single dots (da.malan) and the domain may have ONE optional subdomain (cs50.harvard.edu). Ignore case.",
+    "s": "import re\n\ndef valid_edu_sub(email):\n    pass\n",
+    "x": "for good in (\"malan@cs50.harvard.edu\",\"malan@harvard.edu\",\"da.malan@harvard.edu\"):\n    assert valid_edu_sub(good) is True, good\nfor bad in (\"malan@.harvard.edu\",\"malan@a.b.harvard.edu\",\"da..malan@harvard.edu\"):\n    assert valid_edu_sub(bad) is False, bad",
+    "r": "import re\n\ndef valid_edu_sub(email):\n    return re.search(r\"^\\w+(?:\\.\\w+)*@(?:\\w+\\.)?\\w+\\.edu$\", email, re.IGNORECASE) is not None\n",
+    "h": [
+     "Parentheses group; a ? after a group makes the whole group optional.",
+     "Username: \\w+ then a repeated group of dot plus \\w+."
+    ]
+   },
+   {
+    "t": "Flip a name",
+    "m": "M5",
+    "tags": [
+     "capture groups",
+     "re.search",
+     "strip"
+    ],
+    "p": "fix_name(name): \"Malan, David\" becomes \"David Malan\". Tolerate a missing or extra space after the comma and stray outer spaces. A name with no comma comes back unchanged (stripped).",
+    "s": "import re\n\ndef fix_name(name):\n    pass\n",
+    "x": "assert fix_name(\"Malan, David\")==\"David Malan\" and fix_name(\"Malan,David\")==\"David Malan\"\nassert fix_name(\" Malan,   David \")==\"David Malan\" and fix_name(\"David Malan\")==\"David Malan\"",
+    "r": "import re\n\ndef fix_name(name):\n    name = name.strip()\n    matches = re.search(r\"^(.+?)\\s*,\\s*(.+)$\", name)\n    if matches:\n        return f\"{matches.group(2)} {matches.group(1)}\"\n    return name\n",
+    "h": [
+     "Group 1 is the first set of parentheses, not group 0.",
+     "\\s* tolerates zero or more spaces."
+    ]
+   },
+   {
+    "t": "Mask the digits",
+    "m": "M5",
+    "tags": [
+     "re.sub",
+     "\\d"
+    ],
+    "p": "mask_digits(text): replace every run of digits with a single \"#\". \"call 555-1234 now\" becomes \"call #-# now\".",
+    "s": "import re\n\ndef mask_digits(text):\n    pass\n",
+    "x": "assert mask_digits(\"call 555-1234 now\")==\"call #-# now\"\nassert mask_digits(\"no digits\")==\"no digits\" and mask_digits(\"a1b22c333\")==\"a#b#c#\"",
+    "r": "import re\n\ndef mask_digits(text):\n    return re.sub(r\"\\d+\", \"#\", text)\n",
+    "h": [
+     "re.sub(pattern, replacement, text)",
+     "\\d+ means one or more digits."
+    ]
+   },
+   {
+    "t": "Profile username",
+    "m": "M5",
+    "tags": [
+     "optional groups",
+     "character class",
+     "non-capturing"
+    ],
+    "p": "github_username(url) returns the username from a profile URL, or None. Accept an optional http(s)://, an optional www., any letter case, and one optional trailing slash. Usernames use letters, digits, and hyphens only. Anything extra (like /repo) means None.",
+    "s": "import re\n\ndef github_username(url):\n    pass\n",
+    "x": "assert github_username(\"https://github.com/octocat\")==\"octocat\"\nassert github_username(\"http://www.github.com/octo-cat/\")==\"octo-cat\"\nassert github_username(\"github.com/octocat\")==\"octocat\"\nassert github_username(\"HTTPS://GITHUB.COM/Octocat\")==\"Octocat\"\nfor bad in (\"https://gitlab.com/octocat\",\"https://github.com/\",\"https://github.com/octocat/repo\"):\n    assert github_username(bad) is None, bad",
+    "r": "import re\n\ndef github_username(url):\n    matches = re.search(r\"^(?:https?://)?(?:www\\.)?github\\.com/([a-z0-9-]+)/?$\", url, re.IGNORECASE)\n    return matches.group(1) if matches else None\n",
+    "h": [
+     "A group written (?:...) does not capture; only the username gets plain parentheses.",
+     "Put the hyphen last in the character class so it is literal."
+    ]
+   },
+   {
+    "t": "Clean roster (capstone)",
+    "m": "M5",
+    "tags": [
+     "composition",
+     "re",
+     "dedupe"
+    ],
+    "p": "normalize_roster(lines): fix every non-blank line with fix_name, drop duplicates, return the names sorted.",
+    "s": "def normalize_roster(lines):\n    pass\n",
+    "x": "r=normalize_roster([\" Malan, David\",\"Potter,Harry\",\"\",\"Harry Potter\",\"Granger, Hermione\"])\nassert r==[\"David Malan\",\"Harry Potter\",\"Hermione Granger\"],r",
+    "r": "def normalize_roster(lines):\n    names = [fix_name(line) for line in lines if line.strip()]\n    return sorted(set(names))\n",
+    "h": [
+     "Skip blank lines with a condition in the comprehension.",
+     "set() removes duplicates; sorted() orders them."
+    ]
+   }
+  ]
+ }
+}
