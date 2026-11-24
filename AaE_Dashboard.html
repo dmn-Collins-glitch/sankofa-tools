@@ -954,16 +954,22 @@ body{
   </div>
 
   <!-- Today's Mission -->
-  <div class="mission-block fade-up fade-up-3">
-    <div class="mission-head">
+  <div class="mission-block collapse-panel open fade-up fade-up-3" id="secMission">
+    <div class="mission-head collapse-head" onclick="toggleSec('secMission')">
       <div class="mission-head-left">
         <span class="mission-title">▸ TODAY'S MISSION</span>
         <span class="mission-sub" id="missionSub">—</span>
+        <span class="collapse-ledger" id="missionLedger">—</span>
       </div>
-      <button class="mission-reset" onclick="resetMission()">RESET</button>
+      <div class="hdr-grp-r">
+        <button class="mission-reset" onclick="event.stopPropagation();resetMission()">RESET</button>
+        <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
+      </div>
     </div>
+    <div class="collapse-body">
     <div class="mission-list" id="missionList">
       <!-- rendered by JS -->
+    </div>
     </div>
   </div>
 
@@ -1043,11 +1049,12 @@ body{
     </div>
 
     <!-- Logger -->
-    <div class="panel">
-      <div class="panel-head">
-        <span class="panel-title">Log Session</span>
-        <span class="coded-badge" id="codedBadge">—</span>
+    <div class="panel collapse-panel open" id="secLog">
+      <div class="panel-head collapse-head" onclick="toggleSec('secLog')">
+        <div class="hdr-grp-l"><span class="panel-title">Log Session</span><span class="collapse-ledger" id="logLedger">—</span></div>
+        <div class="hdr-grp-r"><span class="coded-badge" id="codedBadge">—</span><svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg></div>
       </div>
+      <div class="collapse-body">
 
       <!-- Stop & Think -->
       <div class="st-block" id="stBlock">
@@ -1193,6 +1200,7 @@ body{
         </div>
         <div class="log-ok" id="logOk">✓ LOGGED</div>
       </div>
+      </div>
     </div>
 
   </div>
@@ -1242,13 +1250,18 @@ body{
   </div>
 
   <!-- Phase Bars -->
-  <div class="pb-panel">
-    <div class="pb-head">Phase Progress</div>
+  <div class="pb-panel collapse-panel" id="secPhases">
+    <div class="pb-head collapse-head" onclick="toggleSec('secPhases')" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0">
+      <div class="hdr-grp-l"><span>Phase Progress</span><span class="collapse-ledger" id="phasesLedger">—</span></div>
+      <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
+    </div>
+    <div class="collapse-body"><div style="height:.7rem"></div>
     <div class="pb-grid">
       <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#8B6FA8;width:0%"></div></div><div class="pb-wks">Python + CCP</div></div>
       <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#C9982E;width:0%"></div></div><div class="pb-wks">SAA + EvalKit + ReviewLoop</div></div>
       <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#D98F3A;width:0%"></div></div><div class="pb-wks">AgentForge + CloudMind</div></div>
       <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#B5533C;width:0%"></div></div><div class="pb-wks">Portfolio + first client</div></div>
+    </div>
     </div>
   </div>
 
@@ -1279,7 +1292,7 @@ body{
     <div class="fl-sep"></div>
     <a class="fl-link" href="https://docs.anthropic.com" target="_blank"><div class="fl-dot" style="background:var(--teal)"></div>Anthropic Docs</a>
     <div class="fl-sep"></div>
-    <a class="fl-link" href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>AWS CCP</a>
+    <a class="fl-link" href="https://aws.amazon.com/certification/certified-solutions-architect-associate/" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>AWS SAA-C03</a>
     <div class="fl-sep"></div>
     <a class="fl-link" href="https://explore.skillbuilder.aws/learn" target="_blank"><div class="fl-dot" style="background:var(--amber)"></div>AWS Skill Builder</a>
     <div class="fl-sep"></div>
@@ -1661,18 +1674,27 @@ function getCCPDailyObjective(){
 }
 
 // Phase-derived daily missions
+// Hint pulled from the last Drill Engine session so the mission never shows a stale target.
+function drillHint(){
+  try{
+    const l=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');
+    if(l&&l.mode==='python'&&l.nextFocus)return 'Next up: '+l.nextFocus+(l.date?' (from '+l.date+')':'');
+  }catch(e){}
+  return 'Open the Drill Engine — pick up the next unsolved drill.';
+}
 const PHASE_MISSIONS = {
   1:(()=>{
     const cert=getCCPDailyObjective();
     return [
-      {text:cert.text, hint:cert.hint, tag:'cert', cat:'cert'},
-      {text:'Complete today\'s Python drill — then apply it to Claude Shell',hint:'Each module unlocks a shell feature. Drill it, then build it.',tag:'code',   cat:'drill'},
+      {text:'Advance Claude Shell — build the next feature your last drill unlocked',hint:'Each module unlocks a shell feature. Drill it, then build it.',tag:'code',   cat:'project'},
+      {text:'Complete one Python drill block',hintFn:drillHint,tag:'code',   cat:'drill'},
       {text:'Commit at least one file to GitHub',         hint:'Even a README update counts. No days without commits.',tag:'code',   cat:'code'},
     ];
   })(),
   2:[
     {text:'Run one AWS SAA-C03 domain drill',             hint:'Use the Drill Engine — SAA mode. One subdomain per session.',tag:'cert',   cat:'cert'},
-    {text:'Work on Sekhem AI or Cleaning Ops project',   hint:'Even 30 minutes of building beats 0.',               tag:'code',   cat:'project'},
+    {text:'Complete one Python drill block',             hintFn:drillHint,                                           tag:'code',   cat:'drill'},
+    {text:'Build: EvalKit, Sekhem AI, or Cleaning Ops',  hint:'EvalKit\'s opening is the human-judgment layer — rubrics, ground truth, annotator disagreement.',tag:'code',   cat:'project'},
   ],
   3:[
     {text:'Build something on AgentForge or CloudMind',  hint:'Must be deployed, not just local.',                  tag:'code',   cat:'project'},
@@ -1823,7 +1845,7 @@ function renderMission(){
   const today=todayStr();
   const mKey=today; // mission resets daily if not manually done
 
-  document.getElementById('missionSub').textContent=`Phase ${ph.num} · Week ${currWk()}`;
+  document.getElementById('missionSub').textContent=`Phase ${ph.num} · ${ph.label}`;
 
   const list=document.getElementById('missionList');
   list.innerHTML=items.map((item,i)=>{
@@ -1831,10 +1853,13 @@ function renderMission(){
     const done=!!missionDone[key];
     return `<div class="mission-item${done?' done':''}" onclick="toggleMission('${key}',this)">
       <div class="mi-check">${done?'✓':''}</div>
-      <div class="mi-text">${item.text}<small>${item.hint}</small></div>
+      <div class="mi-text">${item.text}<small>${item.hintFn?item.hintFn():item.hint}</small></div>
       <span class="mi-tag ${item.tag}">${item.tag.toUpperCase()}</span>
     </div>`;
   }).join('');
+  const dn=items.filter((_,i)=>missionDone[`${mKey}_${i}`]).length;
+  const ml=document.getElementById('missionLedger');
+  if(ml)ml.textContent=`${dn}/${items.length} done today`;
 }
 
 function toggleMission(key,el){
@@ -1939,6 +1964,14 @@ function logCCP(){
   sessions.unshift({id:Date.now(),date:todayStr(),week:currWk(),category:'cert',minutes:90,
     note:`CCP mock exam — score: ${v}`,tags:['AWS CCP','Mock exam',v>=820?'Target range':'Reviewing']});
   saveSesh();document.getElementById('ccpInput').value='';renderAll();
+}
+
+function renderLedgers(){
+  const ph=getCurrentPhase();
+  const a=document.getElementById('phasesLedger');
+  if(a)a.textContent=`Phase ${ph.num} · ${ph.label} — current`;
+  const b=document.getElementById('logLedger');
+  if(b)b.textContent=codedToday()?'Coded today ✓':'Nothing logged today';
 }
 
 function renderCodedBadge(){
@@ -2138,7 +2171,7 @@ function showBkMsg(txt){
 const PHASE_DETAIL = {
   1:{
     wkRange:[1,6],
-    cert:['CCP review — target 850+ (currently 658)','Focus: billing, IAM, shared responsibility, core services','One full mock exam per week until passing'],
+    cert:['CCP — passed and archived; revisit only if a retake is ever needed','Focus: billing, IAM, shared responsibility, core services','Mock exams until consistently passing — readiness sets the pace, not the calendar'],
     code:['Python: variables, loops, functions, files, APIs','VS Code + Cursor as daily pair','Git workflow: commit, branch, PR — no GUI crutches','Build Project 1: Claude Shell (CLI wrapper)'],
     milestones:[
       {label:'CCP pass 850+',type:'cert'},{label:'Claude Shell',type:'proj'},
@@ -2155,7 +2188,7 @@ const PHASE_DETAIL = {
   },
   2:{
     wkRange:[7,13],
-    cert:['AWS SAA-C03 study — begins once Phase 1 closes','Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing','DL.AI: Evaluating & Debugging GenAI — paired with the EvalKit build','SAA exam: once mocks are consistently passing, not before'],
+    cert:['AWS SAA-C03 study — current cert target (infrastructure depth for CloudMind)','Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing','DL.AI: Evaluating & Debugging GenAI — paired with the EvalKit build','SAA exam: once mocks are consistently passing, not before'],
     code:['Python intermediate: requests, JSON, async basics, classes','Build EvalKit — automated LLM output scoring','Build ReviewLoop — HITL annotation interface','APIs: Anthropic, basic REST patterns'],
     milestones:[
       {label:'SAA-C03 pass',type:'cert'},{label:'DL.AI Evals',type:'cert'},
@@ -2292,7 +2325,7 @@ function toggleSec(id){
   localStorage.setItem('v13_sec_'+id, el.classList.contains('open')?'1':'0');
 }
 function restoreSecState(){
-  ['secPython','secWeek','secSessions'].forEach(id=>{
+  ['secPython','secWeek','secSessions','secMission','secLog','secPhases'].forEach(id=>{
     const el = document.getElementById(id);
     if(!el) return;
     const saved = localStorage.getItem('v13_sec_'+id);
@@ -2307,7 +2340,7 @@ function renderAll(){
   renderMission();renderPyModules();renderCCP();
   renderCodedBadge();renderTargets();renderPhaseBrief();
   renderPhaseBars();renderSessions();
-  renderDebrief();
+  renderDebrief();renderLedgers();
 }
 
 load();
