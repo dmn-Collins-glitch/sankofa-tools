@@ -1472,7 +1472,7 @@ const BK=(function(){
   function sync(){ // feeds the Dashboard's Drill Debrief panel
     const d=ALL[cur],n=ALL[cur+1],ds=today();
     try{localStorage.setItem('drill_engine_last_log',JSON.stringify({date:ds,mode:'python',module:d.m,moduleName:BK_MN[d.m]||'',drills:nSolved(),weakSpots:weak(),nextDrill:n?n.t+': '+n.p:'Banks complete',nextFocus:n?n.w.toUpperCase()+' · '+n.t:'Review weak concepts',raw:''}));
-      const s=JSON.parse(localStorage.getItem('drill_engine_state')||'{}');s.lastActivity=ds;localStorage.setItem('drill_engine_state',JSON.stringify(s))}catch(e){}
+      const s=JSON.parse(localStorage.getItem('drill_engine_state')||'{}');s.lastActivity=ds;localStorage.setItem('drill_engine_state',JSON.stringify(s));localStorage.setItem('drill_engine_py_next',JSON.stringify({date:ds,nextFocus:n?n.w.toUpperCase()+' · '+n.t:'Review weak concepts'}))}catch(e){}
   }
   async function ask(){
     const key=localStorage.getItem('de_api_key'),a=$('bkAi'),d=ALL[cur];a.className='bk-out ai show';

@@ -129,7 +129,7 @@ body{
 .setup-box{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   padding:2.25rem;
   max-width:400px;width:100%;
   box-shadow:var(--shadow-glow);
@@ -140,14 +140,14 @@ body{
 .setup-lbl{font-family:var(--fm);font-size:10px;color:var(--text-3);display:block;margin-bottom:.4rem;letter-spacing:.1em;text-transform:uppercase}
 .setup-box input[type=date]{
   width:100%;padding:.65rem .85rem;
-  border:1px solid var(--border-mid);border-radius:3px;
+  border:1px solid var(--border-mid);border-radius:0;
   font-family:var(--fm);font-size:13px;
   background:var(--bg2);color:var(--text);margin-bottom:1rem;
 }
 .btn-primary{
   width:100%;padding:.7rem;
   background:var(--teal);color:var(--bg);
-  border:none;border-radius:3px;
+  border:none;border-radius:0;
   font-family:var(--fm);font-size:12px;font-weight:600;
   cursor:pointer;letter-spacing:.1em;text-transform:uppercase;
   transition:opacity .15s;
@@ -173,7 +173,7 @@ body{
 .hdr-pills{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
 .pill{
   font-family:var(--fm);font-size:10px;
-  padding:2px 9px;border-radius:2px;
+  padding:2px 9px;border-radius:0;
   border:1px solid var(--border-mid);
   letter-spacing:.06em;
 }
@@ -183,7 +183,7 @@ body{
 .hdr-date{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.04em}
 .theme-btn{
   width:28px;height:28px;
-  border:1px solid var(--border-mid);border-radius:2px;
+  border:1px solid var(--border-mid);border-radius:0;
   background:var(--surface2);color:var(--text-2);
   font-size:13px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
@@ -193,7 +193,7 @@ body{
 .drill-btn{
   font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   background:var(--teal);color:var(--bg);
-  border:none;border-radius:3px;
+  border:none;border-radius:0;
   padding:.3rem .75rem;cursor:pointer;
   transition:opacity .15s;white-space:nowrap;
   display:inline-flex;align-items:center;gap:.4rem;
@@ -204,7 +204,7 @@ body{
 /* ── DRILL DEBRIEF PANEL ──────────────────────────── */
 .debrief-panel{
   background:var(--surface);border:1px solid var(--border-mid);
-  border-radius:4px;margin-bottom:1rem;box-shadow:var(--shadow);overflow:hidden;
+  border-radius:0;margin-bottom:1rem;box-shadow:var(--shadow);overflow:hidden;
 }
 [data-theme="dark"] .debrief-panel{border-top:2px solid var(--teal)}
 .debrief-head{
@@ -214,14 +214,14 @@ body{
 }
 .debrief-head-left{display:flex;align-items:center;gap:.65rem}
 .debrief-title{font-family:var(--fm);font-size:11px;color:var(--teal);letter-spacing:.15em;text-transform:uppercase}
-.debrief-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:2px;background:var(--teal-bg);border:1px solid var(--teal-dim);color:var(--teal)}
+.debrief-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:0;background:var(--teal-bg);border:1px solid var(--teal-dim);color:var(--teal)}
 .debrief-chevron{font-family:var(--fm);font-size:10px;color:var(--text-3);transition:transform .2s}
 .debrief-panel .collapse-mark{width:15px;height:15px;color:var(--text-3);transition:transform .35s cubic-bezier(.4,0,.2,1)}
 .debrief-panel.open .collapse-mark{transform:rotate(180deg);color:var(--teal)}
 .debrief-body{display:none;padding:.85rem 1.25rem;flex-direction:column;gap:.75rem}
 .debrief-panel.open .debrief-body{display:flex}
 .debrief-last-log{
-  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:0;
   padding:.65rem .85rem;font-size:12px;color:var(--text-2);line-height:1.7;
 }
 .dl-header{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem}
@@ -229,22 +229,22 @@ body{
 .dl-label{font-family:var(--fm);font-size:10px;color:var(--text-3);min-width:80px}
 .dl-val{font-size:12px;color:var(--text-2)}
 .debrief-ws-chips{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.25rem}
-.debrief-ws-chip{font-family:var(--fm);font-size:10px;padding:1px 7px;border-radius:2px;background:var(--coral-bg);border:1px solid var(--coral);color:var(--coral)}
+.debrief-ws-chip{font-family:var(--fm);font-size:10px;padding:1px 7px;border-radius:0;background:var(--coral-bg);border:1px solid var(--coral);color:var(--coral)}
 .debrief-actions{display:flex;gap:.5rem;flex-wrap:wrap}
-.debrief-btn{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .85rem;border-radius:2px;cursor:pointer;transition:all .12s;border:1px solid}
+.debrief-btn{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .85rem;border-radius:0;cursor:pointer;transition:all .12s;border:1px solid}
 .debrief-btn-primary{background:var(--teal);color:var(--bg);border-color:var(--teal)}
 .debrief-btn-primary:hover{opacity:.85}.debrief-btn-primary:disabled{opacity:.3;cursor:not-allowed}
 .debrief-btn-secondary{background:none;color:var(--text-3);border-color:var(--border-mid)}
 .debrief-btn-secondary:hover{color:var(--text-2);border-color:var(--border-hi)}
 .debrief-ai-out{
   background:var(--surface);border:1px solid var(--border-mid);
-  border-left:2px solid var(--teal);border-radius:3px;
+  border-left:2px solid var(--teal);border-radius:0;
   padding:.75rem .9rem;font-size:13px;color:var(--text);line-height:1.7;display:none;
 }
 .debrief-ai-out.show{display:block}
 .debrief-ai-out p{margin-bottom:.4rem}.debrief-ai-out p:last-child{margin-bottom:0}
 .debrief-ai-out strong{color:var(--text);font-weight:600}
-.debrief-ai-out code{font-family:var(--fm);font-size:11px;background:var(--bg3);color:var(--teal);padding:1px 5px;border-radius:2px}
+.debrief-ai-out code{font-family:var(--fm);font-size:11px;background:var(--bg3);color:var(--teal);padding:1px 5px;border-radius:0}
 .debrief-cursor{display:inline-block;width:6px;height:12px;background:var(--teal);vertical-align:middle;margin-left:2px;animation:blink .7s infinite}
 .debrief-empty{font-family:var(--fm);font-size:11px;color:var(--text-4);text-align:center;padding:.75rem;letter-spacing:.06em}
 
@@ -253,7 +253,7 @@ body{
   background:var(--purple-bg);
   border:1px solid var(--purple);
   border-left:3px solid var(--purple);
-  border-radius:3px;
+  border-radius:0;
   padding:.6rem 1rem;
   margin-bottom:1rem;
   display:none;align-items:center;justify-content:space-between;gap:.75rem;
@@ -261,7 +261,7 @@ body{
 .mon-banner p{font-family:var(--fm);font-size:11px;color:var(--purple);letter-spacing:.04em}
 .mon-banner a{
   font-family:var(--fm);font-size:10px;color:var(--purple);
-  border:1px solid var(--purple);border-radius:2px;
+  border:1px solid var(--purple);border-radius:0;
   padding:.25rem .65rem;text-decoration:none;
   white-space:nowrap;letter-spacing:.06em;
 }
@@ -272,7 +272,7 @@ body{
   background:var(--teal-bg);
   border:1px solid var(--border-mid);
   border-left:3px solid var(--teal);
-  border-radius:3px;
+  border-radius:0;
   padding:.75rem 1.1rem;
   margin-bottom:1rem;
   display:flex;align-items:flex-start;gap:.75rem;
@@ -289,7 +289,7 @@ body{
 .streak-hero{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   padding:1.25rem 1.5rem;
   margin-bottom:1rem;
   display:grid;
@@ -319,7 +319,7 @@ body{
 .s-badges{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem}
 .s-badge{
   font-family:var(--fm);font-size:10px;
-  padding:2px 8px;border-radius:2px;
+  padding:2px 8px;border-radius:0;
   border:1px solid var(--border-mid);
   color:var(--text-3);
   display:inline-flex;align-items:center;gap:.35rem;
@@ -336,7 +336,7 @@ body{
 .s-stat{
   background:var(--bg2);
   border:1px solid var(--border);
-  border-radius:3px;padding:.65rem .75rem;
+  border-radius:0;padding:.65rem .75rem;
 }
 .s-stat .n{
   font-family:var(--fm);font-size:20px;
@@ -352,7 +352,7 @@ body{
 .mission-block{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   margin-bottom:1rem;
   box-shadow:var(--shadow);
   overflow:hidden;
@@ -373,7 +373,7 @@ body{
 .mission-reset{
   font-family:var(--fm);font-size:9px;color:var(--text-4);
   cursor:pointer;letter-spacing:.08em;
-  border:1px solid var(--border);border-radius:2px;
+  border:1px solid var(--border);border-radius:0;
   padding:2px 7px;background:none;
   transition:all .12s;
 }
@@ -382,7 +382,7 @@ body{
 .mission-item{
   display:flex;align-items:flex-start;gap:.75rem;
   padding:.5rem .65rem;
-  border:1px solid var(--border);border-radius:3px;
+  border:1px solid var(--border);border-radius:0;
   cursor:pointer;transition:all .12s;
   background:var(--bg2);
 }
@@ -390,7 +390,7 @@ body{
 .mission-item.done{opacity:.45}
 .mission-item.done .mi-text{text-decoration:line-through;color:var(--text-3)}
 .mi-check{
-  width:16px;height:16px;border-radius:2px;
+  width:16px;height:16px;border-radius:0;
   border:1px solid var(--border-hi);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;margin-top:1px;
@@ -405,7 +405,7 @@ body{
 .mi-text small{display:block;font-family:var(--fm);font-size:10px;color:var(--text-3);margin-top:2px}
 .mi-tag{
   font-family:var(--fm);font-size:9px;
-  padding:1px 6px;border-radius:2px;
+  padding:1px 6px;border-radius:0;
   flex-shrink:0;margin-top:2px;
   border:1px solid var(--border);color:var(--text-3);
 }
@@ -423,7 +423,7 @@ body{
 .panel{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   box-shadow:var(--shadow);
   overflow:hidden;
 }
@@ -456,7 +456,7 @@ body{
 .panel-title{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase}
 .panel-meta{font-family:var(--fm);font-size:10px;color:var(--text-4)}
 .py-body{padding:.65rem .75rem}
-.py-ring-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.65rem;padding:.5rem .65rem;background:var(--bg2);border-radius:3px;border:1px solid var(--border)}
+.py-ring-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.65rem;padding:.5rem .65rem;background:var(--bg2);border-radius:0;border:1px solid var(--border)}
 .py-ring{position:relative;width:36px;height:36px;flex-shrink:0}
 .py-ring svg{transform:rotate(-90deg)}
 .py-ring-bg{fill:none;stroke:var(--border-mid);stroke-width:3}
@@ -468,7 +468,7 @@ body{
 .py-modules{display:flex;flex-direction:column;gap:2px}
 .py-mod{
   display:flex;align-items:center;gap:.6rem;
-  padding:.32rem .5rem;border-radius:2px;
+  padding:.32rem .5rem;border-radius:0;
   cursor:pointer;transition:all .1s;
   border:1px solid transparent;
 }
@@ -496,7 +496,7 @@ body{
   background:var(--teal-bg);
   border:1px solid var(--teal-dim);
   border-left:2px solid var(--teal);
-  border-radius:3px;
+  border-radius:0;
 }
 .drill-prompt-lbl{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem}
 .drill-prompt-text{font-size:12px;color:var(--text-2);line-height:1.6}
@@ -507,7 +507,7 @@ body{
   margin-top:.65rem;
   border:1px solid var(--teal-dim);
   border-left:2px solid var(--teal);
-  border-radius:3px;
+  border-radius:0;
   background:var(--teal-bg);
   overflow:hidden;
 }
@@ -522,12 +522,12 @@ body{
 .idrill-hint{font-family:var(--fm);font-size:10px;color:var(--text-3);padding:0 .8rem .5rem;line-height:1.5}
 .idrill-thread{display:flex;flex-direction:column;gap:.5rem;padding:.5rem .8rem;max-height:280px;overflow-y:auto}
 .idrill-thread::-webkit-scrollbar{width:3px}
-.idrill-thread::-webkit-scrollbar-thumb{background:var(--teal-dim);border-radius:2px}
-.idrill-msg-u{align-self:flex-end;max-width:80%;background:var(--surface2);border:1px solid var(--border-mid);border-radius:4px 4px 0 4px;padding:.4rem .65rem;font-size:12px;color:var(--text-2)}
-.idrill-msg-a{align-self:flex-start;width:100%;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--teal);border-radius:0 4px 4px 4px;padding:.5rem .7rem;font-size:12px;color:var(--text);line-height:1.65}
+.idrill-thread::-webkit-scrollbar-thumb{background:var(--teal-dim);border-radius:0}
+.idrill-msg-u{align-self:flex-end;max-width:80%;background:var(--surface2);border:1px solid var(--border-mid);border-radius:0;padding:.4rem .65rem;font-size:12px;color:var(--text-2)}
+.idrill-msg-a{align-self:flex-start;width:100%;background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--teal);border-radius:0;padding:.5rem .7rem;font-size:12px;color:var(--text);line-height:1.65}
 .idrill-msg-a p{margin-bottom:.35rem}.idrill-msg-a p:last-child{margin-bottom:0}
-.idrill-msg-a code{font-family:var(--fm);font-size:11px;background:var(--bg3);color:var(--teal);padding:1px 4px;border-radius:2px}
-.idrill-msg-a pre{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:.45rem .65rem;margin:.3rem 0;overflow-x:auto}
+.idrill-msg-a code{font-family:var(--fm);font-size:11px;background:var(--bg3);color:var(--teal);padding:1px 4px;border-radius:0}
+.idrill-msg-a pre{background:var(--bg3);border:1px solid var(--border);border-radius:0;padding:.45rem .65rem;margin:.3rem 0;overflow-x:auto}
 .idrill-msg-a pre code{background:none;border:none;padding:0;color:var(--text-2);font-size:11px}
 .idrill-msg-a strong{color:var(--text);font-weight:600}
 .idrill-thinking{display:flex;gap:3px;align-items:center;padding:.4rem .5rem}
@@ -535,14 +535,14 @@ body{
 .idrill-dot:nth-child(2){animation-delay:.2s}.idrill-dot:nth-child(3){animation-delay:.4s}
 .idrill-ibar{display:flex;gap:.4rem;padding:.5rem .8rem;border-top:1px solid var(--teal-dim);align-items:flex-end}
 .idrill-inp{
-  flex:1;background:var(--surface);border:1px solid var(--border-mid);border-radius:3px;
+  flex:1;background:var(--surface);border:1px solid var(--border-mid);border-radius:0;
   color:var(--text);font-family:var(--fb);font-size:12px;line-height:1.5;
   padding:.4rem .65rem;resize:none;min-height:34px;max-height:100px;outline:none;
   transition:border-color .15s;
 }
 .idrill-inp:focus{border-color:var(--teal-dim)}
 .idrill-inp::placeholder{color:var(--text-4);font-family:var(--fm);font-size:10px;letter-spacing:.04em}
-.idrill-send{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:var(--teal);color:var(--bg);border:none;border-radius:2px;padding:.4rem .7rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
+.idrill-send{font-family:var(--fm);font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:var(--teal);color:var(--bg);border:none;border-radius:0;padding:.4rem .7rem;cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0;align-self:flex-end}
 .idrill-send:hover{opacity:.85}.idrill-send:disabled{opacity:.3;cursor:not-allowed}
 
 /* ── SESSION LOGGER ───────────────────────────────── */
@@ -551,10 +551,10 @@ body{
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:.65rem;
   padding:.4rem .65rem;
-  background:var(--bg2);border-radius:3px;border:1px solid var(--border);
+  background:var(--bg2);border-radius:0;border:1px solid var(--border);
 }
 .coded-status-label{font-family:var(--fm);font-size:9px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase}
-.coded-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:2px}
+.coded-badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:0}
 .coded-yes{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim)}
 .coded-no{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-dim)}
 
@@ -562,29 +562,29 @@ body{
 .ccp-mini{
   background:var(--amber-bg);
   border:1px solid var(--amber-dim);
-  border-radius:3px;padding:.6rem .75rem;
+  border-radius:0;padding:.6rem .75rem;
   margin-bottom:.65rem;
 }
 .ccp-mini-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem}
 .ccp-lbl{font-family:var(--fm);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase}
 .ccp-score{font-family:var(--fm);font-size:18px;color:var(--amber);line-height:1}
-.ccp-track{height:3px;background:var(--border-mid);border-radius:2px;overflow:hidden;margin-bottom:.45rem}
-.ccp-fill{height:100%;background:var(--amber);border-radius:2px;transition:width .4s;box-shadow:0 0 6px var(--amber-glow)}
+.ccp-track{height:3px;background:var(--border-mid);border-radius:0;overflow:hidden;margin-bottom:.45rem}
+.ccp-fill{height:100%;background:var(--amber);border-radius:0;transition:width .4s;box-shadow:0 0 6px var(--amber-glow)}
 .ccp-input-row{display:flex;gap:.35rem}
 .ccp-input-row input{
   flex:1;padding:.35rem .6rem;
-  border:1px solid var(--amber-dim);border-radius:2px;
+  border:1px solid var(--amber-dim);border-radius:0;
   font-family:var(--fm);font-size:12px;
   background:var(--bg2);color:var(--text);
 }
 .ccp-input-row button{
   padding:.35rem .75rem;background:var(--amber);color:var(--bg);
-  border:none;border-radius:2px;
+  border:none;border-radius:0;
   font-family:var(--fm);font-size:10px;cursor:pointer;
   letter-spacing:.06em;font-weight:600;
 }
 .ccp-hist{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem}
-.chip{font-family:var(--fm);font-size:10px;padding:1px 7px;border-radius:2px;background:var(--bg2);border:1px solid var(--border-mid);color:var(--text-3)}
+.chip{font-family:var(--fm);font-size:10px;padding:1px 7px;border-radius:0;background:var(--bg2);border:1px solid var(--border-mid);color:var(--text-3)}
 .chip.best{background:var(--amber);color:var(--bg);border-color:var(--amber)}
 
 /* Cat pills */
@@ -592,7 +592,7 @@ body{
 .cat-pills{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.5rem}
 .cat-pill{
   padding:.25rem .65rem;
-  border:1px solid var(--border-mid);border-radius:2px;
+  border:1px solid var(--border-mid);border-radius:0;
   background:none;color:var(--text-3);
   font-family:var(--fm);font-size:10px;cursor:pointer;
   letter-spacing:.05em;transition:all .1s;
@@ -605,11 +605,14 @@ body{
 .sel-scan   {background:var(--purple-bg)!important;border-color:var(--purple)!important;color:var(--purple)!important}
 .sel-review {background:var(--green-bg)!important;border-color:var(--green-dim)!important;color:var(--green)!important}
 
-.ctx{display:none;flex-direction:column;gap:.4rem;padding:.5rem .6rem;background:var(--bg2);border-radius:2px;border:1px solid var(--border);margin-bottom:.4rem}
+.sel-practice{background:var(--teal-bg)!important;border-color:var(--teal-dim)!important;color:var(--teal)!important}
+.sel-study{background:var(--purple-bg)!important;border-color:var(--purple)!important;color:var(--purple)!important}
+.sel-plan{background:var(--green-bg)!important;border-color:var(--green-dim)!important;color:var(--green)!important}
+.ctx{display:none;flex-direction:column;gap:.4rem;padding:.5rem .6rem;background:var(--bg2);border-radius:0;border:1px solid var(--border);margin-bottom:.4rem}
 .ctx.show{display:flex}
 .ctx select,.ctx input[type=number],.ctx input[type=text]{
   padding:.35rem .55rem;
-  border:1px solid var(--border-mid);border-radius:2px;
+  border:1px solid var(--border-mid);border-radius:0;
   font-family:var(--fm);font-size:11.5px;
   background:var(--bg3);color:var(--text);width:100%;
 }
@@ -621,13 +624,13 @@ body{
 .log-mins{
   width:64px;flex:none;
   padding:.4rem .55rem;
-  border:1px solid var(--border-mid);border-radius:2px;
+  border:1px solid var(--border-mid);border-radius:0;
   font-family:var(--fm);font-size:13px;
   background:var(--bg2);color:var(--text);
 }
 .log-note{
   width:100%;padding:.4rem .6rem;
-  border:1px solid var(--border-mid);border-radius:2px;
+  border:1px solid var(--border-mid);border-radius:0;
   font-family:var(--fb);font-size:12px;
   background:var(--bg2);color:var(--text);
   resize:vertical;min-height:38px;max-height:200px;
@@ -638,7 +641,7 @@ body{
 .log-btn{
   padding:.4rem .9rem;
   background:var(--teal);color:var(--bg);
-  border:none;border-radius:2px;
+  border:none;border-radius:0;
   font-family:var(--fm);font-size:10px;font-weight:600;
   cursor:pointer;letter-spacing:.08em;
   transition:opacity .12s;white-space:nowrap;
@@ -650,7 +653,7 @@ body{
 .week-panel{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   padding:1rem 1.25rem;
   margin-bottom:1rem;
   box-shadow:var(--shadow);
@@ -662,7 +665,7 @@ body{
 @media(max-width:560px){.targets-grid{grid-template-columns:1fr 1fr}}
 .target-item{
   background:var(--bg2);
-  border:1px solid var(--border);border-radius:3px;
+  border:1px solid var(--border);border-radius:0;
   padding:.6rem .75rem;
 }
 .target-item.hit{background:var(--green-bg);border-color:var(--green-dim)}
@@ -677,7 +680,7 @@ body{
 .sl-panel{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   padding:1rem 1.25rem;
   margin-bottom:1rem;
   box-shadow:var(--shadow);
@@ -691,13 +694,13 @@ body{
 .sl-row{
   display:flex;align-items:flex-start;gap:.55rem;
   padding:.45rem .6rem;
-  background:var(--bg2);border:1px solid var(--border);border-radius:2px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:0;
   transition:border-color .1s;
 }
 .sl-row:hover{border-color:var(--border-mid)}
 .sl-cat{
   font-family:var(--fm);font-size:9px;font-weight:600;
-  padding:2px 7px;border-radius:2px;flex-shrink:0;margin-top:1px;
+  padding:2px 7px;border-radius:0;flex-shrink:0;margin-top:1px;
   text-transform:uppercase;letter-spacing:.05em;border:1px solid;
 }
 .cc-cert    {background:var(--amber-bg);color:var(--amber);border-color:var(--amber-dim)}
@@ -706,11 +709,15 @@ body{
 .cc-project {background:var(--coral-bg);color:var(--coral);border-color:var(--coral)}
 .cc-scan    {background:var(--purple-bg);color:var(--purple);border-color:var(--purple)}
 .cc-review  {background:var(--green-bg);color:var(--green);border-color:var(--green-dim)}
+.cc-practice{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-dim)}
+.cc-study{background:var(--purple-bg);color:var(--purple);border-color:var(--purple)}
+.cc-plan{background:var(--green-bg);color:var(--green);border-color:var(--green-dim)}
 .sl-main{flex:1;min-width:0}
-.sl-note{font-size:12px;color:var(--text-2);line-height:1.5;word-break:break-word;white-space:pre-wrap}
+.sl-note{font-size:12px;color:var(--text-2);line-height:1.5;word-break:break-word;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.sl-row.exp .sl-note{display:block;-webkit-line-clamp:unset}
 .sl-meta{font-family:var(--fm);font-size:9.5px;color:var(--text-4);margin-top:1px}
 .sl-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:3px}
-.sl-tag{font-family:var(--fm);font-size:9px;padding:1px 5px;border-radius:2px;background:var(--bg3);color:var(--text-3);border:1px solid var(--border)}
+.sl-tag{font-family:var(--fm);font-size:9px;padding:1px 5px;border-radius:0;background:var(--bg3);color:var(--text-3);border:1px solid var(--border)}
 .sl-del{font-size:11px;color:var(--text-4);cursor:pointer;opacity:0;transition:opacity .12s;padding:0 3px;flex-shrink:0;align-self:flex-start;margin-top:1px}
 .sl-row:hover .sl-del{opacity:1}
 .sl-del:hover{color:var(--red)}
@@ -720,15 +727,15 @@ body{
 .pb-panel{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;padding:.85rem 1.25rem;
+  border-radius:0;padding:.85rem 1.25rem;
   margin-bottom:1rem;box-shadow:var(--shadow);
 }
 .pb-head{font-family:var(--fm);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem}
 .pb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
 @media(max-width:540px){.pb-grid{grid-template-columns:1fr 1fr}}
 .pb-lbl{font-family:var(--fm);font-size:9px;color:var(--text-3);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pb-track{height:3px;border-radius:2px;background:var(--bg3);overflow:hidden}
-.pb-fill{height:100%;border-radius:2px;transition:width .4s}
+.pb-track{height:3px;border-radius:0;background:var(--bg3);overflow:hidden}
+.pb-fill{height:100%;border-radius:0;transition:width .4s}
 [data-theme="dark"] .pb-fill{box-shadow:0 0 4px currentColor}
 .pb-wks{font-family:var(--fm);font-size:8px;color:var(--text-4);margin-top:2px}
 
@@ -736,7 +743,7 @@ body{
 .phase-brief{
   background:var(--surface);
   border:1px solid var(--border-mid);
-  border-radius:4px;
+  border-radius:0;
   margin-bottom:1rem;
   box-shadow:var(--shadow);
   overflow:hidden;
@@ -783,7 +790,7 @@ body{
 .pb2-milestones{display:flex;gap:.35rem;flex-wrap:wrap;padding-top:.75rem;border-top:1px solid var(--border)}
 .pb2-badge{
   font-family:var(--fm);font-size:10px;
-  padding:2px 8px;border-radius:2px;border:1px solid;
+  padding:2px 8px;border-radius:0;border:1px solid;
   letter-spacing:.04em;
 }
 .pb2-badge-cert{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-dim)}
@@ -795,7 +802,7 @@ body{
 }
 .pb2-wk-btn{
   font-family:var(--fm);font-size:9.5px;
-  padding:2px 8px;border-radius:2px;
+  padding:2px 8px;border-radius:0;
   border:1px solid var(--border);
   background:none;color:var(--text-3);cursor:pointer;
   transition:all .1s;letter-spacing:.04em;
@@ -805,7 +812,7 @@ body{
 .pb2-week-detail{
   background:var(--bg2);border:1px solid var(--border);
   border-left:2px solid var(--teal);
-  border-radius:3px;padding:.6rem .85rem;
+  border-radius:0;padding:.6rem .85rem;
   margin-bottom:.85rem;
 }
 .pb2-wd-title{font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
@@ -817,7 +824,7 @@ body{
 .st-block{
   margin-bottom:.65rem;
   border:1px solid var(--border);
-  border-radius:3px;
+  border-radius:0;
   overflow:hidden;
 }
 .st-toggle{
@@ -840,7 +847,7 @@ body{
 .st-card{
   background:var(--bg2);
   border:1px solid var(--border);
-  border-radius:2px;padding:.55rem .65rem;
+  border-radius:0;padding:.55rem .65rem;
 }
 .st-card-title{
   font-family:var(--fm);font-size:9.5px;font-weight:600;
@@ -848,6 +855,9 @@ body{
 }
 .st-card-body{font-size:11.5px;color:var(--text-2);line-height:1.6}
 .st-card-body em{color:var(--amber);font-style:normal;font-family:var(--fm)}
+.st-live{font-family:var(--fm);font-size:10.5px;color:var(--text-3);line-height:1.55;margin-top:.45rem;padding-top:.4rem;border-top:1px dashed var(--border)}
+.st-live:empty{display:none}
+.st-live b{color:var(--amber);font-weight:500}
 
 /* ── FOOTER ───────────────────────────────────────── */
 .footer-bar{
@@ -858,7 +868,7 @@ body{
 }
 .fl-link{
   display:inline-flex;align-items:center;gap:.3rem;
-  padding:.25rem .6rem;border-radius:2px;
+  padding:.25rem .6rem;border-radius:0;
   text-decoration:none;
   font-family:var(--fm);font-size:9.5px;color:var(--text-3);
   border:1px solid transparent;letter-spacing:.04em;
@@ -879,18 +889,22 @@ body{
 .backup-bar{
   display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.5rem;
   margin-top:.5rem;padding:.5rem .75rem;
-  background:var(--surface);border:1px solid var(--border);border-radius:3px;
+  background:var(--surface);border:1px solid var(--border);border-radius:0;
 }
 .backup-bar span{font-family:var(--fm);font-size:9.5px;color:var(--text-4);letter-spacing:.06em}
 .bk-btn{
   padding:.25rem .7rem;
-  border:1px solid var(--border-mid);border-radius:2px;
+  border:1px solid var(--border-mid);border-radius:0;
   background:none;font-family:var(--fm);font-size:10px;color:var(--text-2);
   cursor:pointer;letter-spacing:.04em;transition:all .1s;
 }
 .bk-btn:hover{background:var(--surface2);border-color:var(--border-hi)}
 .bk-msg{font-family:var(--fm);font-size:10px;color:var(--green);display:none;letter-spacing:.06em}
 .bk-file{display:none}
+button,input,select,textarea{border-radius:0}
+.bk-age{font-family:var(--fm);font-size:10px;color:var(--text-3);margin:0 .5rem}
+.bk-age.stale{color:var(--amber)}
+.bk-warn{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.5rem .85rem;margin-bottom:.8rem;background:var(--amber-bg,var(--bg2));border:1px solid var(--amber-dim);color:var(--amber);font-family:var(--fm);font-size:11px}
 </style>
 </head>
 <body>
@@ -913,7 +927,6 @@ body{
       <div class="hdr-brand"><svg class="hdr-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.4" fill="currentColor"/></svg>SANKOFA · DAMON · APPLIED AI ACCELERATOR</div>
       <div class="hdr-pills">
         <span class="pill pill-phase" id="hdrPhase" onclick="cyclePhaseOverride()" style="cursor:pointer" title="Milestone-driven, not week-locked — click to set the current phase manually">PHASE —</span>
-        <span class="pill pill-week" id="hdrWeek">WK —</span>
       </div>
     </div>
     <div class="hdr-right">
@@ -949,9 +962,11 @@ body{
       <div class="s-stat"><span class="n" id="statSesh">0</span><span class="l">SESSIONS</span></div>
       <div class="s-stat"><span class="n" id="statHrs">0h</span><span class="l">LOGGED</span></div>
       <div class="s-stat"><span class="n" id="statWk">0</span><span class="l">THIS WK</span></div>
-      <div class="s-stat"><span class="n" id="statMods">0/7</span><span class="l">PY MODS</span></div>
+      <div class="s-stat"><span class="n" id="statMods">0</span><span class="l">DRILLS</span></div>
     </div>
   </div>
+
+  <div class="bk-warn" id="bkWarn" style="display:none"><span></span><button class="bk-btn" onclick="exportData()">⬇ Export now</button></div>
 
   <!-- Today's Mission -->
   <div class="mission-block collapse-panel open fade-up fade-up-3" id="secMission">
@@ -999,11 +1014,11 @@ body{
     <div class="panel collapse-panel open" id="secPython">
       <div class="panel-head collapse-head" onclick="toggleSec('secPython')">
         <div class="hdr-grp-l">
-          <span class="panel-title">Python Curriculum</span>
+          <span class="panel-title">CS50P Drill Bank</span>
           <span class="collapse-ledger" id="pyLedger">—</span>
         </div>
         <div class="hdr-grp-r">
-          <span class="panel-meta" id="pyMeta">0 / 7 modules</span>
+          <span class="panel-meta" id="pyMeta">0 / 50 drills</span>
           <svg class="collapse-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 C29 6 34 13 34 20 C34 27.5 28 33 20.5 33 C15.5 33 12 30.5 10.5 27.5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" fill="none"/><path d="M10.5 27.5 L10.5 20.5 M10.5 27.5 L17 27" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="20" cy="6" r="3.8" fill="currentColor"/></svg>
         </div>
       </div>
@@ -1019,30 +1034,10 @@ body{
           </div>
           <div class="py-ring-info">
             <div class="pct" id="pyPct">0%</div>
-            <div class="sub" id="pySubtext">M1 active — Variables & Types</div>
+            <div class="sub" id="pySubtext">—</div>
           </div>
         </div>
         <div class="py-modules" id="pyModules"></div>
-        <div class="idrill" id="idrillWidget" style="display:none">
-          <div class="idrill-head">
-            <span class="idrill-lbl">▸ Active Drill</span>
-            <button class="idrill-reset" onclick="idrillReset()">RESET</button>
-          </div>
-          <div class="idrill-challenge" id="idrillChallenge"></div>
-          <div class="idrill-hint" id="idrillHint"></div>
-          <div class="idrill-thread" id="idrillThread"></div>
-          <div class="idrill-ibar" id="idrillIbar" style="display:none">
-            <textarea class="idrill-inp" id="idrillInp" rows="1"
-              placeholder="TYPE YOUR ANSWER OR QUESTION..."
-              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
-              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();idrillSend()}"></textarea>
-            <button class="idrill-send" id="idrillSend" onclick="idrillSend()">Send</button>
-          </div>
-        </div>
-        <div class="drill-prompt" id="drillNextPrompt" style="display:none">
-          <div class="drill-prompt-lbl">▸ Resume — Next Drill</div>
-          <div class="drill-prompt-text" id="drillNextText"></div>
-          <div class="drill-prompt-hint" id="drillNextHint"></div>
         </div>
       </div>
       </div>
@@ -1069,68 +1064,62 @@ body{
           <div class="st-card">
             <div class="st-card-title">Before logging</div>
             <div class="st-card-body">Can you complete the sentence — <em>"I can now..."</em>? If not, the session isn't done yet.</div>
+            <div class="st-live" id="stLive1"></div>
           </div>
           <div class="st-card">
             <div class="st-card-title">Motion ≠ progress</div>
-            <div class="st-card-body">A streak measures showing up. It doesn't measure understanding. Don't confuse the two.</div>
+            <div class="st-card-body">Watching and reading feel like work. Practice is the rep that counts.</div>
+            <div class="st-live" id="stLive2"></div>
           </div>
           <div class="st-card">
             <div class="st-card-title">Before asking for help</div>
             <div class="st-card-body">Sit with the error for 10 minutes first. The struggle is the learning. Skipping it skips the rep.</div>
+            <div class="st-live" id="stLive3"></div>
           </div>
           <div class="st-card">
-            <div class="st-card-title">Weekly gut check</div>
-            <div class="st-card-body">Could you explain what you built this week to someone else without notes? If no — review before moving forward.</div>
+            <div class="st-card-title">Gut check</div>
+            <div class="st-card-body">Could you explain what you built or drilled recently to someone else, without notes?</div>
+            <div class="st-live" id="stLive4"></div>
           </div>
         </div>
       </div>
 
       <div class="log-body">
-        <!-- CCP -->
-        <div class="ccp-mini" id="ccpMini" style="display:none">
-          <div class="ccp-mini-row1">
-            <span class="ccp-lbl">CCP Mock Score</span>
-            <span class="ccp-score" id="ccpScore">658</span>
-          </div>
-          <div class="ccp-track"><div class="ccp-fill" id="ccpFill" style="width:52%"></div></div>
-          <div class="ccp-input-row">
-            <input type="number" id="ccpInput" placeholder="New score" min="100" max="1000">
-            <button onclick="logCCP()">LOG</button>
-          </div>
-          <div class="ccp-hist" id="ccpChips"></div>
-        </div>
 
         <!-- Category -->
         <div class="log-section-lbl">Category</div>
         <div class="cat-pills">
-          <button class="cat-pill" data-cat="drill"   onclick="pickCat(this)">Drill</button>
-          <button class="cat-pill" data-cat="cert"    onclick="pickCat(this)">Cert</button>
-          <button class="cat-pill" data-cat="code"    onclick="pickCat(this)">Code</button>
-          <button class="cat-pill" data-cat="project" onclick="pickCat(this)">Project</button>
-          <button class="cat-pill" data-cat="scan"    onclick="pickCat(this)">Scan</button>
-          <button class="cat-pill" data-cat="review"  onclick="pickCat(this)">Review</button>
+          <button class="cat-pill" data-cat="practice" onclick="pickCat(this)">Practice</button>
+          <button class="cat-pill" data-cat="study"    onclick="pickCat(this)">Study</button>
+          <button class="cat-pill" data-cat="cert"     onclick="pickCat(this)">Cert</button>
+          <button class="cat-pill" data-cat="plan"     onclick="pickCat(this)">Plan</button>
         </div>
 
-        <div class="ctx" id="ctx-drill">
+        <div class="ctx" id="ctx-practice">
           <div class="ctx-row">
-            <div><div class="ctx-lbl">Module</div>
-              <select id="drillModule">
-                <option value="1">M1 · Variables & Types</option>
-                <option value="2">M2 · Functions</option>
-                <option value="3">M3 · Lists, Dicts, Loops</option>
-                <option value="4">M4 · Files & .env</option>
-                <option value="5">M5 · APIs + JSON</option>
-                <option value="6">M6 · Classes (light)</option>
-                <option value="7">M7 · Async basics</option>
-              </select>
-            </div>
             <div><div class="ctx-lbl">Type</div>
-              <select id="drillType">
-                <option>Concept study</option>
-                <option>Exercise / drill</option>
-                <option>Challenge</option>
-                <option>Review</option>
-              </select>
+              <select id="practiceType"><option>Drill</option><option>Build</option><option>Debugging</option><option>Refactoring</option><option>Challenge</option></select>
+            </div>
+            <div><div class="ctx-lbl">Focus</div>
+              <select id="practiceFocus"><option>CS50P bank</option><option>Claude Shell</option><option>Trading Framework</option><option>Sekhem AI Tool</option><option>EvalKit</option><option>ReviewLoop</option><option>AgentForge</option><option>CloudMind</option><option>Cleaning Ops</option><option>Other</option></select>
+            </div>
+          </div>
+          <div><div class="ctx-lbl">Tool</div>
+            <select id="practiceTool"><option>Cursor (AI-assisted)</option><option>VS Code (solo)</option><option>Terminal only</option><option>Browser / Drill Engine</option></select>
+          </div>
+          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+            <button type="button" class="log-btn" style="flex:none;padding:.3rem .7rem;font-size:10px" onclick="pullEngine()">↧ Pull from Drill Engine</button>
+            <span class="ctx-lbl" id="logHint" style="margin:0"></span>
+          </div>
+        </div>
+
+        <div class="ctx" id="ctx-study">
+          <div class="ctx-row">
+            <div><div class="ctx-lbl">Source</div>
+              <select id="studySource"><option>CS50P lecture</option><option>Course / video</option><option>Docs / reading</option><option>Concept review</option><option>Other</option></select>
+            </div>
+            <div><div class="ctx-lbl">Topic</div>
+              <input type="text" id="studyTopic" placeholder="e.g. libraries, regex">
             </div>
           </div>
         </div>
@@ -1138,10 +1127,10 @@ body{
         <div class="ctx" id="ctx-cert">
           <div class="ctx-row">
             <div><div class="ctx-lbl">Cert</div>
-              <select id="certWhich"><option>AWS CCP</option><option>AWS SAA</option><option>DL.AI: Evals</option><option>DL.AI: Agents</option><option>AWS AI Practitioner</option><option>Anthropic CCP</option></select>
+              <select id="certWhich"><option>AWS SAA</option><option>DL.AI: Evals</option><option>DL.AI: Agents</option><option>AWS AI Practitioner</option><option>Anthropic CCP</option><option>AWS CCP</option></select>
             </div>
             <div><div class="ctx-lbl">Method</div>
-              <select id="certMethod"><option>Mock exam</option><option>Video lesson</option><option>Reading / docs</option><option>Flashcards</option><option>Practice Qs</option></select>
+              <select id="certMethod"><option>Domain drill</option><option>Mock exam</option><option>Video lesson</option><option>Reading / docs</option><option>Flashcards</option><option>Practice Qs</option></select>
             </div>
           </div>
           <div><div class="ctx-lbl">Score (mock only)</div>
@@ -1149,43 +1138,14 @@ body{
           </div>
         </div>
 
-        <div class="ctx" id="ctx-code">
+        <div class="ctx" id="ctx-plan">
           <div class="ctx-row">
-            <div><div class="ctx-lbl">Language</div>
-              <select id="codeLang"><option>Python</option><option>JavaScript</option><option>Bash / CLI</option><option>SQL</option><option>HTML / CSS</option><option>Other</option></select>
-            </div>
             <div><div class="ctx-lbl">Type</div>
-              <select id="codeType"><option>Exercise / drill</option><option>Tutorial</option><option>Project work</option><option>Debugging</option><option>Refactoring</option><option>Code reading</option></select>
+              <select id="planType"><option>Planning / design</option><option>Weekly review</option><option>Ecosystem scan</option><option>Outreach / client</option><option>Writing / README</option></select>
             </div>
-          </div>
-          <div><div class="ctx-lbl">Tool</div>
-            <select id="codeTool"><option>Cursor (AI-assisted)</option><option>VS Code (solo)</option><option>Terminal only</option><option>Browser / REPL</option></select>
-          </div>
-        </div>
-
-        <div class="ctx" id="ctx-project">
-          <div class="ctx-row">
-            <div><div class="ctx-lbl">Project</div>
-              <select id="projWhich"><option>Trading Framework (flagship)</option><option>Sekhem AI Tool</option><option>Claude Shell</option><option>EvalKit / VerifAI</option><option>ReviewLoop</option><option>AgentForge</option><option>CloudMind</option></select>
+            <div><div class="ctx-lbl">Signal (scan only)</div>
+              <select id="planSig"><option value="">n/a</option><option value="green">Green — noted</option><option value="yellow">Yellow — discuss</option><option value="red">Red — act now</option></select>
             </div>
-            <div><div class="ctx-lbl">Work type</div>
-              <select id="projType"><option>Planning / design</option><option>Building a feature</option><option>Debugging</option><option>Testing / evals</option><option>Deploying</option><option>Polishing / README</option></select>
-            </div>
-          </div>
-        </div>
-
-        <div class="ctx" id="ctx-scan">
-          <div><div class="ctx-lbl">Signal level</div>
-            <select id="scanSig"><option value="green">Green — noted, no change</option><option value="yellow">Yellow — discuss, maybe adjust</option><option value="red">Red — act now</option><option value="none">Nothing notable</option></select>
-          </div>
-          <div><div class="ctx-lbl">What did you find?</div>
-            <input type="text" id="scanNote" placeholder="e.g. New DL.AI course on RAG launched">
-          </div>
-        </div>
-
-        <div class="ctx" id="ctx-review">
-          <div><div class="ctx-lbl">Review type</div>
-            <select id="reviewType"><option>Weekly reflection</option><option>Monthly plan review</option><option>Phase transition</option><option>CCP score debrief</option><option>Ad hoc reflection</option></select>
           </div>
         </div>
 
@@ -1195,7 +1155,7 @@ body{
             <button class="log-btn" onclick="logSession()" style="flex:1">LOG →</button>
           </div>
           <textarea class="log-note" id="logNote" rows="2"
-            placeholder="What did you work on? Paste drill engine log here..."
+            placeholder="What did you work on?"
             oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'"></textarea>
         </div>
         <div class="log-ok" id="logOk">✓ LOGGED</div>
@@ -1206,7 +1166,7 @@ body{
   </div>
 
   <!-- This Week -->
-  <div class="week-panel collapse-panel open fade-up fade-up-5" id="secWeek">
+  <div class="week-panel collapse-panel fade-up fade-up-5" id="secWeek">
     <div class="week-head collapse-head" onclick="toggleSec('secWeek')">
       <div class="hdr-grp-l">
         <span class="week-title">This Week</span>
@@ -1257,7 +1217,7 @@ body{
     </div>
     <div class="collapse-body"><div style="height:.7rem"></div>
     <div class="pb-grid">
-      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#8B6FA8;width:0%"></div></div><div class="pb-wks">Python + CCP</div></div>
+      <div><div class="pb-lbl">Phase 1 · Foundation</div><div class="pb-track"><div class="pb-fill" id="pb1" style="background:#8B6FA8;width:0%"></div></div><div class="pb-wks">CS50P + Claude Shell + CCP</div></div>
       <div><div class="pb-lbl">Phase 2 · Eval Layer</div><div class="pb-track"><div class="pb-fill" id="pb2" style="background:#C9982E;width:0%"></div></div><div class="pb-wks">SAA + EvalKit + ReviewLoop</div></div>
       <div><div class="pb-lbl">Phase 3 · Agentic</div><div class="pb-track"><div class="pb-fill" id="pb3" style="background:#D98F3A;width:0%"></div></div><div class="pb-wks">AgentForge + CloudMind</div></div>
       <div><div class="pb-lbl">Phase 4 · Client Ready</div><div class="pb-track"><div class="pb-fill" id="pb4" style="background:#B5533C;width:0%"></div></div><div class="pb-wks">Portfolio + first client</div></div>
@@ -1266,7 +1226,7 @@ body{
   </div>
 
   <!-- Session List -->
-  <div class="sl-panel collapse-panel open" id="secSessions">
+  <div class="sl-panel collapse-panel" id="secSessions">
     <div class="sl-head collapse-head" onclick="toggleSec('secSessions')">
       <div class="hdr-grp-l">
         <span class="sl-head-l">Recent Sessions</span>
@@ -1286,7 +1246,6 @@ body{
   <!-- Footer Links -->
   <div class="footer-bar">
     <a class="fl-link" href="AaE_Plan.html"><div class="fl-dot" style="background:var(--teal)"></div>Plan</a>
-    <div class="fl-sep"></div>
     <div class="fl-sep"></div>
     <a class="fl-link" href="AaE_Plan.html#protocol"><div class="fl-dot" style="background:var(--purple)"></div>Protocol</a>
     <div class="fl-sep"></div>
@@ -1310,7 +1269,7 @@ body{
   </div>
 
   <div class="backup-bar">
-    <span>BACKUP:</span>
+    <span>BACKUP:</span><span class="bk-age" id="bkAge"></span>
     <button class="bk-btn" onclick="exportData()">⬇ Export JSON</button>
     <button class="bk-btn" onclick="document.getElementById('bkFile').click()">⬆ Import JSON</button>
     <input type="file" id="bkFile" class="bk-file" accept=".json" onchange="importData(event)">
@@ -1622,7 +1581,7 @@ function fmtDebrief(t){
 // ── CONSTANTS ─────────────────────────────────────────
 const PHASES = [
   {num:1,wk:[1,6],   color:'#8B6FA8',label:'Foundation',
-   northStar:'Claude Shell is the forcing function — not the output. Every Python module unlocks a shell feature. CCP drilling is domain-targeted, not full-mock. Leave Phase 1 with the cert passed, the shell shipped, and <strong>every module understood through code you wrote and can explain.</strong>'},
+   northStar:'Claude Shell is the forcing function — not the output. Every Python concept you drill unlocks a shell feature. CCP drilling is domain-targeted, not full-mock. Leave Phase 1 with the cert passed, the shell shipped, and <strong>every concept understood through code you wrote and can explain.</strong>'},
   {num:2,wk:[7,13],  color:'#C9982E',label:'Eval Layer',
    northStar:'"How do you know if your AI is working?" — Phase 2 is your answer. Build the evals mindset AND the code to back it up. <strong>The HITL project here is what makes you non-generic.</strong>'},
   {num:3,wk:[14,20], color:'#D98F3A',label:'Agentic',
@@ -1677,6 +1636,8 @@ function getCCPDailyObjective(){
 // Hint pulled from the last Drill Engine session so the mission never shows a stale target.
 function drillHint(){
   try{
+    const n=JSON.parse(localStorage.getItem('drill_engine_py_next')||'null');
+    if(n&&n.nextFocus)return 'Next up: '+n.nextFocus+(n.date?' (from '+n.date+')':'');
     const l=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');
     if(l&&l.mode==='python'&&l.nextFocus)return 'Next up: '+l.nextFocus+(l.date?' (from '+l.date+')':'');
   }catch(e){}
@@ -1707,8 +1668,8 @@ const PHASE_MISSIONS = {
 };
 
 const WEEK_TARGETS = {
-  1:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'CCP Mocks',target:1,unit:'exam this wk'},modules:{label:'Py Modules',target:2,unit:'done total'}},
-  2:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'Cert Sessions',target:3,unit:'this wk'},modules:{label:'Py Modules',target:4,unit:'done total'}},
+  1:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'Cert Mocks',target:1,unit:'exam this wk'},modules:{label:'Bank Weeks',target:2,unit:'done total'}},
+  2:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'Cert Sessions',target:3,unit:'this wk'},modules:{label:'Bank Weeks',target:4,unit:'done total'}},
   3:{coding:{label:'Code / Drill',target:5,unit:'sessions this wk'},cert:{label:'Cert Sessions',target:3,unit:'this wk'},project:{label:'Project',target:3,unit:'sessions this wk'}},
   4:{coding:{label:'Code / Drill',target:3,unit:'sessions this wk'},project:{label:'Project',target:4,unit:'sessions this wk'},apps:{label:'Applications',target:10,unit:'sent this wk'}},
 };
@@ -1785,7 +1746,21 @@ function calcStreak(filter){
   while(true){const ds=localStr(check);if(days.has(ds)){streak++;check.setDate(check.getDate()-1);}else break;}
   return streak;
 }
-function isCodeSesh(s){return['dailycode','code','drill'].includes(s.category);}
+// Categories: practice · study · cert · plan. Older sessions (drill/code/project/scan/review)
+// are mapped at read time from their category and tags; stored data is left untouched.
+const PROJECT_FOCI=['Claude Shell','Trading Framework','Trading Framework (flagship)','Sekhem AI Tool','EvalKit','EvalKit / VerifAI','ReviewLoop','AgentForge','CloudMind','Cleaning Ops'];
+function normCat(s){
+  const c=s.category,t=s.tags||[];
+  if(['practice','study','cert','plan'].includes(c))return c;
+  if(c==='scan'||c==='review')return 'plan';
+  if(c==='project')return 'practice';
+  if(c==='drill')return t.includes('Concept study')?'study':'practice';
+  if(c==='code'||c==='dailycode')return (t.includes('Tutorial')||t.includes('Code reading'))?'study':'practice';
+  return 'practice';
+}
+function isProject(s){return s.category==='project'||(normCat(s)==='practice'&&(s.tags||[]).some(x=>PROJECT_FOCI.includes(x)));}
+function isCodeSesh(s){const n=normCat(s);return n==='practice'||n==='study';}
+const CAT_LABEL={practice:'PRACTICE',study:'STUDY',cert:'CERT',plan:'PLAN'};
 function codedToday(){return sessions.some(s=>s.date===todayStr()&&isCodeSesh(s));}
 
 // ── THEME ─────────────────────────────────────────────
@@ -1805,7 +1780,6 @@ function renderHeader(){
   pill.innerHTML=`PHASE ${ph.num} · ${ph.label.toUpperCase()}${manual?' <span style="opacity:.55;font-size:9px">(manual)</span>':''}`;
   pill.style.borderColor=ph.color+'80';
   pill.style.color=ph.color;
-  document.getElementById('hdrWeek').textContent=startStr?`WK ${wk}`:'WK —';
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}).toUpperCase();
   if(new Date().getDay()===1)document.getElementById('monBanner').style.display='flex';
 }
@@ -1821,7 +1795,7 @@ function renderStreak(){
   const streak=calcStreak();
   const codeStreak=calcStreak(isCodeSesh);
   const ct=codedToday();
-  const doneMods=PY_MODULES.filter(m=>pyDone[m.num]).length;
+  const doneMods=bankProgress().done;
   document.getElementById('streakNum').textContent=streak;
 
   const csb=document.getElementById('codeStreakBadge');
@@ -1836,7 +1810,7 @@ function renderStreak(){
   const mins=sessions.reduce((a,s)=>a+(s.minutes||0),0);
   document.getElementById('statHrs').textContent=(mins/60).toFixed(1)+'h';
   document.getElementById('statWk').textContent=sessions.filter(s=>wkOf(s.date)===currWk()).length;
-  document.getElementById('statMods').textContent=doneMods+'/7';
+  document.getElementById('statMods').textContent=doneMods;
 }
 
 function renderMission(){
@@ -1875,96 +1849,46 @@ function resetMission(){
   saveMission();renderMission();
 }
 
+const BANK_WEEKS = [{"w": "w0", "name": "Functions & Variables", "n": 6}, {"w": "w1", "name": "Conditionals", "n": 6}, {"w": "w2", "name": "Loops", "n": 6}, {"w": "w3", "name": "Exceptions", "n": 5}, {"w": "w4", "name": "Libraries", "n": 9}, {"w": "w5", "name": "Unit Tests", "n": 5}, {"w": "w6", "name": "File I/O", "n": 6}, {"w": "w7", "name": "Regular Expressions", "n": 7}];
+function bankProgress(){
+  let st=null;try{st=JSON.parse(localStorage.getItem('de3')||'null');}catch(e){}
+  const solved=(st&&st.solved)||{},seed=(st&&st.seed)||0;
+  let idx=0,tot=0,done=0,nextWk=null;
+  const weeks=BANK_WEEKS.map(w=>{
+    let k=0;
+    for(let i=1;i<=w.n;i++){ if(solved[w.w+'.'+i]!=null||idx<seed)k++; idx++; }
+    tot+=w.n;done+=k;
+    const r={w:w.w,name:w.name,n:w.n,k};
+    if(!nextWk&&k<w.n)nextWk=r;
+    return r;
+  });
+  return {weeks,done,tot,nextWk,weeksDone:weeks.filter(x=>x.k===x.n).length};
+}
 function renderPyModules(){
-  const doneMods=PY_MODULES.filter(m=>pyDone[m.num]).length;
-  const nextMod=PY_MODULES.find(m=>!pyDone[m.num]);
-  const pct=Math.round((doneMods/PY_MODULES.length)*100);
-  const offset=100-(pct/100)*100;
-  document.getElementById('pyRingFill').style.strokeDashoffset=offset;
+  const bp=bankProgress();
+  const pct=bp.tot?Math.round(bp.done/bp.tot*100):0;
+  document.getElementById('pyRingFill').style.strokeDashoffset=100-pct;
   document.getElementById('pyRingLabel').textContent=pct+'%';
   document.getElementById('pyPct').textContent=pct+'%';
-  document.getElementById('pyMeta').textContent=doneMods+' / 7 modules';
-  const pyLedgerEl=document.getElementById('pyLedger');
-  if(pyLedgerEl)pyLedgerEl.textContent=nextMod?`M${nextMod.num} · ${nextMod.name} — active`:'All modules complete';
-
-  // Read drill engine state for live stats
-  let deState=null;
-  try{deState=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
-  const deSuffix=deState?.lastActivity
-    ?` · last drilled ${deState.lastActivity===todayStr()?'today':parseLD(deState.lastActivity).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
-    :'';
-
-  document.getElementById('pySubtext').textContent=nextMod
-    ?`M${nextMod.num} active — ${nextMod.name}${deSuffix}`
-    :'All modules complete';
-
-  document.getElementById('pyModules').innerHTML=PY_MODULES.map(m=>{
-    const done=!!pyDone[m.num];
-    const active=nextMod&&m.num===nextMod.num;
-    let cls='py-mod';
-    if(done)cls+=' done';
-    else if(active)cls+=' active';
-    return `<div class="${cls}" onclick="togglePyMod(${m.num})">
-      <div class="py-mod-dot">${done?'✓':m.num}</div>
-      <div class="py-mod-name">M${m.num} · ${m.name}</div>
-      <span class="py-mod-sub">${m.sub}</span>
+  document.getElementById('pyMeta').textContent=bp.done+' / '+bp.tot+' drills';
+  const nx=bp.nextWk;
+  const led=document.getElementById('pyLedger');
+  if(led)led.textContent=nx?`${nx.w.toUpperCase()} · ${nx.name} — ${nx.k}/${nx.n}`:'All weeks complete';
+  let deState=null;try{deState=JSON.parse(localStorage.getItem('drill_engine_state')||'null');}catch(e){}
+  const last=deState&&deState.lastActivity?(deState.lastActivity===todayStr()?'today':parseLD(deState.lastActivity).toLocaleDateString('en-US',{month:'short',day:'numeric'})):null;
+  document.getElementById('pySubtext').textContent=(nx?`${nx.w.toUpperCase()} active — ${nx.name}`:'All weeks complete')+(last?` · last drilled ${last}`:'');
+  document.getElementById('pyModules').innerHTML=bp.weeks.map(w=>{
+    const done=w.k===w.n,active=nx&&w.w===nx.w;
+    return `<div class="py-mod${done?' done':active?' active':''}" onclick="openDrillEngine()">
+      <div class="py-mod-dot">${done?'✓':w.w.toUpperCase().slice(1)}</div>
+      <div class="py-mod-name">${w.w.toUpperCase()} · ${w.name}</div>
+      <span class="py-mod-sub">${w.k}/${w.n}</span>
     </div>`;
   }).join('');
-
-  // Inline drill widget — show for active module
-  const widget=document.getElementById('idrillWidget');
-  if(nextMod){
-    widget.style.display='block';
-    document.getElementById('idrillChallenge').textContent=nextMod.prompt;
-    document.getElementById('idrillHint').textContent=nextMod.hint;
-    // Only init if not already running
-    if(!idrillActive){idrillMod=nextMod;idrillActive=true;document.getElementById('idrillIbar').style.display='flex';}
-  } else {
-    widget.style.display='none';
-  }
-
-  // Next drill from last log — show if available and module matches
-  let lastLog=null;
-  try{lastLog=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');}catch(e){}
-  const nextPromptEl=document.getElementById('drillNextPrompt');
-  if(lastLog?.nextDrill&&nextMod&&lastLog.module===`M${nextMod.num}`){
-    nextPromptEl.style.display='block';
-    document.getElementById('drillNextText').textContent=lastLog.nextDrill;
-    document.getElementById('drillNextHint').textContent=lastLog.nextFocus?`Focus: ${lastLog.nextFocus}`:'';
-  } else {
-    nextPromptEl.style.display='none';
-  }
 }
 
-function togglePyMod(num){
-  pyDone[num]=!pyDone[num];
-  savePyDone();renderPyModules();renderStreak();renderTargets();
-}
 
-function renderCCP(){
-  const wk=currWk();
-  const mini=document.getElementById('ccpMini');
-  mini.style.display=wk<=6?'block':'none';
-  if(wk>6)return;
-  const base=658;
-  const allScores=[base,...ccp.map(s=>s.score)];
-  const latest=allScores[allScores.length-1];
-  const best=Math.max(...allScores);
-  document.getElementById('ccpScore').textContent=latest;
-  document.getElementById('ccpFill').style.width=Math.round((latest/1000)*100)+'%';
-  document.getElementById('ccpChips').innerHTML=ccp.slice().reverse().map(s=>
-    `<span class="chip${s.score===best?' best':''}">${s.score}</span>`
-  ).join('');
-}
-
-function logCCP(){
-  const v=parseInt(document.getElementById('ccpInput').value);
-  if(!v||v<100||v>1000)return;
-  ccp.push({score:v,date:todayStr()});saveCCP();
-  sessions.unshift({id:Date.now(),date:todayStr(),week:currWk(),category:'cert',minutes:90,
-    note:`CCP mock exam — score: ${v}`,tags:['AWS CCP','Mock exam',v>=820?'Target range':'Reviewing']});
-  saveSesh();document.getElementById('ccpInput').value='';renderAll();
-}
+function renderCCP(){} // score box retired — mock scores live on Cert sessions
 
 function renderLedgers(){
   const ph=getCurrentPhase();
@@ -1986,12 +1910,12 @@ function renderTargets(){
   const phNum=ph.num;
   const tDef=WEEK_TARGETS[phNum]||WEEK_TARGETS[1];
   const wkSessions=sessions.filter(s=>wkOf(s.date)===wk);
-  const doneMods=PY_MODULES.filter(m=>pyDone[m.num]).length;
+  const doneMods=bankProgress().weeksDone;
   document.getElementById('weekMeta').textContent=startStr?`WEEK ${wk} · PHASE ${ph.num} · ${ph.label.toUpperCase()}`:'—';
   const counts={
     coding:wkSessions.filter(s=>isCodeSesh(s)).length,
-    cert:wkSessions.filter(s=>s.category==='cert').length,
-    project:wkSessions.filter(s=>s.category==='project').length,
+    cert:wkSessions.filter(s=>normCat(s)==='cert').length,
+    project:wkSessions.filter(s=>isProject(s)).length,
     modules:doneMods,apps:0,
   };
   document.getElementById('targetsGrid').innerHTML=Object.entries(tDef).map(([key,def])=>{
@@ -2023,6 +1947,7 @@ function renderPhaseBars(){
   });
 }
 
+function escH(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function renderSessions(){
   const list=document.getElementById('slList');
   const toggle=document.getElementById('slToggle');
@@ -2036,14 +1961,13 @@ function renderSessions(){
   toggle.textContent=showAll?'SHOW LESS':'SHOW ALL';
   list.innerHTML=vis.map(s=>{
     const dl=s.date===todayStr()?'TODAY':parseLD(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();
-    const cat=s.category==='dailycode'?'dailycode':s.category;
-    let lbl=s.category.toUpperCase();
-    if(s.category==='dailycode')lbl='CODE ★';
+    const cat=normCat(s);
+    const lbl=CAT_LABEL[cat];
     const tags=(s.tags||[]).filter(Boolean).slice(0,4).map(t=>`<span class="sl-tag">${t}</span>`).join('');
     return `<div class="sl-row">
       <span class="sl-cat cc-${cat}">${lbl}</span>
       <div class="sl-main">
-        <div class="sl-note">${s.note||'—'}</div>
+        <div class="sl-note" title="Click to expand" onclick="this.closest('.sl-row').classList.toggle('exp')">${escH(s.note||'—')}</div>
         <div class="sl-meta">${dl} · WK ${s.week} · ${s.minutes} MIN</div>
         ${tags?`<div class="sl-tags">${tags}</div>`:''}
       </div>
@@ -2059,9 +1983,27 @@ function delSesh(id){sessions=sessions.filter(s=>s.id!==id);saveSesh();renderAll
 function pickCat(btn){
   document.querySelectorAll('.cat-pill').forEach(b=>b.className='cat-pill');
   selCat=btn.dataset.cat;btn.classList.add('cat-pill','sel-'+selCat);
-  ['drill','cert','code','project','scan','review'].forEach(c=>
+  ['practice','study','cert','plan'].forEach(c=>
     document.getElementById('ctx-'+c).classList.toggle('show',c===selCat)
   );
+}
+
+// The bank engine has no LOG block to paste; this fills the note from its saved state instead.
+function pullEngine(){
+  const h=document.getElementById('logHint');
+  let l=null,n=null,s=null;
+  try{l=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');n=JSON.parse(localStorage.getItem('drill_engine_py_next')||'null');s=JSON.parse(localStorage.getItem('de3')||'null');}catch(e){}
+  const solved=s&&s.solved?Object.keys(s.solved).length:((l&&l.mode==='python')?l.drills:null);
+  if(solved==null){h.textContent='No bank session found yet.';return;}
+  const weak=stWeakConcepts();
+  const parts=[`CS50P bank · ${solved} drills solved`];
+  if(weak.length)parts.push('weak: '+weak.slice(0,4).join(', '));
+  if(n&&n.nextFocus)parts.push('next: '+n.nextFocus);
+  const note=document.getElementById('logNote');
+  note.value=(note.value?note.value+'\n':'')+parts.join(' · ');
+  note.dispatchEvent(new Event('input'));
+  document.getElementById('practiceFocus').value='CS50P bank';document.getElementById('practiceType').value='Drill';
+  h.textContent='Filled from the engine — edit before logging.';
 }
 
 function logSession(){
@@ -2069,29 +2011,21 @@ function logSession(){
   const note=document.getElementById('logNote').value.trim();
   if(!selCat||mins<1)return;
   const tags=[];let fullNote=note;
-  if(selCat==='drill'){
-    const modNum=parseInt(document.getElementById('drillModule').value);
-    const type=document.getElementById('drillType').value;
-    const mod=PY_MODULES.find(m=>m.num===modNum);
-    tags.push(`M${modNum}: ${mod.name}`,type);
-    if(!fullNote)fullNote=`Python drill · M${modNum}: ${mod.name} · ${type}`;
+  if(selCat==='practice'){
+    const ty=document.getElementById('practiceType').value,fo=document.getElementById('practiceFocus').value,to=document.getElementById('practiceTool').value;
+    tags.push(ty,fo,to);if(!fullNote)fullNote=`${fo} · ${ty}`;
+  }else if(selCat==='study'){
+    const so=document.getElementById('studySource').value,tp=document.getElementById('studyTopic').value.trim();
+    tags.push(so);if(tp)tags.push(tp);if(!fullNote)fullNote=tp?`${so} · ${tp}`:so;
   }else if(selCat==='cert'){
     const w=document.getElementById('certWhich').value,m=document.getElementById('certMethod').value,sc=document.getElementById('certScore').value;
     tags.push(w,m);
     if(sc){tags.push('Score: '+sc);if(!fullNote)fullNote=`${w} · ${m} · score ${sc}`;}
     else if(!fullNote)fullNote=`${w} · ${m}`;
     if(sc&&w==='AWS CCP'){ccp.push({score:parseInt(sc),date:todayStr()});saveCCP();}
-  }else if(selCat==='code'){
-    const l=document.getElementById('codeLang').value,t=document.getElementById('codeType').value,to=document.getElementById('codeTool').value;
-    tags.push(l,t,to);if(!fullNote)fullNote=`${l} · ${t}`;
-  }else if(selCat==='project'){
-    const p=document.getElementById('projWhich').value,t=document.getElementById('projType').value;
-    tags.push(p,t);if(!fullNote)fullNote=`${p} · ${t}`;
-  }else if(selCat==='scan'){
-    const sig=document.getElementById('scanSig').value,sn=document.getElementById('scanNote').value.trim();
-    tags.push('Signal: '+sig);if(sn)tags.push(sn);if(!fullNote)fullNote=sn||'Ecosystem scan · '+sig;
-  }else if(selCat==='review'){
-    const rt=document.getElementById('reviewType').value;tags.push(rt);if(!fullNote)fullNote=rt;
+  }else if(selCat==='plan'){
+    const ty=document.getElementById('planType').value,sig=document.getElementById('planSig').value;
+    tags.push(ty);if(sig)tags.push('Signal: '+sig);if(!fullNote)fullNote=sig?`${ty} · ${sig}`:ty;
   }
   sessions.unshift({id:Date.now(),date:todayStr(),week:currWk(),category:selCat,minutes:mins,note:fullNote,tags:tags.filter(Boolean)});
   saveSesh();
@@ -2099,7 +2033,7 @@ function logSession(){
   const noteEl=document.getElementById('logNote');
   noteEl.value='';noteEl.style.height='auto';
   document.querySelectorAll('.cat-pill').forEach(b=>b.className='cat-pill');
-  ['drill','cert','code','project','scan','review'].forEach(c=>document.getElementById('ctx-'+c).classList.remove('show'));
+  ['practice','study','cert','plan'].forEach(c=>document.getElementById('ctx-'+c).classList.remove('show'));
   selCat='';
   const ok=document.getElementById('logOk');ok.style.display='block';setTimeout(()=>ok.style.display='none',2000);
   renderAll();
@@ -2121,6 +2055,15 @@ function resetStart(){
 }
 
 // ── BACKUP ────────────────────────────────────────────
+function renderBackupWarn(){
+  let ts=0;try{ts=parseInt(localStorage.getItem('v14_lastExport')||'0')||0;}catch(e){}
+  const el=document.getElementById('bkAge'),bar=document.getElementById('bkWarn');
+  const days=ts?Math.floor((Date.now()-ts)/86400000):null;
+  const stale=days===null||days>=3;
+  if(el){el.textContent=days===null?'never exported':(days===0?'exported today':`last export ${days}d ago`);el.className='bk-age'+(stale?' stale':'');}
+  if(bar){bar.style.display=stale&&sessions.length?'flex':'none';
+    bar.querySelector('span').textContent=days===null?'No backup yet — your history lives only in this browser.':`Last backup was ${days} days ago — your history lives only in this browser.`;}
+}
 function exportData(){
   const payload={
     v:11,exported:new Date().toISOString(),
@@ -2131,13 +2074,16 @@ function exportData(){
     v11_mission:localStorage.getItem('v11_mission')||'{}',
     drill_engine_state:localStorage.getItem('drill_engine_state')||'null',
     drill_engine_last_log:localStorage.getItem('drill_engine_last_log')||'null',
+    de3:localStorage.getItem('de3')||'null',
+    de_model:localStorage.getItem('de_model')||'',
   };
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;a.download=`ops-backup-${new Date().toISOString().slice(0,10)}.json`;
   a.click();URL.revokeObjectURL(url);
-  showBkMsg('✓ EXPORTED');
+  try{localStorage.setItem('v14_lastExport',String(Date.now()));}catch(e){}
+  showBkMsg('✓ EXPORTED');renderBackupWarn();
 }
 function importData(evt){
   const file=evt.target.files[0];if(!file)return;
@@ -2154,6 +2100,8 @@ function importData(evt){
       if(d.v11_mission)localStorage.setItem('v11_mission',d.v11_mission);
       if(d.drill_engine_state&&d.drill_engine_state!=='null')localStorage.setItem('drill_engine_state',d.drill_engine_state);
       if(d.drill_engine_last_log&&d.drill_engine_last_log!=='null')localStorage.setItem('drill_engine_last_log',d.drill_engine_last_log);
+      if(d.de3&&d.de3!=='null')localStorage.setItem('de3',d.de3);
+      if(d.de_model)localStorage.setItem('de_model',d.de_model);
       load();renderAll();
       showBkMsg('✓ IMPORTED');
     }catch(err){alert('Import failed: '+err.message);}
@@ -2172,30 +2120,30 @@ const PHASE_DETAIL = {
   1:{
     wkRange:[1,6],
     cert:['CCP — passed and archived; revisit only if a retake is ever needed','Focus: billing, IAM, shared responsibility, core services','Mock exams until consistently passing — readiness sets the pace, not the calendar'],
-    code:['Python: variables, loops, functions, files, APIs','VS Code + Cursor as daily pair','Git workflow: commit, branch, PR — no GUI crutches','Build Project 1: Claude Shell (CLI wrapper)'],
+    code:['Python via the CS50P drill bank: functions, conditionals, loops, exceptions, libraries, unit tests, file I/O, regex','VS Code + Cursor as daily pair','Git workflow: commit, branch, PR — no GUI crutches','Build Project 1: Claude Shell (CLI wrapper) — M1–M6 closed, M7 async next'],
     milestones:[
       {label:'CCP pass 850+',type:'cert'},{label:'Claude Shell',type:'proj'},
       {label:'Git fluency',type:'skill'},{label:'Python CLI',type:'skill'},
     ],
     weeks:{
-      1:['Run first CCP mock exam — baseline your score','Start Python M1: Variables & Types','Set up daily commit habit — push something every day'],
-      2:['CCP: focus on billing models and pricing','Python M2: Functions — write 5 small functions from scratch','Start Claude Shell repo on GitHub'],
-      3:['CCP: IAM, shared responsibility model','Python M3: Lists, dicts, loops','Claude Shell: build the basic CLI loop'],
-      4:['CCP: core services — EC2, S3, RDS, Lambda overview','Python M4: Files & .env loading','Claude Shell: add session logging to file'],
-      5:['CCP: mock exam — target 820+','Python M5: APIs + JSON — call Anthropic API directly','Claude Shell: add multi-turn conversation'],
-      6:['CCP: final review pass, sit the exam if 820+ on mocks','Python M6: Classes (light)','Claude Shell: README, polish, push to GitHub'],
+      1:['Run first CCP mock exam — baseline your score','Start the CS50P bank at W0: Functions & Variables','Set up daily commit habit — push something every day'],
+      2:['CCP: focus on billing models and pricing','CS50P W0–W1: functions and conditionals — write small ones from scratch','Start Claude Shell repo on GitHub'],
+      3:['CCP: IAM, shared responsibility model','CS50P W2: loops','Claude Shell: build the basic CLI loop'],
+      4:['CCP: core services — EC2, S3, RDS, Lambda overview','CS50P W3–W4: exceptions and libraries','Claude Shell: add session logging to file'],
+      5:['CCP: mock exam — target 820+','CS50P W5–W6: unit tests and file I/O — call the Anthropic API directly','Claude Shell: add multi-turn conversation'],
+      6:['CCP: final review pass, sit the exam if 820+ on mocks','CS50P W7: regular expressions','Claude Shell: README, polish, push to GitHub'],
     }
   },
   2:{
     wkRange:[7,13],
     cert:['AWS SAA-C03 study — current cert target (infrastructure depth for CloudMind)','Focus: VPC, EC2, S3, Lambda, IAM, RDS, load balancing','DL.AI: Evaluating & Debugging GenAI — paired with the EvalKit build','SAA exam: once mocks are consistently passing, not before'],
-    code:['Python intermediate: requests, JSON, async basics, classes','Build EvalKit — automated LLM output scoring','Build ReviewLoop — HITL annotation interface','APIs: Anthropic, basic REST patterns'],
+    code:['Python intermediate: requests, JSON, async streaming, classes','Build EvalKit — automated LLM output scoring','Build ReviewLoop — HITL annotation interface','APIs: Anthropic, basic REST patterns'],
     milestones:[
       {label:'SAA-C03 pass',type:'cert'},{label:'DL.AI Evals',type:'cert'},
       {label:'EvalKit',type:'proj'},{label:'ReviewLoop',type:'proj'},
     ],
     weeks:{
-      7:['Begin SAA study — VPC fundamentals','Python M6 review or M7: Async basics','EvalKit: scaffold the project structure'],
+      7:['Begin SAA study — VPC fundamentals','Claude Shell M7: async streaming','EvalKit: scaffold the project structure'],
       8:['SAA: EC2, S3, IAM deep dive','EvalKit: build prompt input + output scoring logic','Commit daily — every session leaves a trace'],
       9:['SAA: RDS, Lambda, load balancing','EvalKit: add pass/fail assertions and results output','Code review: read one open-source LLM eval repo'],
       10:['Complete DL.AI: Evaluating & Debugging GenAI','EvalKit: integrate with DL.AI concepts','Begin ReviewLoop planning — sketch the UI flow'],
@@ -2239,7 +2187,7 @@ const PHASE_DETAIL = {
   }
 };
 
-const PHASE_MILESTONE_LABEL = {1:'Python M1–M7 + Claude Shell v1.0 + CCP',2:'SAA-C03 + EvalKit + ReviewLoop',3:'AgentForge + CloudMind (deployed)',4:'Portfolio live + first client engaged'};
+const PHASE_MILESTONE_LABEL = {1:'CS50P bank + Claude Shell v1.0 + CCP',2:'SAA-C03 + EvalKit + ReviewLoop',3:'AgentForge + CloudMind (deployed)',4:'Portfolio live + first client engaged'};
 let pb2SelectedWk = null;
 
 function renderPhaseBrief(){
@@ -2307,6 +2255,48 @@ function selectPhaseBriefWk(wk, e){
   renderPhaseBriefWeek(PHASE_DETAIL[ph.num]);
 }
 
+
+// ── STOP & THINK (live lines) ─────────────────────────
+function stWeakConcepts(){
+  try{
+    const s=JSON.parse(localStorage.getItem('de3')||'null');
+    if(s&&s.tag){
+      const w=Object.keys(s.tag).filter(t=>s.tag[t].f>=2&&s.tag[t].f>s.tag[t].p)
+        .sort((a,b)=>(s.tag[b].f-s.tag[b].p)-(s.tag[a].f-s.tag[a].p));
+      if(w.length)return w;
+    }
+  }catch(e){}
+  try{
+    const l=JSON.parse(localStorage.getItem('drill_engine_last_log')||'null');
+    if(l&&(!l.mode||l.mode==='python')&&Array.isArray(l.weakSpots))return l.weakSpots.map(x=>String(x).trim()).filter(Boolean);
+  }catch(e){}
+  return [];
+}
+function renderStopThink(){
+  const set=(i,h)=>{const el=document.getElementById('stLive'+i);if(el)el.innerHTML=h;};
+  const esc2=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  // 1: last logged session
+  const last=sessions[0];
+  if(last){
+    const line=(String(last.note||'').split('\n').map(l=>l.replace(/^[\s#]+/,'').trim()).find(Boolean)||last.category);
+    set(1,`Last logged: <b>${esc2(CAT_LABEL[normCat(last)].toLowerCase())}</b> · ${last.minutes} min — ${esc2(line.length>80?line.slice(0,80)+'…':line)}`);
+  }else set(1,'');
+  // 2: input vs practice, last 7 days
+  const cutoff=parseLD(todayStr())-6*86400000;
+  let learn=0,prac=0;
+  sessions.forEach(s=>{
+    if(parseLD(s.date)<cutoff)return;
+    const m=Number(s.minutes)||0,nc=normCat(s);
+    if(nc==='study')learn+=m;else if(nc==='practice')prac+=m;
+  });
+  if(learn+prac>0)set(2,`Last 7 days: <b>${learn}</b> min study · <b>${prac}</b> min practice (${Math.round(100*prac/(learn+prac))}% practice)`);
+  else set(2,'');
+  // 3 + 4: recurring misses from the engines
+  const w=stWeakConcepts();
+  set(3,w.length?`Your recurring misses: <b>${esc2(w.slice(0,3).join(' · '))}</b> — reread your own code before asking.`:'');
+  set(4,w.length?`Explain <b>${esc2(w[0])}</b> aloud, no notes, then check it against a run.`:'');
+}
+
 function toggleStopThink(){
   const el = document.getElementById('stBlock');
   el.classList.toggle('open');
@@ -2340,7 +2330,7 @@ function renderAll(){
   renderMission();renderPyModules();renderCCP();
   renderCodedBadge();renderTargets();renderPhaseBrief();
   renderPhaseBars();renderSessions();
-  renderDebrief();renderLedgers();
+  renderDebrief();renderLedgers();renderStopThink();renderBackupWarn();
 }
 
 load();
